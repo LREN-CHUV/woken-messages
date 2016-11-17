@@ -1,0 +1,15 @@
+# Builder image
+# Creates a portable environemnt to build this project.
+# Do not push this image to Docker hub.
+builder:
+  build: Dockerfile.builder
+  image: woken-messages-build
+  pre:
+    - echo "Building woken builder image"
+  post:
+    - echo "Finished building woken builder image"
+    - echo "Building project..."
+    - docker run --rm -ti --net=host -u build -v $WORKSPACE:/build/ -v $USER_HOME/.m2:/home/build/.m2/ -v $USER_HOME/.ivy2:/home/build/.ivy2 -e "VERSION=$VERSION" woken-messages-build
+    - echo "Finished building project"
+  test:
+    - tests/test.sh
