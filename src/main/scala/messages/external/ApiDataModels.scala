@@ -47,7 +47,7 @@ case class Filter(
 
 case class MethodsQuery()
 
-case class Methods(methods: Seq[String])
+case class Methods(methods: String)
 
 abstract class Query() {
   def variables: Seq[VariableId]
