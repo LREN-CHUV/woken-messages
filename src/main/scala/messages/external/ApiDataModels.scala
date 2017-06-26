@@ -53,14 +53,14 @@ abstract class Query() {
   def variables: Seq[VariableId]
   def covariables: Seq[VariableId]
   def grouping: Seq[VariableId]
-  def filters: Seq[Filter]
+  def filters: String
 }
 
 case class MiningQuery(
   variables: Seq[VariableId],
   covariables: Seq[VariableId],
   grouping: Seq[VariableId],
-  filters: Seq[Filter],
+  filters: String,
   algorithm: Algorithm
 ) extends Query
 
@@ -68,7 +68,7 @@ case class ExperimentQuery(
   variables: Seq[VariableId],
   covariables: Seq[VariableId],
   grouping: Seq[VariableId],
-  filters: Seq[Filter],
+  filters: String,
   algorithms: Seq[Algorithm],
   validations: Seq[Validation]
 ) extends Query

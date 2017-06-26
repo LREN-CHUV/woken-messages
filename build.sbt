@@ -7,13 +7,15 @@ scalaVersion  := "2.11.8"
 
 val versions = new {
   val akka = "2.3.14"
+  val spray = "1.3.2"
 }
 
 libraryDependencies ++= {
   Seq(
     "com.typesafe.akka"   %%  "akka-actor"       % versions.akka,
     "com.typesafe.akka"   %%  "akka-remote"      % versions.akka,
-    "com.typesafe.akka"   %%  "akka-cluster"     % versions.akka
+    "com.typesafe.akka"   %%  "akka-cluster"     % versions.akka,
+    "io.spray"            %%  "spray-json"       % versions.spray
   )
 }
 
