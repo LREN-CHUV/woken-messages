@@ -1,6 +1,6 @@
 package queryfilter
 
-import spray.json.{JsArray, JsNumber, JsObject, JsString, JsNumber}
+import spray.json.{JsArray, JsNumber, JsObject, JsString}
 
 /**
   * Simple parser for JSON produced by QueryBuilder JS
@@ -19,10 +19,11 @@ object Parser {
     "not_between" -> "NOT BETWEEN"
   )
   def parseRules(rule: JsObject): String = {
+    import spray.json.DefaultJsonProtocol._
     rule match {
       // Group
       case _ if rule.fields.contains("rules") => {
-        val operator = rule.fields.get("operator").get.convertTo[JsString]
+        val operator = rule.fields.get("operator").get.toString()
         String.format("(%s)", rule.fields.get("rules").get.convertTo[JsArray].elements.map(r => parseRules(r.asJsObject)).mkString(" " + operator + " "))
       }
       // End rule
@@ -33,8 +34,8 @@ object Parser {
           case a: JsArray if a.elements.length == 2 => a.elements(0) + " AND " + a.elements(1)
           case _ => throw new Exception("Invalid JSON query!")
         }
-        val operator = rule.fields.get("operator").get.convertTo[JsString]
-        val value = rule.fields.get("value").get.convertTo[JsString]
+        val operator = rule.fields.get("operator").get.toString()
+        val value = rule.fields.get("value").get.toString()
 
         field + " " + operator + " " + value
       }
