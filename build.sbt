@@ -1,7 +1,7 @@
 
 name          := "woken-messages"
 
-version       := sys.env.get("VERSION")getOrElse("dev")
+version       := sys.env.getOrElse("VERSION", "dev")
 
 scalaVersion  := "2.11.8"
 
