@@ -19,12 +19,13 @@ package eu.hbp.mip.woken.messages.external
 import java.time.OffsetDateTime
 
 case class Algorithm(
-    /** */
+    /** Code identifying the algorithm */
     code: String,
-    /** */
+    /** Optional readable name for the algorithm */
+    // TODO: should be Option[String]
     name: String,
-    /** */
-    parameters: Map[String, String]
+    /** List of parameters to pass to the algorithm */
+    parameters: Map[String, String] = Map.empty
 )
 
 case class VariableId(
