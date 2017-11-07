@@ -14,16 +14,14 @@ Prerequisites: docker, captain
 
 It will build the scala project into a docker container.
 
-## How to push to MIP's binaries repository
+## How to publish to MIP's binaries repository
 
-1. Write a .credentials file containing:
+1. Define the environment variables to log into BinTray
 
-> realm=Artifactory Realm
-> host=lab01560.intranet.chuv
-> user=<USER>
-> password=<PASSWORD>
+> BINTRAY_USER=<USER>
+> BINTRAY_PASS=<PASSWORD>
 
-2. Run the publish scripts
+2. Run the publish script
 ```
   ./publish.sh
 ```
