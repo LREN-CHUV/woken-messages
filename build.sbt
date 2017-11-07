@@ -30,14 +30,14 @@ lazy val library =
       val scalaCheck = "1.13.5"
       val scalaTest  = "3.0.3"
       val akka       = "2.3.16"
-      val spray      = "1.3.4"
+      val sprayJson  = "1.3.4"
     }
     val scalaCheck: ModuleID  = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
     val scalaTest: ModuleID   = "org.scalatest"     %% "scalatest"    % Version.scalaTest
     val akkaActor: ModuleID   = "com.typesafe.akka" %% "akka-actor"   % Version.akka
     val akkaRemote: ModuleID  = "com.typesafe.akka" %% "akka-remote"  % Version.akka
     val akkaCluster: ModuleID = "com.typesafe.akka" %% "akka-cluster" % Version.akka
-    val sprayJson: ModuleID   = "io.spray"          %% "spray-json"   % Version.spray
+    val sprayJson: ModuleID   = "io.spray"          %% "spray-json"   % Version.sprayJson
   }
 
 // *****************************************************************************
