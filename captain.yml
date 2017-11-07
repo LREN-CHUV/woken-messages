@@ -8,8 +8,8 @@ builder:
     - echo "Building woken builder image"
   post:
     - echo "Finished building woken builder image"
-    - echo "Building project..."
-    - docker run --rm -ti --net=host -u build -v $WORKSPACE:/build/ -v $USER_HOME/.m2:/home/build/.m2/ -v $USER_HOME/.ivy2:/home/build/.ivy2 -e "VERSION=$VERSION" woken-messages-build
+    - echo "Exporting jar..."
+    - docker run --rm -ti -v $WORKSPACE/target/scala-2.11/:/target/ --entrypoint "/bin/sh" woken-messages-build -c 'cp /build/target/scala-2.11/woken-messages*.jar /target'
     - echo "Finished building project"
   test:
     - tests/test.sh

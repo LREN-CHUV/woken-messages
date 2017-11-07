@@ -1,48 +1,63 @@
+/*
+ * Copyright 2017 LREN CHUV
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package eu.hbp.mip.messages.external
 
 import java.time.OffsetDateTime
 
-
 case class VariableId(
-  /** Unique variable code, used to request */
-  code: String
+    /** Unique variable code, used to request */
+    code: String
 )
 
 case class Algorithm(
-  /** */
-  code: String,
-  /** */
-  name: String,
-  /** */
-  parameters: Map[String, String]
+    /** */
+    code: String,
+    /** */
+    name: String,
+    /** */
+    parameters: Map[String, String]
 )
 
 case class Validation(
-  /** */
-  code: String,
-  /** */
-  name: String,
-  /** */
-  parameters: Map[String, String]
+    /** */
+    code: String,
+    /** */
+    name: String,
+    /** */
+    parameters: Map[String, String]
 )
 
 object Operators extends Enumeration {
   type Operators = Value
-  val eq = Value("eq")
-  val lt = Value("lt")
-  val gt = Value("gt")
-  val lte = Value("lte")
-  val gte = Value("gte")
-  val neq = Value("neq")
-  val in = Value("in")
-  val notin = Value("notin")
+  val eq      = Value("eq")
+  val lt      = Value("lt")
+  val gt      = Value("gt")
+  val lte     = Value("lte")
+  val gte     = Value("gte")
+  val neq     = Value("neq")
+  val in      = Value("in")
+  val notin   = Value("notin")
   val between = Value("between")
 }
 
 case class Filter(
-  variable: VariableId,
-  operator: Operators.Operators,
-  values: Seq[String]
+    variable: VariableId,
+    operator: Operators.Operators,
+    values: Seq[String]
 )
 
 case class MethodsQuery()
@@ -57,32 +72,36 @@ abstract class Query() {
 }
 
 case class MiningQuery(
-  variables: Seq[VariableId],
-  covariables: Seq[VariableId],
-  grouping: Seq[VariableId],
-  filters: String,
-  algorithm: Algorithm
+    variables: Seq[VariableId],
+    covariables: Seq[VariableId],
+    grouping: Seq[VariableId],
+    filters: String,
+    algorithm: Algorithm
 ) extends Query
 
 case class ExperimentQuery(
-  variables: Seq[VariableId],
-  covariables: Seq[VariableId],
-  grouping: Seq[VariableId],
-  filters: String,
-  algorithms: Seq[Algorithm],
-  validations: Seq[Validation]
+    variables: Seq[VariableId],
+    covariables: Seq[VariableId],
+    grouping: Seq[VariableId],
+    filters: String,
+    algorithms: Seq[Algorithm],
+    validations: Seq[Validation]
 ) extends Query
 
 // PFA
 case class QueryError(
-  message: String
+    message: String
 )
 
 // PFA
 case class QueryResult(
-  jobId: String, node: String, timestamp: OffsetDateTime,
-  data: Option[String] = None, error: Option[String] = None,
-  shape: String, function: String
+    jobId: String,
+    node: String,
+    timestamp: OffsetDateTime,
+    data: Option[String] = None,
+    error: Option[String] = None,
+    shape: String,
+    function: String
 )
 
 /*

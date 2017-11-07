@@ -9,7 +9,6 @@ lazy val `woken-messages` =
     .settings(settings)
     .settings(
       Seq(
-        assemblyJarName in assembly := "woken-messages.jar",
         libraryDependencies ++= Seq(
           library.akkaActor,
           library.akkaRemote,
@@ -30,25 +29,22 @@ lazy val library =
     object Version {
       val scalaCheck = "1.13.5"
       val scalaTest  = "3.0.3"
-      val akka = "2.3.16"
-      val spray = "1.3.4"
+      val akka       = "2.3.16"
+      val spray      = "1.3.4"
     }
-    val scalaCheck: ModuleID = "org.scalacheck" %% "scalacheck" % Version.scalaCheck
-    val scalaTest: ModuleID = "org.scalatest"  %% "scalatest"  % Version.scalaTest
-    val akkaActor: ModuleID = "com.typesafe.akka" %% "akka-actor" % Version.akka
-    val akkaRemote: ModuleID =  "com.typesafe.akka" %% "akka-remote" % Version.akka
+    val scalaCheck: ModuleID  = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
+    val scalaTest: ModuleID   = "org.scalatest"     %% "scalatest"    % Version.scalaTest
+    val akkaActor: ModuleID   = "com.typesafe.akka" %% "akka-actor"   % Version.akka
+    val akkaRemote: ModuleID  = "com.typesafe.akka" %% "akka-remote"  % Version.akka
     val akkaCluster: ModuleID = "com.typesafe.akka" %% "akka-cluster" % Version.akka
-    val sprayJson: ModuleID = "io.spray" %% "spray-json" % Version.spray
+    val sprayJson: ModuleID   = "io.spray"          %% "spray-json"   % Version.spray
   }
 
 // *****************************************************************************
 // Settings
 // *****************************************************************************
 
-lazy val settings =
-  commonSettings ++
-  gitSettings ++
-  scalafmtSettings
+lazy val settings = commonSettings ++ gitSettings ++ scalafmtSettings
 
 lazy val commonSettings =
   Seq(
@@ -64,10 +60,10 @@ lazy val commonSettings =
       "-Yno-adapted-args",
       "-Ywarn-dead-code",
       "-Ywarn-value-discard",
-      "-Ypartial-unification",
       "-language:_",
       "-target:jvm-1.8",
-      "-encoding", "UTF-8"
+      "-encoding",
+      "UTF-8"
     ),
     javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint"),
     unmanagedSourceDirectories.in(Compile) := Seq(scalaSource.in(Compile).value),
@@ -77,18 +73,22 @@ lazy val commonSettings =
     test in assembly := {},
     fork in Test := false,
     parallelExecution in Test := false
-)
+  )
 
 // Publish to Artifactory
 publishMavenStyle := true
 publishArtifact in Test := false
-publishTo := Some("Artifactory Realm" at "http://lab01560.intranet.chuv:9082/artifactory/libs-release-local")
+publishTo := Some(
+  "Artifactory Realm" at "http://lab01560.intranet.chuv:9082/artifactory/libs-release-local"
+)
 credentials += Credentials(new File("/build/.credentials"))
-
-Revolver.settings : Seq[sbt.Def.Setting[_]]
 
 lazy val gitSettings =
   Seq(
+    git.gitTagToVersionNumber := { tag: String =>
+      if (tag matches "[0-9]+\\..*") Some(tag)
+      else None
+    },
     git.useGitDescribe := true
   )
 
