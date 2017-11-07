@@ -17,5 +17,9 @@ RUN sbt compile
 
 COPY src/ /build/src/
 COPY .git/ /build/.git/
+COPY .circleci/ /build/.circleci/
+COPY .*.cfg .*ignore .*.yaml .*.conf *.md *.builder *.sh *.yml *.json LICENSE /build/
+COPY check-sources.sh /
+RUN /check-sources.sh
 
 RUN sbt package
