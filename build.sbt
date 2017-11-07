@@ -44,7 +44,7 @@ lazy val library =
 // Settings
 // *****************************************************************************
 
-lazy val settings = commonSettings ++ gitSettings ++ scalafmtSettings
+lazy val settings = commonSettings ++ gitSettings ++ scalafmtSettings ++ bintraySettings
 
 lazy val commonSettings =
   Seq(
@@ -75,14 +75,6 @@ lazy val commonSettings =
     parallelExecution in Test := false
   )
 
-// Publish to Artifactory
-publishMavenStyle := true
-publishArtifact in Test := false
-publishTo := Some(
-  "Artifactory Realm" at "http://lab01560.intranet.chuv:9082/artifactory/libs-release-local"
-)
-credentials += Credentials(new File("/build/.credentials"))
-
 lazy val gitSettings =
   Seq(
     git.gitTagToVersionNumber := { tag: String =>
@@ -97,4 +89,12 @@ lazy val scalafmtSettings =
     scalafmtOnCompile := true,
     scalafmtOnCompile.in(Sbt) := false,
     scalafmtVersion := "1.1.0"
+  )
+
+// Publish to BinTray
+lazy val bintraySettings =
+  Seq(
+    bintrayOrganization := Some("hbpmedical"),
+    bintrayRepository := "maven",
+    bintrayPackageLabels := Seq("woken", "library", "algorithm-factory")
   )

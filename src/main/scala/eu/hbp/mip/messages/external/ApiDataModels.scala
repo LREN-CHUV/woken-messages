@@ -18,11 +18,6 @@ package eu.hbp.mip.messages.external
 
 import java.time.OffsetDateTime
 
-case class VariableId(
-    /** Unique variable code, used to request */
-    code: String
-)
-
 case class Algorithm(
     /** */
     code: String,
@@ -30,6 +25,11 @@ case class Algorithm(
     name: String,
     /** */
     parameters: Map[String, String]
+)
+
+case class VariableId(
+    /** Unique variable code, used to request */
+    code: String
 )
 
 case class Validation(
@@ -98,10 +98,10 @@ case class QueryResult(
     jobId: String,
     node: String,
     timestamp: OffsetDateTime,
-    data: Option[String] = None,
-    error: Option[String] = None,
     shape: String,
-    function: String
+    function: String,
+    data: Option[String] = None,
+    error: Option[String] = None
 )
 
 /*

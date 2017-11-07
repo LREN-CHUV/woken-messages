@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package queryfilter
+package eu.hbp.mip.queryfilter
 
 import spray.json.{ JsArray, JsNumber, JsObject, JsString }
 
@@ -39,11 +39,10 @@ object Parser {
     rule match {
       // Group
       case _ if rule.fields.contains("rules") => {
-        val operator = rule.fields.get("operator").get.toString()
+        val operator = rule.fields("operator").toString()
         String.format("(%s)",
-                      rule.fields
-                        .get("rules")
-                        .get
+                      rule
+                        .fields("rules")
                         .convertTo[JsArray]
                         .elements
                         .map(r => parseRules(r.asJsObject))
@@ -51,14 +50,15 @@ object Parser {
       }
       // End rule
       case _ => {
-        val field: String = rule.fields.get("field").get match {
-          case s: JsString                          => s.toString()
-          case n: JsNumber                          => n.toString()
-          case a: JsArray if a.elements.length == 2 => a.elements(0) + " AND " + a.elements(1)
-          case _                                    => throw new Exception("Invalid JSON query!")
+        val field: String = rule.fields("field") match {
+          case s: JsString => s.toString()
+          case n: JsNumber => n.toString()
+          case a: JsArray if a.elements.length == 2 =>
+            a.elements(0).toString() + " AND " + a.elements(1).toString()
+          case _ => throw new Exception("Invalid JSON query!")
         }
-        val operator = rule.fields.get("operator").get.toString()
-        val value    = rule.fields.get("value").get.toString()
+        val operator = rule.fields("operator").toString()
+        val value    = rule.fields("value").toString()
 
         field + " " + operator + " " + value
       }
