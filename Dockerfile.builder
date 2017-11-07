@@ -3,6 +3,12 @@ FROM hbpmip/scala-base-build:0.13.16-4 as scala-build-env
 
 MAINTAINER Arnaud Jutzeler <arnaud.jutzeler@chuv.ch>
 
+ARG BINTRAY_USER
+ARG BINTRAY_PASS
+
+ENV BINTRAY_USER=$BINTRAY_USER \
+    BINTRAY_PASS=$BINTRAY_PASS
+
 COPY build.sbt /build/
 COPY project/ /build/project/
 

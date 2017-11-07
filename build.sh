@@ -30,4 +30,6 @@ BUILD_DATE=$(date -Iseconds) \
   VCS_REF=$(git describe --tags --dirty) \
   VERSION=$(git describe --tags --dirty) \
   WORKSPACE=$(pwd) \
+  BINTRAY_USER=${BINTRAY_USER} \
+  BINTRAY_PASS=${BINTRAY_PASS} \
   $CAPTAIN build

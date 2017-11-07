@@ -95,7 +95,7 @@ git push
 git push --tags
 
 # Publish on BinTray
-docker run
+docker run -e BINTRAY_USER=$BINTRAY_USER -e BINTRAY_PASS=$BINTRAY_PASS woken-messages-build:latest sbt publish
 docker run --rm -ti --entrypoint="sbt" --net=host -u build -v $PWD:/build/ -v $HOME/.m2:/home/build/.m2/ -v $HOME/.ivy2:/home/build/.ivy2 -e "VERSION=$VERSION" woken-messages-build publish
 
 
