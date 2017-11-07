@@ -1,5 +1,5 @@
 # Pull base image
-FROM hbpmip/scala-base-build:0.13.16-4 as scala-build-env
+FROM hbpmip/scala-base-build:0.13.16-5 as scala-build-env
 
 MAINTAINER Arnaud Jutzeler <arnaud.jutzeler@chuv.ch>
 
@@ -19,7 +19,7 @@ COPY src/ /build/src/
 COPY .git/ /build/.git/
 COPY .circleci/ /build/.circleci/
 COPY .*.cfg .*ignore .*.yaml .*.conf *.md *.builder *.sh *.yml *.json LICENSE /build/
-COPY check-sources.sh /
+
 RUN /check-sources.sh
 
 RUN sbt package
