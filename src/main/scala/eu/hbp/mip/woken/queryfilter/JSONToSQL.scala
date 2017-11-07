@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.queryfilter
+package eu.hbp.mip.woken.queryfilter
 
 import spray.json.{ JsArray, JsNumber, JsObject, JsString }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.meta
+package eu.hbp.mip.woken.meta
 
 case class VariableMetaData(
     code: String,

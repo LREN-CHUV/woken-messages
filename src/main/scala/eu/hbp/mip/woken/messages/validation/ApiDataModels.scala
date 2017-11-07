@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.messages.validation
+package eu.hbp.mip.woken.messages.validation
 
-import eu.hbp.mip.meta.VariableMetaData
+import eu.hbp.mip.woken.meta.VariableMetaData
 
 case class ValidationQuery(
     fold: String,

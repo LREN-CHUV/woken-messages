@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.messages.external
+package eu.hbp.mip.woken.messages.external
 
 import java.time.OffsetDateTime
 
