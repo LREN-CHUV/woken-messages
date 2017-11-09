@@ -9,12 +9,15 @@ ARG BINTRAY_PASS
 ENV BINTRAY_USER=$BINTRAY_USER \
     BINTRAY_PASS=$BINTRAY_PASS
 
+# First caching layer: build.sbt and sbt configuration
 COPY build.sbt /build/
-COPY project/ /build/project/
+RUN  mkdir -p /build/project/
+COPY project/build.properties project/plugins.sbt project/.gitignore /build/project/
 
 # Run sbt on an empty project and force it to download most of its dependencies to fill the cache
 RUN sbt compile
 
+# Second caching layer: project sources
 COPY src/ /build/src/
 COPY .git/ /build/.git/
 COPY .circleci/ /build/.circleci/
