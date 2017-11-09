@@ -2,6 +2,7 @@
 # Creates a portable environemnt to build this project.
 # Do not push this image to Docker hub.
 builder:
+  build: Dockerfile
   image: woken-messages-build
   pre:
     - echo "Building woken builder image"
