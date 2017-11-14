@@ -17,6 +17,7 @@
 package eu.hbp.mip.woken.messages.validation
 
 import eu.hbp.mip.woken.meta.VariableMetaData
+import spray.json.JsObject
 
 case class ValidationQuery(
     fold: String,
@@ -33,4 +34,10 @@ case class ValidationResult(
 
 case class ValidationError(
     message: String
+)
+
+case class KFoldCrossValidationQuery(data: List[JsObject], labels: List[JsObject], k: Int)
+
+case class CrossValidationResult(
+    scores: JsObject
 )
