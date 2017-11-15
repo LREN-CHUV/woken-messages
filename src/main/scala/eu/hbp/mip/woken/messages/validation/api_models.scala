@@ -18,6 +18,7 @@ package eu.hbp.mip.woken.messages.validation
 
 import eu.hbp.mip.woken.meta.VariableMetaData
 import spray.json.JsObject
+import cats.data.NonEmptyList
 
 case class ValidationQuery(
     fold: String,
@@ -36,8 +37,8 @@ case class ValidationError(
     message: String
 )
 
-case class ScoringQuery(algorithmOutput: List[String],
-                        groundTruth: List[String],
+case class ScoringQuery(algorithmOutput: NonEmptyList[String],
+                        groundTruth: NonEmptyList[String],
                         targetMetaData: VariableMetaData)
 
 case class ScoringResult(

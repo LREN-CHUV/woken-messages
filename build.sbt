@@ -14,6 +14,7 @@ lazy val `woken-messages` =
           library.akkaRemote,
           library.akkaCluster,
           library.sprayJson,
+          library.catsCore,
           library.scalaCheck % Test,
           library.scalaTest  % Test
         )
@@ -31,6 +32,7 @@ lazy val library =
       val scalaTest  = "3.0.3"
       val akka       = "2.3.16"
       val sprayJson  = "1.3.4"
+      val cats           = "1.0.0-RC1"
     }
     val scalaCheck: ModuleID  = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
     val scalaTest: ModuleID   = "org.scalatest"     %% "scalatest"    % Version.scalaTest
@@ -38,6 +40,7 @@ lazy val library =
     val akkaRemote: ModuleID  = "com.typesafe.akka" %% "akka-remote"  % Version.akka
     val akkaCluster: ModuleID = "com.typesafe.akka" %% "akka-cluster" % Version.akka
     val sprayJson: ModuleID   = "io.spray"          %% "spray-json"   % Version.sprayJson
+    val catsCore: ModuleID    = "org.typelevel"     %% "cats-core"    % Version.cats
   }
 
 // *****************************************************************************
