@@ -44,8 +44,8 @@ case class Validation(
 
 object Operators extends Enumeration {
   type Operators = Value
-  val eq: Value = Value("eq")
-  val lt: Value = Value("lt")
+  val eq: Value      = Value("eq")
+  val lt: Value      = Value("lt")
   val gt: Value      = Value("gt")
   val lte: Value     = Value("lte")
   val gte: Value     = Value("gte")
