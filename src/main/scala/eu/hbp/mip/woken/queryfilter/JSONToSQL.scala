@@ -36,9 +36,10 @@ object Parser {
   )
   def parseRules(rule: JsObject): String = {
     import spray.json.DefaultJsonProtocol._
+
     rule match {
       // Group
-      case _ if rule.fields.contains("rules") => {
+      case _ if rule.fields.contains("rules") =>
         val operator = rule.fields("operator").toString()
         String.format("(%s)",
                       rule
@@ -47,9 +48,9 @@ object Parser {
                         .elements
                         .map(r => parseRules(r.asJsObject))
                         .mkString(" " + operator + " "))
-      }
       // End rule
-      case _ => {
+
+      case _ =>
         val field: String = rule.fields("field") match {
           case s: JsString => s.toString()
           case n: JsNumber => n.toString()
@@ -61,7 +62,6 @@ object Parser {
         val value    = rule.fields("value").toString()
 
         field + " " + operator + " " + value
-      }
     }
   }
 }

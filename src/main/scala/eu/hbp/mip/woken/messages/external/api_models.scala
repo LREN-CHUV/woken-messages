@@ -44,15 +44,15 @@ case class Validation(
 
 object Operators extends Enumeration {
   type Operators = Value
-  val eq      = Value("eq")
-  val lt      = Value("lt")
-  val gt      = Value("gt")
-  val lte     = Value("lte")
-  val gte     = Value("gte")
-  val neq     = Value("neq")
-  val in      = Value("in")
-  val notin   = Value("notin")
-  val between = Value("between")
+  val eq: Value = Value("eq")
+  val lt: Value = Value("lt")
+  val gt: Value      = Value("gt")
+  val lte: Value     = Value("lte")
+  val gte: Value     = Value("gte")
+  val neq: Value     = Value("neq")
+  val in: Value      = Value("in")
+  val notin: Value   = Value("notin")
+  val between: Value = Value("between")
 }
 
 case class Filter(

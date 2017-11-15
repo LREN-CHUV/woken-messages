@@ -36,8 +36,8 @@ case class ValidationError(
     message: String
 )
 
-case class KFoldCrossValidationQuery(data: List[JsObject], labels: List[JsObject], k: Int)
+case class ScoringQuery(data: List[JsObject], labels: List[JsObject], k: Int)
 
-case class CrossValidationResult(
+case class ScoringResult(
     scores: JsObject
 )
