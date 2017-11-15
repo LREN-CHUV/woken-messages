@@ -36,7 +36,9 @@ case class ValidationError(
     message: String
 )
 
-case class ScoringQuery(data: List[JsObject], labels: List[JsObject], k: Int)
+case class ScoringQuery(algorithmOutput: List[String],
+                        groundTruth: List[String],
+                        targetMetaData: VariableMetaData)
 
 case class ScoringResult(
     scores: JsObject
