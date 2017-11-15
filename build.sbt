@@ -49,10 +49,17 @@ lazy val settings = commonSettings ++ gitSettings ++ scalafmtSettings ++ bintray
 lazy val commonSettings =
   Seq(
     scalaVersion := "2.11.8",
-    organization := "eu.humanbrainproject.mip",
-    organizationName := "LREN CHUV",
-    startYear := Some(2017),
-    licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
+    organization in ThisBuild := "eu.humanbrainproject.mip",
+    organizationName in ThisBuild := "Human Brain Project MIP by LREN CHUV",
+    homepage in ThisBuild := Some(url(s"https://github.com/HBPMedical/${name.value}/#readme")),
+    licenses in ThisBuild := Seq("Apache-2.0" ->
+      url(s"https://github.com/sbt/${name.value}/blob/${version.value}/LICENSE")),
+    startYear in ThisBuild := Some(2017),
+    description in ThisBuild := "Library of messages passed between Woken components",
+    developers in ThisBuild := List(
+      Developer("ludovicc", "Ludovic Claude", "@ludovicc", url("https://github.com/ludovicc"))
+    ),
+    scmInfo in ThisBuild := Some(ScmInfo(url(s"https://github.com/HBPMedical/${name.value}"), s"git@github.com:HBPMedical/${name.value}.git")),
     scalacOptions ++= Seq(
       "-unchecked",
       "-deprecation",
