@@ -37,6 +37,7 @@ case class ValidationError(
     message: String
 )
 
+// TODO: the NonEmptyList[String] contain actually a Json value to deserialise and that maps usually to String or Double
 case class ScoringQuery(algorithmOutput: NonEmptyList[String],
                         groundTruth: NonEmptyList[String],
                         targetMetaData: VariableMetaData)
