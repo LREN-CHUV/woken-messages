@@ -18,6 +18,8 @@ package eu.hbp.mip.woken.messages.external
 
 import java.time.OffsetDateTime
 
+import eu.hbp.mip.woken.messages.RemoteMessage
+
 case class Algorithm(
     /** Code identifying the algorithm */
     code: String,
@@ -26,7 +28,7 @@ case class Algorithm(
     name: String,
     /** List of parameters to pass to the algorithm */
     parameters: Map[String, String] = Map.empty
-)
+) extends RemoteMessage
 
 case class VariableId(
     /** Unique variable code, used to request */
@@ -40,7 +42,7 @@ case class Validation(
     name: String,
     /** */
     parameters: Map[String, String]
-)
+) extends RemoteMessage
 
 object Operators extends Enumeration {
   type Operators = Value
@@ -59,13 +61,13 @@ case class Filter(
     variable: VariableId,
     operator: Operators.Operators,
     values: Seq[String]
-)
+) extends RemoteMessage
 
-case class MethodsQuery()
+case class MethodsQuery() extends RemoteMessage
 
 case class Methods(methods: String)
 
-abstract class Query() {
+abstract class Query() extends RemoteMessage {
   def variables: Seq[VariableId]
   def covariables: Seq[VariableId]
   def grouping: Seq[VariableId]

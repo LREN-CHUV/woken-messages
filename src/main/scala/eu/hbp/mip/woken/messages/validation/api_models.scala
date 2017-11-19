@@ -19,13 +19,14 @@ package eu.hbp.mip.woken.messages.validation
 import eu.hbp.mip.woken.meta.VariableMetaData
 import spray.json.JsObject
 import cats.data.NonEmptyList
+import eu.hbp.mip.woken.messages.RemoteMessage
 
 case class ValidationQuery(
     fold: String,
     model: String,
     data: List[String],
     varInfo: VariableMetaData
-)
+) extends RemoteMessage
 
 case class ValidationResult(
     fold: String,
@@ -41,6 +42,7 @@ case class ValidationError(
 case class ScoringQuery(algorithmOutput: NonEmptyList[String],
                         groundTruth: NonEmptyList[String],
                         targetMetaData: VariableMetaData)
+    extends RemoteMessage
 
 case class ScoringResult(
     scores: JsObject
