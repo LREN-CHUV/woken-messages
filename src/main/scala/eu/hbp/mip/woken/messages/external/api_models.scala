@@ -60,7 +60,7 @@ object Operators extends Enumeration {
 case class Filter(
     variable: VariableId,
     operator: Operators.Operators,
-    values: Seq[String]
+    values: List[String]
 ) extends RemoteMessage
 
 case class MethodsQuery() extends RemoteMessage
@@ -68,27 +68,27 @@ case class MethodsQuery() extends RemoteMessage
 case class Methods(methods: String)
 
 abstract class Query() extends RemoteMessage {
-  def variables: Seq[VariableId]
-  def covariables: Seq[VariableId]
-  def grouping: Seq[VariableId]
+  def variables: List[VariableId]
+  def covariables: List[VariableId]
+  def grouping: List[VariableId]
   def filters: String
 }
 
 case class MiningQuery(
-    variables: Seq[VariableId],
-    covariables: Seq[VariableId],
-    grouping: Seq[VariableId],
+    variables: List[VariableId],
+    covariables: List[VariableId],
+    grouping: List[VariableId],
     filters: String,
     algorithm: Algorithm
 ) extends Query
 
 case class ExperimentQuery(
-    variables: Seq[VariableId],
-    covariables: Seq[VariableId],
-    grouping: Seq[VariableId],
+    variables: List[VariableId],
+    covariables: List[VariableId],
+    grouping: List[VariableId],
     filters: String,
-    algorithms: Seq[Algorithm],
-    validations: Seq[Validation]
+    algorithms: List[Algorithm],
+    validations: List[Validation]
 ) extends Query
 
 // PFA
