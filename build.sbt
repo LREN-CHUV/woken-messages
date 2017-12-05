@@ -116,13 +116,5 @@ lazy val publishSettings = Seq(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   homepage := Some(url("https://github.com/LREN-CHUV/woken-messages")),
-  pomIncludeRepository := Function.const(false),
-  pomExtra :=
-    <developers>
-      <developer>
-        <id>ludovicc</id>
-        <name>Ludovic Claude</name>
-        <url>https://github.com/ludovicc</url>
-      </developer>
-    </developers>
+  pomIncludeRepository := Function.const(false)
 )
