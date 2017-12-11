@@ -63,6 +63,7 @@ case class Filter(
     values: List[String]
 ) extends RemoteMessage
 
+// TODO: MethodsQuery should be case object
 case class MethodsQuery() extends RemoteMessage
 
 case class Methods(methods: String)
