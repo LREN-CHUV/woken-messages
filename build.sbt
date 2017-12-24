@@ -14,6 +14,7 @@ lazy val `woken-messages` =
           library.akkaRemote,
           library.akkaCluster,
           library.akkaTracingCore,
+          library.swaggerAnnotations,
           library.sprayJson,
           library.catsCore,
           library.scalaCheck % Test,
@@ -29,12 +30,13 @@ lazy val `woken-messages` =
 lazy val library =
   new {
     object Version {
-      val scalaCheck  = "1.13.5"
-      val scalaTest   = "3.0.3"
-      val akka        = "2.3.16"
-      val akkaTracing = "0.5.2" // use 0.6.1 with akka-http
-      val sprayJson   = "1.3.4"
-      val cats        = "1.0.0-RC1"
+      val scalaCheck         = "1.13.5"
+      val scalaTest          = "3.0.3"
+      val akka               = "2.5.8"
+      val akkaTracing        = "0.6.1"
+      val swaggerAnnotations = "1.5.16"
+      val sprayJson          = "1.3.4"
+      val cats               = "1.0.0-RC1"
     }
     val scalaCheck: ModuleID  = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
     val scalaTest: ModuleID   = "org.scalatest"     %% "scalatest"    % Version.scalaTest
@@ -42,6 +44,7 @@ lazy val library =
     val akkaRemote: ModuleID  = "com.typesafe.akka" %% "akka-remote"  % Version.akka
     val akkaCluster: ModuleID = "com.typesafe.akka" %% "akka-cluster" % Version.akka
     val akkaTracingCore: ModuleID = "com.github.levkhomich" %% "akka-tracing-core" % Version.akkaTracing
+    val swaggerAnnotations: ModuleID = "io.swagger"  % "swagger-annotations"       % Version.swaggerAnnotations
     val sprayJson: ModuleID   = "io.spray"          %% "spray-json"   % Version.sprayJson
     val catsCore: ModuleID    = "org.typelevel"     %% "cats-core"    % Version.cats
   }

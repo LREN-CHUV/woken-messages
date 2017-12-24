@@ -25,4 +25,4 @@ COPY .*.cfg .*ignore .*.yaml .*.conf *.md *.sh *.yml *.json Dockerfile LICENSE /
 
 RUN /check-sources.sh
 
-RUN sbt package
+RUN sbt test package

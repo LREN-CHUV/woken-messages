@@ -18,32 +18,69 @@ package eu.hbp.mip.woken.meta
 
 import spray.json._
 
+case class EnumeratedValue(code: String, label: String)
+
 case class VariableMetaData(
     code: String,
     label: String,
     `type`: String,
+    sqlType: Option[String],
+    description: Option[String],
     methodology: Option[String],
     units: Option[String],
-    enumerations: Option[Map[String, String]]
+    enumerations: Option[List[EnumeratedValue]]
 )
 
 // Get target variable's meta data
-object MetaDataProtocol extends DefaultJsonProtocol {
-  //implicit val variableMetaData = jsonFormat6(VariableMetaData)
+object VariableMetaDataProtocol extends DefaultJsonProtocol {
+
+  implicit object EnumeratedValueFormat extends RootJsonFormat[EnumeratedValue] {
+    private val numPattern = "([0-9]+)".r
+
+    private def numbersHaveNoQuotes(v: String): JsValue = v match {
+      case numPattern(n) => JsNumber(n.toInt)
+      case _             => JsString(v)
+    }
+
+    def write(item: EnumeratedValue): JsObject =
+      JsObject(
+        "code"  -> numbersHaveNoQuotes(item.code),
+        "label" -> numbersHaveNoQuotes(item.label)
+      )
+
+    def read(json: JsValue): EnumeratedValue = {
+      val jsObject = json.asJsObject
+      jsObject.getFields("code", "label") match {
+        case Seq(JsString(code), JsString(label)) => EnumeratedValue(code, label)
+        case Seq(code, label)                     => EnumeratedValue(code.toString, label.toString)
+        case _ =>
+          deserializationError(
+            s"Cannot deserialize EnumeratedValue: invalid input. Raw input: $json"
+          )
+      }
+
+    }
+  }
 
   implicit object VariableMetaDataFormat extends RootJsonFormat[VariableMetaData] {
     // Some fields are optional so we produce a list of options and
     // then flatten it to only write the fields that were Some(..)
     def write(item: VariableMetaData): JsObject =
       JsObject(
-        ((item.methodology match {
-          case Some(m) => Some("methodology" -> m.toJson)
+        ((item.sqlType match {
+          case Some(m) => Some("sql_type" -> m.toJson)
+          case _       => None
+        }) :: (item.description match {
+          case Some(u) => Some("description" -> u.toJson)
+          case _       => None
+        }) :: (item.methodology match {
+          case Some(u) => Some("methodology" -> u.toJson)
           case _       => None
         }) :: (item.units match {
           case Some(u) => Some("units" -> u.toJson)
           case _       => None
         }) :: (item.enumerations match {
-          case Some(e) => Some("enumerations" -> e.map({ case (c, l) => (c, l) }).toJson)
+          case Some(e) => Some("enumerations" -> e.toJson)
           case _       => None
         }) :: List(
           Some("code"  -> item.code.toJson),
@@ -59,31 +96,20 @@ object MetaDataProtocol extends DefaultJsonProtocol {
       val jsObject = json.asJsObject
 
       jsObject.getFields("code", "label", "type") match {
-        case Seq(code, label, t) ⇒
+        case Seq(code, label, t) =>
           VariableMetaData(
             code.convertTo[String],
             label.convertTo[String],
             t.convertTo[String],
+            jsObject.fields.get("sql_type").map(_.convertTo[String]),
+            jsObject.fields.get("description").map(_.convertTo[String]),
             jsObject.fields.get("methodology").map(_.convertTo[String]),
             jsObject.fields.get("units").map(_.convertTo[String]),
-            jsObject.fields
-              .get("enumerations")
-              .map(
-                _.convertTo[JsArray].elements
-                  .map(
-                    o =>
-                      o.asJsObject
-                        .fields("code")
-                        .convertTo[String] -> o.asJsObject
-                        .fields("label")
-                        .convertTo[String]
-                  )
-                  .toMap
-              )
+            jsObject.fields.get("enumerations").map(_.convertTo[List[EnumeratedValue]])
           )
-        case other ⇒
+        case _ =>
           deserializationError(
-            "Cannot deserialize VariableMetaData: invalid input. Raw input: " + other
+            s"Cannot deserialize VariableMetaData: invalid input. Raw input: $json"
           )
       }
     }

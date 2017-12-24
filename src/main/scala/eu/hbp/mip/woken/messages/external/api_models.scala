@@ -19,31 +19,41 @@ package eu.hbp.mip.woken.messages.external
 import java.time.OffsetDateTime
 
 import eu.hbp.mip.woken.messages.RemoteMessage
+import io.swagger.annotations.ApiModel
 
+/** An algorithm */
+@ApiModel(
+  description = "An algorithm to execute"
+)
 case class Algorithm(
     /** Code identifying the algorithm */
     code: String,
     /** Optional readable name for the algorithm */
-    // TODO: should be Option[String]
-    name: String,
+    name: Option[String],
     /** List of parameters to pass to the algorithm */
     parameters: Map[String, String] = Map.empty
-) extends RemoteMessage
+)
 
+/** Id of a variable */
+@ApiModel(
+  description = "Id of a variable"
+)
 case class VariableId(
     /** Unique variable code, used to request */
     code: String
 )
 
+/** Definition of a validation method used in an experiment */
 case class Validation(
-    /** */
+    /** Code identifying the validation */
     code: String,
-    /** */
-    name: String,
-    /** */
+    /** Optional readable name for the validation */
+    name: Option[String],
+    /** List of parameters to pass to the validation */
     parameters: Map[String, String]
-) extends RemoteMessage
+)
 
+/** List of operations supported by a filter */
 object Operators extends Enumeration {
   type Operators = Value
   val eq: Value      = Value("eq")
@@ -61,20 +71,37 @@ case class Filter(
     variable: VariableId,
     operator: Operators.Operators,
     values: List[String]
-) extends RemoteMessage
+)
 
-// TODO: MethodsQuery should be case object
-case class MethodsQuery() extends RemoteMessage
+/** Request the list of methods available */
+case object MethodsQuery extends RemoteMessage
 
-case class Methods(methods: String)
+/** Response to MethodsQuery, lists the methods available */
+case class MethodsResponse(
+    /** Contains the list of methods serialized as a Json object*/
+    methods: String
+)
 
+/** A query for data mining or more complex operations on data */
 abstract class Query() extends RemoteMessage {
+
+  /** List of variables ( aka dependent features ) */
   def variables: List[VariableId]
+
+  /** List of covariables (aka independent features ) */
   def covariables: List[VariableId]
+
+  /** List of groupings */
+  // TODO: the concept of groupings is hazy, like a SQL group by but not only that, for example in R there are variants such as a:b and a*b
+  // We may need to move away from it and be able to express full R formula (see https://stat.ethz.ch/R-manual/R-devel/library/stats/html/formula.html)
   def grouping: List[VariableId]
+
+  /** Filters to apply on the data. Currently, a SQL where clause */
+  // TODO: filters should be a structured parameter
   def filters: String
 }
 
+/** Data mining query executing a single algorithm */
 case class MiningQuery(
     variables: List[VariableId],
     covariables: List[VariableId],
@@ -83,6 +110,7 @@ case class MiningQuery(
     algorithm: Algorithm
 ) extends Query
 
+/** Experiment query using one or more algorithms on the same dataset and with an optional validation step */
 case class ExperimentQuery(
     variables: List[VariableId],
     covariables: List[VariableId],
@@ -92,19 +120,25 @@ case class ExperimentQuery(
     validations: List[Validation]
 ) extends Query
 
-// PFA
-case class QueryError(
-    message: String
-)
-
-// PFA
+/** Response to a query */
 case class QueryResult(
+    /** Id of the job producing the result */
     jobId: String,
+    /** Node where the result was computed */
     node: String,
+    /** Date of creation of the result */
     timestamp: OffsetDateTime,
+    /** Shape of the result. A MIME type */
     shape: String,
+    /** Name of the function that produced the result */
+    // TODO: rename to algorithm?
     function: String,
+    /** Contains the result serialized as a string.
+      * The format of the string is defined by the MIME type defined in the shape field.
+      * It can be for example a JSON document defining the PFA model if the shape field is 'application/pfa+json'.
+      */
     data: Option[String] = None,
+    /** Contains the error message if the query was not successful */
     error: Option[String] = None
 )
 

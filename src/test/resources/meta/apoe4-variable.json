@@ -1,0 +1,22 @@
+{
+  "code": "apoe4",
+  "description": "Apolipoprotein E (APOE) e4 allele",
+  "enumerations": [
+    {
+      "code": 0,
+      "label": 0
+    },
+    {
+      "code": 1,
+      "label": 1
+    },
+    {
+      "code": 2,
+      "label": 2
+    }
+  ],
+  "label": "ApoE4",
+  "methodology": "mip-cde",
+  "sql_type": "int",
+  "type": "polynominal"
+}

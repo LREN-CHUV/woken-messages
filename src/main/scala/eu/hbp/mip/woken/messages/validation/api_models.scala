@@ -21,10 +21,9 @@ import spray.json.JsObject
 import cats.data.NonEmptyList
 import eu.hbp.mip.woken.messages.RemoteMessage
 
-// TODO: model should be JsObject
 case class ValidationQuery(
     fold: String,
-    model: String,
+    model: JsObject,
     data: List[String],
     varInfo: VariableMetaData
 ) extends RemoteMessage

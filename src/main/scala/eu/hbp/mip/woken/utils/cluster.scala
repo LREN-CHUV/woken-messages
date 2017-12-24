@@ -16,17 +16,37 @@
 
 package eu.hbp.mip.woken.utils
 
-import akka.actor.{ Actor, Address, ExtendedActorSystem, Extension, ExtensionKey }
+import akka.actor.{
+  Actor,
+  Address,
+  ExtendedActorSystem,
+  Extension,
+  ExtensionId,
+  ExtensionIdProvider
+}
 
-class RemotePathExtension(system: ExtendedActorSystem) extends Extension {
+class RemotePathExtensionImpl(system: ExtendedActorSystem) extends Extension {
   def getPath(actor: Actor): String =
     actor.self.path.toStringWithAddress(system.provider.getDefaultAddress)
 }
 
-object RemotePathExtension extends ExtensionKey[RemotePathExtension]
+object RemotePathExtension extends ExtensionId[RemotePathExtensionImpl] with ExtensionIdProvider {
+  override def createExtension(system: ExtendedActorSystem): RemotePathExtensionImpl =
+    new RemotePathExtensionImpl(system)
 
-class RemoteAddressExtension(system: ExtendedActorSystem) extends Extension {
-  def getAddress: Address = system.provider.getDefaultAddress
+  override def lookup(): ExtensionId[_ <: Extension] = RemotePathExtension
 }
 
-object RemoteAddressExtension extends ExtensionKey[RemoteAddressExtension]
+class RemoteAddressExtensionImpl(system: ExtendedActorSystem) extends Extension {
+  def getAddress: Address =
+    system.provider.getDefaultAddress
+}
+
+object RemoteAddressExtension
+    extends ExtensionId[RemoteAddressExtensionImpl]
+    with ExtensionIdProvider {
+  override def createExtension(system: ExtendedActorSystem): RemoteAddressExtensionImpl =
+    new RemoteAddressExtensionImpl(system)
+
+  override def lookup(): ExtensionId[_ <: Extension] = RemoteAddressExtension
+}
