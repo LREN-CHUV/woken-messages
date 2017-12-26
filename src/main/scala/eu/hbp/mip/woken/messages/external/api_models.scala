@@ -126,7 +126,7 @@ case class MiningQuery(
     covariables: List[VariableId],
     grouping: List[VariableId],
     filters: String,
-    algorithm: Algorithm
+    algorithm: AlgorithmSpec
 ) extends Query
 
 /** Experiment query using one or more algorithms on the same dataset and with an optional validation step */
@@ -135,8 +135,8 @@ case class ExperimentQuery(
     covariables: List[VariableId],
     grouping: List[VariableId],
     filters: String,
-    algorithms: List[Algorithm],
-    validations: List[Validation]
+    algorithms: List[AlgorithmSpec],
+    validations: List[ValidationSpec]
 ) extends Query
 
 /** Response to a query */
