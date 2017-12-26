@@ -24,44 +24,27 @@ import eu.hbp.mip.woken.meta.{ EnumeratedValue => EV }
 
 class VariableMetaDataTest extends WordSpec with Matchers with JsonUtils {
 
+  val apoe4Meta = VariableMetaData(
+    code = "apoe4",
+    label = "ApoE4",
+    `type` = "polynominal",
+    sqlType = Some("int"),
+    description = Some("Apolipoprotein E (APOE) e4 allele"),
+    methodology = Some("mip-cde"),
+    units = None,
+    enumerations = Some(List(EV("0", "0"), EV("1", "1"), EV("2", "2")))
+  )
+
+  val apoe4Json: JsValue = loadJson("/meta/apoe4-variable.json")
+
   "VariableMetaData" should {
 
-    "be serializable to and from Json" in {
-
-      val expectedJson = loadJson("/meta/apoe4-variable.json")
-
-      val meta = VariableMetaData(
-        code = "apoe4",
-        label = "ApoE4",
-        `type` = "polynominal",
-        sqlType = Some("int"),
-        description = Some("Apolipoprotein E (APOE) e4 allele"),
-        methodology = Some("mip-cde"),
-        units = None,
-        enumerations = Some(List(EV("0", "0"), EV("1", "1"), EV("2", "2")))
-      )
-
-      meta.toJson shouldBe expectedJson
-
+    "be serializable to Json" in {
+      apoe4Meta.toJson shouldBe apoe4Json
     }
 
-    "be read from Json" in {
-
-      val json = loadJson("/meta/apoe4-variable.json")
-
-      val expectedMeta = VariableMetaData(
-        code = "apoe4",
-        label = "ApoE4",
-        `type` = "polynominal",
-        sqlType = Some("int"),
-        description = Some("Apolipoprotein E (APOE) e4 allele"),
-        methodology = Some("mip-cde"),
-        units = None,
-        enumerations = Some(List(EV("0", "0"), EV("1", "1"), EV("2", "2")))
-      )
-
-      json.convertTo[VariableMetaData] shouldBe expectedMeta
-
+    "be deserializable from Json" in {
+      apoe4Json.convertTo[VariableMetaData] shouldBe apoe4Meta
     }
   }
 

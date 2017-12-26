@@ -67,26 +67,16 @@ object VariableMetaDataProtocol extends DefaultJsonProtocol {
     // then flatten it to only write the fields that were Some(..)
     def write(item: VariableMetaData): JsObject =
       JsObject(
-        ((item.sqlType match {
-          case Some(m) => Some("sql_type" -> m.toJson)
-          case _       => None
-        }) :: (item.description match {
-          case Some(u) => Some("description" -> u.toJson)
-          case _       => None
-        }) :: (item.methodology match {
-          case Some(u) => Some("methodology" -> u.toJson)
-          case _       => None
-        }) :: (item.units match {
-          case Some(u) => Some("units" -> u.toJson)
-          case _       => None
-        }) :: (item.enumerations match {
-          case Some(e) => Some("enumerations" -> e.toJson)
-          case _       => None
-        }) :: List(
-          Some("code"  -> item.code.toJson),
-          Some("label" -> item.label.toJson),
-          Some("type"  -> item.`type`.toJson)
-        )).flatten: _*
+        List[Option[(String, JsValue)]](
+          item.sqlType.map("sql_type"          -> _.toJson),
+          item.description.map("description"   -> _.toJson),
+          item.methodology.map("methodology"   -> _.toJson),
+          item.units.map("units"               -> _.toJson),
+          item.enumerations.map("enumerations" -> _.toJson),
+          Some("code"                          -> item.code.toJson),
+          Some("label"                         -> item.label.toJson),
+          Some("type"                          -> item.`type`.toJson)
+        ).flatten: _*
       )
 
     // We use the "standard" getFields method to extract the mandatory fields.
