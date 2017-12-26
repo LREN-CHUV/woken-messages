@@ -19,4 +19,4 @@ package eu.hbp.mip.woken.messages
 /**
   * Defines the messages exchanged between Woken and an external system
   */
-package object external {}
+package object external

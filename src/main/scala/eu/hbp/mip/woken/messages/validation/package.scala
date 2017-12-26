@@ -19,4 +19,4 @@ package eu.hbp.mip.woken.messages
 /**
   * Defines the messages exchanged between Woken and Woken-validation
   */
-package object validation {}
+package object validation

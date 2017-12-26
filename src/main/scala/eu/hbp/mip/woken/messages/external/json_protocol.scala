@@ -31,48 +31,61 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
 
   implicit val VariableIdJsonFormat: JsonFormat[VariableId] = jsonFormat1(VariableId)
 
+  private def paramMap(value: JsValue): Map[String, String] =
+    value.asJsObject
+      .fields("parameters")
+      .convertTo[List[CodeValue]]
+      .map(_.toTuple)
+      .toMap
+
+  implicit object AlgorithmSpecJsonFormat extends JsonFormat[AlgorithmSpec] {
+    def write(a: AlgorithmSpec): JsValue =
+      JsObject(
+        "code"       -> JsString(a.code),
+        "parameters" -> a.parameters.map(CodeValue.fromTuple).toJson
+      )
+
+    def read(value: JsValue): AlgorithmSpec =
+      AlgorithmSpec(value.asJsObject.fields("code").convertTo[String], paramMap(value))
+  }
+
   implicit object AlgorithmJsonFormat extends JsonFormat[Algorithm] {
     def write(a: Algorithm): JsValue =
       JsObject(
-        List[Option[(String, JsValue)]](
-          Some("code"       -> JsString(a.code)),
-          a.name.map("name" -> JsString(_)),
-          Some("parameters" -> a.parameters.map(CodeValue.fromTuple).toJson)
-        ).flatten: _*
+        "code"       -> JsString(a.code),
+        "name"       -> JsString(a.name),
+        "parameters" -> a.parameters.map(CodeValue.fromTuple).toJson
       )
 
-    def read(value: JsValue): Algorithm = {
-      val parameters = value.asJsObject
-        .fields("parameters")
-        .convertTo[List[CodeValue]]
-        .map(_.toTuple)
-        .toMap
+    def read(value: JsValue): Algorithm =
       Algorithm(value.asJsObject.fields("code").convertTo[String],
-                value.asJsObject.fields.get("name").map(_.convertTo[String]),
-                parameters)
-    }
+                value.asJsObject.fields("name").convertTo[String],
+                paramMap(value))
+  }
+
+  implicit object ValidationSpecJsonFormat extends JsonFormat[ValidationSpec] {
+    def write(v: ValidationSpec): JsValue =
+      JsObject(
+        "code"       -> JsString(v.code),
+        "parameters" -> v.parameters.map(CodeValue.fromTuple).toJson
+      )
+
+    def read(value: JsValue): ValidationSpec =
+      ValidationSpec(value.asJsObject.fields("code").convertTo[String], paramMap(value))
   }
 
   implicit object ValidationJsonFormat extends JsonFormat[Validation] {
     def write(v: Validation): JsValue =
       JsObject(
-        List[Option[(String, JsValue)]](
-          Some("code"       -> JsString(v.code)),
-          v.name.map("name" -> JsString(_)),
-          Some("parameters" -> v.parameters.map(CodeValue.fromTuple).toJson)
-        ).flatten: _*
+        "code"       -> JsString(v.code),
+        "name"       -> JsString(v.name),
+        "parameters" -> v.parameters.map(CodeValue.fromTuple).toJson
       )
 
-    def read(value: JsValue): Validation = {
-      val parameters = value.asJsObject
-        .fields("parameters")
-        .convertTo[List[CodeValue]]
-        .map(_.toTuple)
-        .toMap
+    def read(value: JsValue): Validation =
       Validation(value.asJsObject.fields("code").convertTo[String],
-                 value.asJsObject.fields.get("name").map(_.convertTo[String]),
-                 parameters)
-    }
+                 value.asJsObject.fields("name").convertTo[String],
+                 paramMap(value))
   }
 
   def jsonEnum[T <: Enumeration](enu: T): JsonFormat[T#Value] = new JsonFormat[T#Value] {

@@ -25,11 +25,22 @@ import io.swagger.annotations.ApiModel
 @ApiModel(
   description = "An algorithm to execute"
 )
+case class AlgorithmSpec(
+    /** Code identifying the algorithm */
+    code: String,
+    /** List of parameters to pass to the algorithm */
+    parameters: Map[String, String] = Map.empty
+)
+
+/** An algorithm */
+@ApiModel(
+  description = "An algorithm to execute"
+)
 case class Algorithm(
     /** Code identifying the algorithm */
     code: String,
-    /** Optional readable name for the algorithm */
-    name: Option[String],
+    /** Readable name for the algorithm */
+    name: String,
     /** List of parameters to pass to the algorithm */
     parameters: Map[String, String] = Map.empty
 )
@@ -44,11 +55,19 @@ case class VariableId(
 )
 
 /** Definition of a validation method used in an experiment */
+case class ValidationSpec(
+    /** Code identifying the validation */
+    code: String,
+    /** List of parameters to pass to the validation */
+    parameters: Map[String, String]
+)
+
+/** Definition of a validation method used in an experiment */
 case class Validation(
     /** Code identifying the validation */
     code: String,
-    /** Optional readable name for the validation */
-    name: Option[String],
+    /** Readable name for the validation */
+    name: String,
     /** List of parameters to pass to the validation */
     parameters: Map[String, String]
 )
