@@ -52,7 +52,7 @@ case class Algorithm(
     name: String,
     /** List of parameters to pass to the algorithm */
     parameters: List[CodeValue]
-                    ) {
+) {
   lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
 }
 
@@ -71,7 +71,7 @@ case class ValidationSpec(
     code: String,
     /** List of parameters to pass to the validation */
     parameters: List[CodeValue]
-                         ) {
+) {
   lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
 }
 
@@ -83,7 +83,7 @@ case class Validation(
     name: String,
     /** List of parameters to pass to the validation */
     parameters: List[CodeValue]
-                     ) {
+) {
   lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
 }
 

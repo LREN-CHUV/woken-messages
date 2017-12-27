@@ -28,7 +28,9 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
 
   implicit val AlgorithmJsonFormat: JsonFormat[Algorithm] = jsonFormat3(Algorithm.apply)
 
-  implicit val ValidationSpecJsonFormat: JsonFormat[ValidationSpec] = jsonFormat2(ValidationSpec.apply)
+  implicit val ValidationSpecJsonFormat: JsonFormat[ValidationSpec] = jsonFormat2(
+    ValidationSpec.apply
+  )
 
   implicit val ValidationJsonFormat: JsonFormat[Validation] = jsonFormat3(Validation.apply)
 
