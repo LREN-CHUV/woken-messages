@@ -21,16 +21,25 @@ import java.time.OffsetDateTime
 import eu.hbp.mip.woken.messages.RemoteMessage
 import io.swagger.annotations.ApiModel
 
+case class CodeValue(code: String, value: String) {
+  def toTuple: (String, String) = (code, value)
+}
+object CodeValue {
+  def fromTuple(t: (String, String)) = CodeValue(t._1, t._2)
+}
+
 /** An algorithm */
 @ApiModel(
-  description = "An algorithm to execute"
+  description = "Specification for the execution of an algorithm"
 )
 case class AlgorithmSpec(
     /** Code identifying the algorithm */
     code: String,
     /** List of parameters to pass to the algorithm */
-    parameters: Map[String, String] = Map.empty
-)
+    parameters: List[CodeValue]
+) {
+  lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
+}
 
 /** An algorithm */
 @ApiModel(
@@ -42,8 +51,10 @@ case class Algorithm(
     /** Readable name for the algorithm */
     name: String,
     /** List of parameters to pass to the algorithm */
-    parameters: Map[String, String] = Map.empty
-)
+    parameters: List[CodeValue]
+                    ) {
+  lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
+}
 
 /** Id of a variable */
 @ApiModel(
@@ -54,13 +65,15 @@ case class VariableId(
     code: String
 )
 
-/** Definition of a validation method used in an experiment */
+/** Specification of a validation method to use in an experiment */
 case class ValidationSpec(
     /** Code identifying the validation */
     code: String,
     /** List of parameters to pass to the validation */
-    parameters: Map[String, String]
-)
+    parameters: List[CodeValue]
+                         ) {
+  lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
+}
 
 /** Definition of a validation method used in an experiment */
 case class Validation(
@@ -69,8 +82,10 @@ case class Validation(
     /** Readable name for the validation */
     name: String,
     /** List of parameters to pass to the validation */
-    parameters: Map[String, String]
-)
+    parameters: List[CodeValue]
+                     ) {
+  lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
+}
 
 /** List of operations supported by a filter */
 object Operators extends Enumeration {
