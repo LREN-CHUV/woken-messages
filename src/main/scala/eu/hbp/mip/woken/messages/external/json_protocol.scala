@@ -16,23 +16,32 @@
 
 package eu.hbp.mip.woken.messages.external
 
+import java.time.{ LocalDateTime, OffsetDateTime, ZoneOffset }
+
 import spray.json._
 
 object ExternalAPIProtocol extends DefaultJsonProtocol {
+
+  implicit object OffsetDateTimeJsonFormat extends RootJsonFormat[OffsetDateTime] {
+    override def write(x: OffsetDateTime): JsNumber = {
+      require(x ne null)
+      JsNumber(x.toEpochSecond)
+    }
+    override def read(value: JsValue): OffsetDateTime = value match {
+      case JsNumber(x) =>
+        OffsetDateTime.of(LocalDateTime.ofEpochSecond(x.toLong, 0, ZoneOffset.UTC), ZoneOffset.UTC)
+      case unknown =>
+        deserializationError(s"Expected OffsetDateTime as JsNumber, but got $unknown")
+    }
+  }
 
   implicit val CodeValueJsonFormat: JsonFormat[CodeValue] = jsonFormat2(CodeValue.apply)
 
   implicit val VariableIdJsonFormat: JsonFormat[VariableId] = jsonFormat1(VariableId)
 
-  implicit val AlgorithmSpecJsonFormat: JsonFormat[AlgorithmSpec] = jsonFormat2(AlgorithmSpec.apply)
+  implicit val AlgorithmSpecJsonFormat: JsonFormat[AlgorithmSpec] = jsonFormat2(AlgorithmSpec)
 
-  implicit val AlgorithmJsonFormat: JsonFormat[Algorithm] = jsonFormat3(Algorithm.apply)
-
-  implicit val ValidationSpecJsonFormat: JsonFormat[ValidationSpec] = jsonFormat2(
-    ValidationSpec.apply
-  )
-
-  implicit val ValidationJsonFormat: JsonFormat[Validation] = jsonFormat3(Validation.apply)
+  implicit val ValidationSpecJsonFormat: JsonFormat[ValidationSpec] = jsonFormat2(ValidationSpec)
 
   def jsonEnum[T <: Enumeration](enu: T): JsonFormat[T#Value] = new JsonFormat[T#Value] {
     def write(obj: T#Value) = JsString(obj.toString)
@@ -45,5 +54,13 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
   }
 
   implicit val OperatorsJsonFormat: JsonFormat[Operators.Value] = jsonEnum(Operators)
+
+  implicit val FilterJsonFormat: JsonFormat[Filter]               = jsonFormat3(Filter)
+  implicit val SimpleQueryJsonFormat: RootJsonFormat[MiningQuery] = jsonFormat5(MiningQuery)
+  implicit val ExperimentQueryJsonFormat: RootJsonFormat[ExperimentQuery] = jsonFormat6(
+    ExperimentQuery
+  )
+
+  implicit val QueryResultJsonFormat: JsonFormat[QueryResult] = jsonFormat7(QueryResult)
 
 }

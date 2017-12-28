@@ -38,22 +38,7 @@ case class AlgorithmSpec(
     /** List of parameters to pass to the algorithm */
     parameters: List[CodeValue]
 ) {
-  lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
-}
-
-/** An algorithm */
-@ApiModel(
-  description = "An algorithm to execute"
-)
-case class Algorithm(
-    /** Code identifying the algorithm */
-    code: String,
-    /** Readable name for the algorithm */
-    name: String,
-    /** List of parameters to pass to the algorithm */
-    parameters: List[CodeValue]
-) {
-  lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
+  @transient lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
 }
 
 /** Id of a variable */
@@ -72,19 +57,7 @@ case class ValidationSpec(
     /** List of parameters to pass to the validation */
     parameters: List[CodeValue]
 ) {
-  lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
-}
-
-/** Definition of a validation method used in an experiment */
-case class Validation(
-    /** Code identifying the validation */
-    code: String,
-    /** Readable name for the validation */
-    name: String,
-    /** List of parameters to pass to the validation */
-    parameters: List[CodeValue]
-) {
-  lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
+  @transient lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
 }
 
 /** List of operations supported by a filter */
@@ -101,6 +74,7 @@ object Operators extends Enumeration {
   val between: Value = Value("between")
 }
 
+// TODO: use or remove
 case class Filter(
     variable: VariableId,
     operator: Operators.Operators,
@@ -171,9 +145,9 @@ case class QueryResult(
       * The format of the string is defined by the MIME type defined in the shape field.
       * It can be for example a JSON document defining the PFA model if the shape field is 'application/pfa+json'.
       */
-    data: Option[String] = None,
+    data: Option[String],
     /** Contains the error message if the query was not successful */
-    error: Option[String] = None
+    error: Option[String]
 )
 
 /*

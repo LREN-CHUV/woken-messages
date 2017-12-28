@@ -1,0 +1,35 @@
+{
+  "algorithms": [
+    {
+      "code": "linearRegression",
+      "parameters": []
+    }
+  ],
+  "covariables": [
+    {
+      "code": "AGE"
+    }
+  ],
+  "filters": "",
+  "grouping": [
+    {
+      "code": "COLPROT"
+    }
+  ],
+  "validations": [
+    {
+      "code": "kfold",
+      "parameters": [
+        {
+          "code": "k",
+          "value": "2"
+        }
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "code": "LeftAmygdala"
+    }
+  ]
+}

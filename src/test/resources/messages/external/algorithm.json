@@ -1,0 +1,9 @@
+{
+  "code": "knn",
+  "parameters": [
+    {
+      "code": "k",
+      "value": "5"
+    }
+  ]
+}

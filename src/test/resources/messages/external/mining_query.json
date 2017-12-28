@@ -1,0 +1,27 @@
+{
+  "algorithm": {
+    "code": "knn",
+    "parameters": [
+      {
+        "code": "k",
+        "value": "5"
+      }
+    ]
+  },
+  "covariables": [
+    {
+      "code": "AGE"
+    }
+  ],
+  "filters": "",
+  "grouping": [
+    {
+      "code": "COLPROT"
+    }
+  ],
+  "variables": [
+    {
+      "code": "LeftAmygdala"
+    }
+  ]
+}
