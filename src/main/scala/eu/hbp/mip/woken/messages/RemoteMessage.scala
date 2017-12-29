@@ -16,9 +16,9 @@
 
 package eu.hbp.mip.woken.messages
 
-import com.github.levkhomich.akka.tracing.TracingSupport
+//import com.github.levkhomich.akka.tracing.TracingSupport
 
 /**
   * Marker for Akka messages exchanged between applications
   */
-trait RemoteMessage extends TracingSupport
+trait RemoteMessage // extends TracingSupport

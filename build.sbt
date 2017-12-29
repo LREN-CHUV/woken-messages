@@ -13,7 +13,7 @@ lazy val `woken-messages` =
           library.akkaActor,
           library.akkaRemote,
           library.akkaCluster,
-          library.akkaTracingCore,
+          //library.akkaTracingCore,
           library.swaggerAnnotations,
           library.sprayJson,
           library.catsCore,
@@ -36,7 +36,7 @@ lazy val library =
       val akkaTracing        = "0.6.1"
       val swaggerAnnotations = "1.5.16"
       val sprayJson          = "1.3.4"
-      val cats               = "1.0.0-RC1"
+      val cats               = "1.0.0"
     }
     val scalaCheck: ModuleID  = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
     val scalaTest: ModuleID   = "org.scalatest"     %% "scalatest"    % Version.scalaTest
