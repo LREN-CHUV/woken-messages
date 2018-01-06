@@ -10,12 +10,26 @@
       "code": "AGE"
     }
   ],
+  "datasets": [
+    {
+      "code": "research"
+    },
+    {
+      "code": "clinical1"
+    },
+    {
+      "code": "clinical2"
+    }
+  ],
   "filters": "",
   "grouping": [
     {
       "code": "COLPROT"
     }
   ],
+  "user": {
+    "code": "user1"
+  },
   "validations": [
     {
       "code": "kfold",

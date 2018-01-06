@@ -47,10 +47,12 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
       val miningQuery = jsonAst.convertTo[MiningQuery]
 
       val expected = MiningQuery(
+        user = UserId("user1"),
         variables = List(VariableId("LeftAmygdala")),
         covariables = List(VariableId("AGE")),
         grouping = List(VariableId("COLPROT")),
         filters = "",
+        datasets = List[DatasetId](),
         algorithm = AlgorithmSpec("knn", List(CodeValue("k", "5")))
       )
 
@@ -62,10 +64,12 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
       val experimentQuery = jsonAst.convertTo[ExperimentQuery]
 
       val expected = ExperimentQuery(
+        user = UserId("user1"),
         variables = List(VariableId("LeftAmygdala")),
         covariables = List(VariableId("AGE")),
         grouping = List(VariableId("COLPROT")),
         filters = "",
+        datasets = List("research", "clinical1", "clinical2").map(DatasetId),
         algorithms = List(AlgorithmSpec("linearRegression", List())),
         validations = List(ValidationSpec("kfold", List(CodeValue("k", "2"))))
       )

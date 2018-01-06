@@ -13,12 +13,16 @@
       "code": "AGE"
     }
   ],
+  "datasets": [],
   "filters": "",
   "grouping": [
     {
       "code": "COLPROT"
     }
   ],
+  "user": {
+    "code": "user1"
+  },
   "variables": [
     {
       "code": "LeftAmygdala"

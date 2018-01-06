@@ -41,6 +41,24 @@ case class AlgorithmSpec(
   @transient lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
 }
 
+/** Id of a user */
+@ApiModel(
+  description = "Id of a user"
+)
+case class UserId(
+    /** Unique user ID */
+    code: String
+)
+
+/** Id of a dataset */
+@ApiModel(
+  description = "Id of a dataset"
+)
+case class DatasetId(
+    /** Unique dataset code, used to select */
+    code: String
+)
+
 /** Id of a variable */
 @ApiModel(
   description = "Id of a variable"
@@ -93,6 +111,9 @@ case class MethodsResponse(
 /** A query for data mining or more complex operations on data */
 abstract class Query() extends RemoteMessage {
 
+  /** User issuing the query */
+  def user: UserId
+
   /** List of variables ( aka dependent features ) */
   def variables: List[VariableId]
 
@@ -107,23 +128,30 @@ abstract class Query() extends RemoteMessage {
   /** Filters to apply on the data. Currently, a SQL where clause */
   // TODO: filters should be a structured parameter
   def filters: String
+
+  /** Selection of the datasets to query */
+  def datasets: List[DatasetId]
 }
 
 /** Data mining query executing a single algorithm */
 case class MiningQuery(
+    user: UserId,
     variables: List[VariableId],
     covariables: List[VariableId],
     grouping: List[VariableId],
     filters: String,
+    datasets: List[DatasetId],
     algorithm: AlgorithmSpec
 ) extends Query
 
 /** Experiment query using one or more algorithms on the same dataset and with an optional validation step */
 case class ExperimentQuery(
+    user: UserId,
     variables: List[VariableId],
     covariables: List[VariableId],
     grouping: List[VariableId],
     filters: String,
+    datasets: List[DatasetId],
     algorithms: List[AlgorithmSpec],
     validations: List[ValidationSpec]
 ) extends Query

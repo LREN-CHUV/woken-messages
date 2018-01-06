@@ -37,6 +37,10 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
 
   implicit val CodeValueJsonFormat: JsonFormat[CodeValue] = jsonFormat2(CodeValue.apply)
 
+  implicit val UserIdJsonFormat: JsonFormat[UserId] = jsonFormat1(UserId)
+
+  implicit val DatasetIdJsonFormat: JsonFormat[DatasetId] = jsonFormat1(DatasetId)
+
   implicit val VariableIdJsonFormat: JsonFormat[VariableId] = jsonFormat1(VariableId)
 
   implicit val AlgorithmSpecJsonFormat: JsonFormat[AlgorithmSpec] = jsonFormat2(AlgorithmSpec)
@@ -56,8 +60,8 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
   implicit val OperatorsJsonFormat: JsonFormat[Operators.Value] = jsonEnum(Operators)
 
   implicit val FilterJsonFormat: JsonFormat[Filter]               = jsonFormat3(Filter)
-  implicit val SimpleQueryJsonFormat: RootJsonFormat[MiningQuery] = jsonFormat5(MiningQuery)
-  implicit val ExperimentQueryJsonFormat: RootJsonFormat[ExperimentQuery] = jsonFormat6(
+  implicit val SimpleQueryJsonFormat: RootJsonFormat[MiningQuery] = jsonFormat7(MiningQuery)
+  implicit val ExperimentQueryJsonFormat: RootJsonFormat[ExperimentQuery] = jsonFormat8(
     ExperimentQuery
   )
 
