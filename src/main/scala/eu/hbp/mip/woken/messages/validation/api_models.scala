@@ -31,11 +31,8 @@ case class ValidationQuery(
 case class ValidationResult(
     fold: String,
     varInfo: VariableMetaData,
-    outputData: List[String]
-)
-
-case class ValidationError(
-    message: String
+    outputData: List[String],
+    error: Option[String]
 )
 
 // TODO: the NonEmptyList[String] contain actually a Json value to deserialise and that maps usually to String or Double
