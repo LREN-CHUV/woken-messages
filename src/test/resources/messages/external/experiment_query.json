@@ -10,7 +10,14 @@
       "code": "AGE"
     }
   ],
-  "datasets": [
+  "filters": "",
+  "grouping": [
+    {
+      "code": "COLPROT"
+    }
+  ],
+  "testingDatasets": [],
+  "trainingDatasets": [
     {
       "code": "research"
     },
@@ -21,15 +28,10 @@
       "code": "clinical2"
     }
   ],
-  "filters": "",
-  "grouping": [
-    {
-      "code": "COLPROT"
-    }
-  ],
   "user": {
     "code": "user1"
   },
+  "validationDatasets": [],
   "validations": [
     {
       "code": "kfold",

@@ -20,6 +20,7 @@ import java.time.OffsetDateTime
 
 import eu.hbp.mip.woken.messages.RemoteMessage
 import io.swagger.annotations.ApiModel
+import spray.json.JsValue
 
 case class CodeValue(code: String, value: String) {
   def toTuple: (String, String) = (code, value)
@@ -68,7 +69,11 @@ case class VariableId(
     code: String
 )
 
-/** Specification of a validation method to use in an experiment */
+/** Specification of a cross-validation method to use in an experiment.
+  *
+  * Cross-validation re-uses always the training dataset used during training, splitting it further into subsets
+  * of training and testing datasets.
+  */
 case class ValidationSpec(
     /** Code identifying the validation */
     code: String,
@@ -128,9 +133,6 @@ abstract class Query() extends RemoteMessage {
   /** Filters to apply on the data. Currently, a SQL where clause */
   // TODO: filters should be a structured parameter
   def filters: String
-
-  /** Selection of the datasets to query */
-  def datasets: List[DatasetId]
 }
 
 /** Data mining query executing a single algorithm */
@@ -140,6 +142,7 @@ case class MiningQuery(
     covariables: List[VariableId],
     grouping: List[VariableId],
     filters: String,
+    /** Selection of the datasets to query */
     datasets: List[DatasetId],
     algorithm: AlgorithmSpec
 ) extends Query
@@ -151,8 +154,13 @@ case class ExperimentQuery(
     covariables: List[VariableId],
     grouping: List[VariableId],
     filters: String,
-    datasets: List[DatasetId],
+    /** List of datasets used for training */
+    trainingDatasets: List[DatasetId],
+    /** List of datasets used for testing. Ignored for cross-validation methods  */
+    testingDatasets: List[DatasetId],
     algorithms: List[AlgorithmSpec],
+    /** List of datasets used for validation. Ignored for cross-validation methods */
+    validationDatasets: List[DatasetId],
     validations: List[ValidationSpec]
 ) extends Query
 
@@ -166,14 +174,13 @@ case class QueryResult(
     timestamp: OffsetDateTime,
     /** Shape of the result. A MIME type */
     shape: String,
-    /** Name of the function that produced the result */
-    // TODO: rename to algorithm?
-    function: String,
-    /** Contains the result serialized as a string.
-      * The format of the string is defined by the MIME type defined in the shape field.
+    /** Name of the algorithm that produced the result */
+    algorithm: String,
+    /** Contains the result serialized as a Json string, object or array.
+      * The format of the result is defined by the MIME type defined in the shape field.
       * It can be for example a JSON document defining the PFA model if the shape field is 'application/pfa+json'.
       */
-    data: Option[String],
+    data: Option[JsValue],
     /** Contains the error message if the query was not successful */
     error: Option[String]
 )

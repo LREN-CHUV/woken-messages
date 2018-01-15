@@ -61,7 +61,7 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
 
   implicit val FilterJsonFormat: JsonFormat[Filter]               = jsonFormat3(Filter)
   implicit val MiningQueryJsonFormat: RootJsonFormat[MiningQuery] = jsonFormat7(MiningQuery)
-  implicit val ExperimentQueryJsonFormat: RootJsonFormat[ExperimentQuery] = jsonFormat8(
+  implicit val ExperimentQueryJsonFormat: RootJsonFormat[ExperimentQuery] = jsonFormat10(
     ExperimentQuery
   )
 
