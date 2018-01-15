@@ -143,7 +143,7 @@ case class MiningQuery(
     grouping: List[VariableId],
     filters: String,
     /** Selection of the datasets to query */
-    datasets: List[DatasetId],
+    datasets: Set[DatasetId],
     algorithm: AlgorithmSpec
 ) extends Query
 
@@ -154,13 +154,13 @@ case class ExperimentQuery(
     covariables: List[VariableId],
     grouping: List[VariableId],
     filters: String,
-    /** List of datasets used for training */
-    trainingDatasets: List[DatasetId],
-    /** List of datasets used for testing. Ignored for cross-validation methods  */
-    testingDatasets: List[DatasetId],
+    /** Set of datasets used for training */
+    trainingDatasets: Set[DatasetId],
+    /** Set of datasets used for testing. Ignored for cross-validation methods  */
+    testingDatasets: Set[DatasetId],
     algorithms: List[AlgorithmSpec],
     /** List of datasets used for validation. Ignored for cross-validation methods */
-    validationDatasets: List[DatasetId],
+    validationDatasets: Set[DatasetId],
     validations: List[ValidationSpec]
 ) extends Query
 

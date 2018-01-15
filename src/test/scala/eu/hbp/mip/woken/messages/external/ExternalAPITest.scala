@@ -52,7 +52,7 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
         covariables = List(VariableId("AGE")),
         grouping = List(VariableId("COLPROT")),
         filters = "",
-        datasets = List[DatasetId](),
+        datasets = Set[DatasetId](),
         algorithm = AlgorithmSpec("knn", List(CodeValue("k", "5")))
       )
 
@@ -69,9 +69,9 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
         covariables = List(VariableId("AGE")),
         grouping = List(VariableId("COLPROT")),
         filters = "",
-        trainingDatasets = List("research", "clinical1", "clinical2").map(DatasetId),
-        testingDatasets = Nil,
-        validationDatasets = Nil,
+        trainingDatasets = Set("research", "clinical1", "clinical2").map(DatasetId),
+        testingDatasets = Set(),
+        validationDatasets = Set(),
         algorithms = List(AlgorithmSpec("linearRegression", List())),
         validations = List(ValidationSpec("kfold", List(CodeValue("k", "2"))))
       )
