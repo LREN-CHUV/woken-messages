@@ -59,6 +59,7 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
 
   implicit val OperatorsJsonFormat: JsonFormat[Operators.Value] = jsonEnum(Operators)
 
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   implicit object StepInputFormat extends JsonFormat[StepInput] {
     def write(obj: StepInput): JsValue = obj match {
       case PreviousResults(fromStep)    => JsObject("previousResults" -> JsString(fromStep))
@@ -75,6 +76,7 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
 
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   implicit object OperationFormat extends JsonFormat[Operation] {
     def write(obj: Operation): JsValue = obj match {
       case Fold              => JsString("fold")

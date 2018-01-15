@@ -52,7 +52,7 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
         covariables = List(VariableId("AGE")),
         grouping = List(VariableId("COLPROT")),
         filters = "",
-        datasets = Set[DatasetId](),
+        datasets = None,
         algorithm = AlgorithmSpec("knn", List(CodeValue("k", "5")))
       )
 
@@ -69,12 +69,12 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
         covariables = List(VariableId("AGE")),
         grouping = List(VariableId("COLPROT")),
         filters = "",
-        trainingDatasets = Set("research", "clinical1", "clinical2").map(DatasetId),
-        testingDatasets = Set(),
-        validationDatasets = Set(),
+        trainingDatasets = Some(Set("research", "clinical1", "clinical2").map(DatasetId)),
+        testingDatasets = None,
+        validationDatasets = None,
         algorithms = List(AlgorithmSpec("linearRegression", List())),
         validations = List(ValidationSpec("kfold", List(CodeValue("k", "2")))),
-        executionPlan = ExecutionPlan.scatterGather
+        executionPlan = Some(ExecutionPlan.scatterGather)
       )
 
       experimentQuery shouldBe expected

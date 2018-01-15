@@ -132,13 +132,6 @@ case object SelectDataset {
   val selectValidationDataset = SelectDataset("validation")
 }
 
-object DatasetType extends Enumeration with StepInput {
-  type DatasetType = Value
-  val training: Value   = Value("training")
-  val testing: Value    = Value("testing")
-  val validation: Value = Value("validation")
-}
-
 sealed trait Operation
 
 case object Fold                     extends Operation
@@ -229,7 +222,7 @@ case class MiningQuery(
     grouping: List[VariableId],
     filters: String,
     /** Selection of the datasets to query */
-    datasets: Set[DatasetId],
+    datasets: Option[Set[DatasetId]],
     algorithm: AlgorithmSpec
 ) extends Query
 
@@ -241,14 +234,14 @@ case class ExperimentQuery(
     grouping: List[VariableId],
     filters: String,
     /** Set of datasets used for training */
-    trainingDatasets: Set[DatasetId],
+    trainingDatasets: Option[Set[DatasetId]],
     /** Set of datasets used for testing. Ignored for cross-validation methods  */
-    testingDatasets: Set[DatasetId],
+    testingDatasets: Option[Set[DatasetId]],
     algorithms: List[AlgorithmSpec],
     /** List of datasets used for validation. Ignored for cross-validation methods */
-    validationDatasets: Set[DatasetId],
+    validationDatasets: Option[Set[DatasetId]],
     validations: List[ValidationSpec],
-    executionPlan: ExecutionPlan
+    executionPlan: Option[ExecutionPlan]
 ) extends Query
 
 /** Response to a query */

@@ -17,7 +17,6 @@
       "code": "COLPROT"
     }
   ],
-  "testingDatasets": [],
   "trainingDatasets": [
     {
       "code": "research"
@@ -32,7 +31,6 @@
   "user": {
     "code": "user1"
   },
-  "validationDatasets": [],
   "validations": [
     {
       "code": "kfold",
