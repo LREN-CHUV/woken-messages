@@ -59,9 +59,55 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
 
   implicit val OperatorsJsonFormat: JsonFormat[Operators.Value] = jsonEnum(Operators)
 
+  implicit object StepInputFormat extends JsonFormat[StepInput] {
+    def write(obj: StepInput): JsValue = obj match {
+      case PreviousResults(fromStep)    => JsObject("previousResults" -> JsString(fromStep))
+      case SelectDataset(selectionType) => JsObject("selectDataset"   -> JsString(selectionType))
+    }
+
+    def read(json: JsValue): StepInput = json match {
+      case JsObject(fields) if fields.contains("previousResults") =>
+        PreviousResults(fields.getOrElse("previousResults", "?").asInstanceOf[JsString].value)
+      case JsObject(fields) if fields.contains("selectDataset") =>
+        SelectDataset(fields.getOrElse("selectDataset", "?").asInstanceOf[JsString].value)
+      case other => deserializationError(s"Cannot deserialise StepInput object $other")
+    }
+
+  }
+
+  implicit object OperationFormat extends JsonFormat[Operation] {
+    def write(obj: Operation): JsValue = obj match {
+      case Fold              => JsString("fold")
+      case Compute(stepName) => JsObject("compute" -> JsString(stepName))
+    }
+
+    def read(json: JsValue): Operation = json match {
+      case JsString("fold") => Fold
+      case JsObject(fields) if fields.contains("compute") =>
+        Compute(fields.getOrElse("compute", "?").asInstanceOf[JsString].value)
+      case other => deserializationError(s"Cannot deserialise Operation object $other")
+    }
+
+  }
+
+  implicit val ExecutionTemplateFormat: JsonFormat[ExecutionStyle.Value] = jsonEnum(ExecutionStyle)
+  implicit val ExecutionStepFormat: JsonFormat[ExecutionStep]            = jsonFormat4(ExecutionStep)
+
+  implicit object ExecutionPlanFormat extends RootJsonFormat[ExecutionPlan] {
+    private val caseClassFormat: RootJsonFormat[ExecutionPlan] = jsonFormat1(ExecutionPlan.apply)
+    def write(obj: ExecutionPlan): JsValue                     = caseClassFormat.write(obj)
+
+    def read(json: JsValue): ExecutionPlan = json match {
+      case JsString("scatter-gather") => ExecutionPlan.scatterGather
+      case JsString("map-reduce")     => ExecutionPlan.mapReduce
+      case JsString("streaming")      => ExecutionPlan.streaming
+      case js                         => caseClassFormat.read(js)
+    }
+  }
+
   implicit val FilterJsonFormat: JsonFormat[Filter]               = jsonFormat3(Filter)
   implicit val MiningQueryJsonFormat: RootJsonFormat[MiningQuery] = jsonFormat7(MiningQuery)
-  implicit val ExperimentQueryJsonFormat: RootJsonFormat[ExperimentQuery] = jsonFormat10(
+  implicit val ExperimentQueryJsonFormat: RootJsonFormat[ExperimentQuery] = jsonFormat11(
     ExperimentQuery
   )
 

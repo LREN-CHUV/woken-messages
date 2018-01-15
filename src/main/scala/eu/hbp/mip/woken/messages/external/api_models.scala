@@ -104,6 +104,92 @@ case class Filter(
     values: List[String]
 )
 
+object ExecutionStyle extends Enumeration {
+  type ExecutionStyle = Value
+
+  /** Apply a step onto each remote node, in parallel */
+  val map: Value = Value("map")
+
+  /** Wait for the results from the previous map step, then execute a step locally */
+  val reduce: Value = Value("reduce")
+
+  /** Perform a computation on one node, then move the intermediate results to the next node and repeat */
+  val stream: Value = Value("stream")
+
+  /** Gather results into a list */
+  val gather: Value = Value("gather")
+}
+
+sealed trait StepInput
+
+case class PreviousResults(fromStep: String) extends StepInput
+
+case class SelectDataset(selectionType: String) extends StepInput
+
+case object SelectDataset {
+  val selectTrainingDataset   = SelectDataset("training")
+  val selectTestingDataset    = SelectDataset("testing")
+  val selectValidationDataset = SelectDataset("validation")
+}
+
+object DatasetType extends Enumeration with StepInput {
+  type DatasetType = Value
+  val training: Value   = Value("training")
+  val testing: Value    = Value("testing")
+  val validation: Value = Value("validation")
+}
+
+sealed trait Operation
+
+case object Fold                     extends Operation
+case class Compute(stepName: String) extends Operation
+
+case class ExecutionStep(name: String,
+                         execution: ExecutionStyle.Value,
+                         input: StepInput,
+                         operation: Operation)
+
+case class ExecutionPlan(steps: List[ExecutionStep])
+
+object ExecutionPlan {
+  val scatterGather = ExecutionPlan(
+    List(
+      ExecutionStep(name = "scatter",
+                    execution = ExecutionStyle.map,
+                    input = SelectDataset.selectTrainingDataset,
+                    operation = Compute("compute")),
+      ExecutionStep(name = "gather",
+                    execution = ExecutionStyle.gather,
+                    input = PreviousResults(fromStep = "scatter"),
+                    operation = Fold)
+    )
+  )
+  val mapReduce = ExecutionPlan(
+    List(
+      ExecutionStep(name = "map",
+                    execution = ExecutionStyle.map,
+                    input = SelectDataset.selectTrainingDataset,
+                    operation = Compute("compute-local")),
+      ExecutionStep(name = "reduce",
+                    execution = ExecutionStyle.reduce,
+                    input = PreviousResults(fromStep = "map"),
+                    operation = Compute("compute-global"))
+    )
+  )
+  val streaming = ExecutionPlan(
+    List(
+      ExecutionStep(name = "stream",
+                    execution = ExecutionStyle.stream,
+                    input = SelectDataset.selectTrainingDataset,
+                    operation = Compute("compute-partial")),
+      ExecutionStep(name = "reduce",
+                    execution = ExecutionStyle.reduce,
+                    input = PreviousResults(fromStep = "stream"),
+                    operation = Compute("compute-global"))
+    )
+  )
+}
+
 /** Request the list of methods available */
 case object MethodsQuery extends RemoteMessage
 
@@ -161,7 +247,8 @@ case class ExperimentQuery(
     algorithms: List[AlgorithmSpec],
     /** List of datasets used for validation. Ignored for cross-validation methods */
     validationDatasets: Set[DatasetId],
-    validations: List[ValidationSpec]
+    validations: List[ValidationSpec],
+    executionPlan: ExecutionPlan
 ) extends Query
 
 /** Response to a query */

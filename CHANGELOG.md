@@ -4,6 +4,7 @@
 ## 2.2.0 - 2018-01-15
 
 * Add support for multiple datasets and results harvested from several sites
+* Add execution plan for experiments
 * Many changes in the definition of each class / json document
 
 ## 2.1.0 - 2017-12-05

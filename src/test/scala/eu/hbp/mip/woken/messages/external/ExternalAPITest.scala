@@ -73,7 +73,8 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
         testingDatasets = Set(),
         validationDatasets = Set(),
         algorithms = List(AlgorithmSpec("linearRegression", List())),
-        validations = List(ValidationSpec("kfold", List(CodeValue("k", "2"))))
+        validations = List(ValidationSpec("kfold", List(CodeValue("k", "2")))),
+        executionPlan = ExecutionPlan.scatterGather
       )
 
       experimentQuery shouldBe expected
