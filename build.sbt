@@ -19,7 +19,8 @@ lazy val `woken-messages` =
           library.catsCore,
           library.scalaCheck % Test,
           library.scalaTest  % Test
-        )
+        ),
+        crossScalaVersions := Seq("2.11.11", "2.12.4")
       )
     )
 
@@ -104,7 +105,7 @@ lazy val scalafmtSettings =
   Seq(
     scalafmtOnCompile := true,
     scalafmtOnCompile.in(Sbt) := false,
-    scalafmtVersion := "1.1.0"
+    scalafmtVersion := "1.4.0"
   )
 
 // Publish to BinTray
