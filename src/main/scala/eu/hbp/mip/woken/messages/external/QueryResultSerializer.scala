@@ -24,6 +24,7 @@ class QueryResultSerializer extends Serializer {
 
   override def identifier: Int = 76561945
 
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def toBinary(o: AnyRef): Array[Byte] = {
     val queryResult        = o.asInstanceOf[QueryResult]
     val bytes: Array[Byte] = queryResult.toJson.compactPrint.getBytes
@@ -32,6 +33,7 @@ class QueryResultSerializer extends Serializer {
 
   override def includeManifest: Boolean = false
 
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def fromBinary(bytes: Array[Byte], manifest: Option[Class[_]]): AnyRef =
     new String(bytes).parseJson.convertTo[QueryResult].asInstanceOf[AnyRef]
 

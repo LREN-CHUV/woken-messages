@@ -51,8 +51,8 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
         variables = List(VariableId("LeftAmygdala")),
         covariables = List(VariableId("AGE")),
         grouping = List(VariableId("COLPROT")),
-        filters = "",
-        datasets = None,
+        filters = None,
+        datasets = Set(),
         algorithm = AlgorithmSpec("knn", List(CodeValue("k", "5")))
       )
 
@@ -68,10 +68,10 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
         variables = List(VariableId("LeftAmygdala")),
         covariables = List(VariableId("AGE")),
         grouping = List(VariableId("COLPROT")),
-        filters = "",
-        trainingDatasets = Some(Set("research", "clinical1", "clinical2").map(DatasetId)),
-        testingDatasets = None,
-        validationDatasets = None,
+        filters = None,
+        trainingDatasets = Set("research", "clinical1", "clinical2").map(DatasetId),
+        testingDatasets = Set(),
+        validationDatasets = Set(),
         algorithms = List(AlgorithmSpec("linearRegression", List())),
         validations = List(ValidationSpec("kfold", List(CodeValue("k", "2")))),
         executionPlan = Some(ExecutionPlan.scatterGather)

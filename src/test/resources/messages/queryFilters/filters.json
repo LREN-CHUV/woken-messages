@@ -1,0 +1,38 @@
+{
+  "condition": "AND",
+  "rules": [
+    {
+      "field": "agegroup",
+      "id": "agegroup",
+      "input": "select",
+      "operator": "equal",
+      "type": "string",
+      "value": "-50y"
+    },
+    {
+      "condition": "AND",
+      "rules": [
+        {
+          "field": "lefttrifgtriangularpartoftheinferiorfrontalgyrus",
+          "id": "lefttrifgtriangularpartoftheinferiorfrontalgyrus",
+          "input": "number",
+          "operator": "equal",
+          "type": "double",
+          "value": "1"
+        },
+        {
+          "field": "rightopifgopercularpartoftheinferiorfrontalgyrus",
+          "id": "rightopifgopercularpartoftheinferiorfrontalgyrus",
+          "input": "number",
+          "operator": "between",
+          "type": "double",
+          "value": [
+            "1",
+            "20"
+          ]
+        }
+      ]
+    }
+  ],
+  "valid": true
+}

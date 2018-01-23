@@ -57,8 +57,6 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
     }
   }
 
-  implicit val OperatorsJsonFormat: JsonFormat[Operators.Value] = jsonEnum(Operators)
-
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   implicit object StepInputFormat extends JsonFormat[StepInput] {
     def write(obj: StepInput): JsValue = obj match {
@@ -107,11 +105,37 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
     }
   }
 
-  implicit val FilterJsonFormat: JsonFormat[Filter]               = jsonFormat3(Filter)
-  implicit val MiningQueryJsonFormat: RootJsonFormat[MiningQuery] = jsonFormat7(MiningQuery)
-  implicit val ExperimentQueryJsonFormat: RootJsonFormat[ExperimentQuery] = jsonFormat11(
-    ExperimentQuery
-  )
+  import eu.hbp.mip.woken.messages.queryFilters.QueryFiltersProtocol._
+
+  implicit object MiningQueryJsonFormat extends RootJsonFormat[MiningQuery] {
+    private val caseClassFormat                   = jsonFormat7(MiningQuery)
+    override def write(obj: MiningQuery): JsValue = caseClassFormat.write(obj)
+
+    override def read(json: JsValue): MiningQuery = {
+      val fields = json.asJsObject.fields.filter {
+        case ("filters", JsString("")) => false; case _ => true
+      }
+      val defaultFields = Map("datasets" -> JsArray())
+      caseClassFormat.read(JsObject(fields.withDefault(defaultFields)))
+    }
+  }
+
+  implicit object ExperimentQueryJsonFormat extends RootJsonFormat[ExperimentQuery] {
+    private val caseClassFormat                       = jsonFormat11(ExperimentQuery)
+    override def write(obj: ExperimentQuery): JsValue = caseClassFormat.write(obj)
+
+    override def read(json: JsValue): ExperimentQuery = {
+      val fields = json.asJsObject.fields.filter {
+        case ("filters", JsString("")) => false; case _ => true
+      }
+      val defaultFields = Map(
+        "trainingDatasets"   -> JsArray(),
+        "testingDatasets"    -> JsArray(),
+        "validationDatasets" -> JsArray()
+      )
+      caseClassFormat.read(JsObject(fields.withDefault(defaultFields)))
+    }
+  }
 
   implicit val QueryResultJsonFormat: RootJsonFormat[QueryResult] = jsonFormat7(QueryResult)
 

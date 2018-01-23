@@ -18,7 +18,8 @@ package eu.hbp.mip.woken.messages.external
 
 import java.time.OffsetDateTime
 
-import eu.hbp.mip.woken.messages.RemoteMessage
+import eu.hbp.mip.woken.messages.queryFilters.FilterRule
+import eu.hbp.mip.woken.messages.{ RemoteMessage, queryFilters }
 import io.swagger.annotations.ApiModel
 import spray.json.JsValue
 
@@ -29,43 +30,55 @@ object CodeValue {
   def fromTuple(t: (String, String)) = CodeValue(t._1, t._2)
 }
 
-/** An algorithm */
+/**
+  * An algorithm
+  *
+  * @param code Code identifying the algorithm
+  * @param parameters List of parameters to pass to the algorithm
+  */
 @ApiModel(
   description = "Specification for the execution of an algorithm"
 )
 case class AlgorithmSpec(
-    /** Code identifying the algorithm */
     code: String,
-    /** List of parameters to pass to the algorithm */
     parameters: List[CodeValue]
 ) {
   @transient lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
 }
 
-/** Id of a user */
+/**
+  * Id of a user
+  *
+  * @param code Unique user ID
+  */
 @ApiModel(
   description = "Id of a user"
 )
 case class UserId(
-    /** Unique user ID */
     code: String
 )
 
-/** Id of a dataset */
+/**
+  * Id of a dataset
+  *
+  * @param code Unique dataset code, used to select
+  */
 @ApiModel(
   description = "Id of a dataset"
 )
 case class DatasetId(
-    /** Unique dataset code, used to select */
     code: String
 )
 
-/** Id of a variable */
+/**
+  * Id of a variable
+  *
+  * @param code Unique dataset code, used to request
+  */
 @ApiModel(
   description = "Id of a variable"
 )
 case class VariableId(
-    /** Unique variable code, used to request */
     code: String
 )
 
@@ -73,36 +86,16 @@ case class VariableId(
   *
   * Cross-validation re-uses always the training dataset used during training, splitting it further into subsets
   * of training and testing datasets.
+  *
+  * @param code Code identifying the validation
+  * @param parameters List of parameters to pass to the validation
   */
 case class ValidationSpec(
-    /** Code identifying the validation */
     code: String,
-    /** List of parameters to pass to the validation */
     parameters: List[CodeValue]
 ) {
   @transient lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
 }
-
-/** List of operations supported by a filter */
-object Operators extends Enumeration {
-  type Operators = Value
-  val eq: Value      = Value("eq")
-  val lt: Value      = Value("lt")
-  val gt: Value      = Value("gt")
-  val lte: Value     = Value("lte")
-  val gte: Value     = Value("gte")
-  val neq: Value     = Value("neq")
-  val in: Value      = Value("in")
-  val notin: Value   = Value("notin")
-  val between: Value = Value("between")
-}
-
-// TODO: use or remove
-case class Filter(
-    variable: VariableId,
-    operator: Operators.Operators,
-    values: List[String]
-)
 
 object ExecutionStyle extends Enumeration {
   type ExecutionStyle = Value
@@ -186,9 +179,11 @@ object ExecutionPlan {
 /** Request the list of methods available */
 case object MethodsQuery extends RemoteMessage
 
-/** Response to MethodsQuery, lists the methods available */
+/** Response to MethodsQuery, lists the methods available
+  *
+  * @param methods Contains the list of methods serialized as a Json object
+  */
 case class MethodsResponse(
-    /** Contains the list of methods serialized as a Json object*/
     methods: String
 )
 
@@ -210,58 +205,78 @@ abstract class Query() extends RemoteMessage {
   def grouping: List[VariableId]
 
   /** Filters to apply on the data. Currently, a SQL where clause */
-  // TODO: filters should be a structured parameter
-  def filters: String
+  def filters: Option[FilterRule]
 }
 
-/** Data mining query executing a single algorithm */
+/**
+  *  Data mining query executing a single algorithm
+  *
+  * @param user User issuing the query
+  * @param variables List of variables ( aka dependent features )
+  * @param covariables List of covariables (aka independent features )
+  * @param grouping List of groupings
+  * @param filters Filters to apply on the data. Currently, a SQL where clause
+  * @param datasets Selection of the datasets to query
+  * @param algorithm Algorithm to execute, with parameters defined
+  */
 case class MiningQuery(
     user: UserId,
     variables: List[VariableId],
     covariables: List[VariableId],
     grouping: List[VariableId],
-    filters: String,
-    /** Selection of the datasets to query */
-    datasets: Option[Set[DatasetId]],
+    filters: Option[FilterRule],
+    datasets: Set[DatasetId],
     algorithm: AlgorithmSpec
 ) extends Query
 
-/** Experiment query using one or more algorithms on the same dataset and with an optional validation step */
+/**
+  *  Experiment query using one or more algorithms on the same dataset and with an optional validation step
+  *
+  * @param user User issuing the query
+  * @param variables List of variables ( aka dependent features )
+  * @param covariables List of covariables (aka independent features )
+  * @param grouping List of groupings
+  * @param filters Filters to apply on the data. Currently, a SQL where clause
+  * @param trainingDatasets Set of datasets used for training
+  * @param testingDatasets Set of datasets used for testing. Ignored for cross-validation methods
+  * @param algorithms List of algorithms to execute, with parameters defined
+  * @param validationDatasets List of datasets used for validation. Ignored for cross-validation methods
+  * @param validations List of validations to apply
+  * @param executionPlan Execution plan
+  */
 case class ExperimentQuery(
     user: UserId,
     variables: List[VariableId],
     covariables: List[VariableId],
     grouping: List[VariableId],
-    filters: String,
-    /** Set of datasets used for training */
-    trainingDatasets: Option[Set[DatasetId]],
-    /** Set of datasets used for testing. Ignored for cross-validation methods  */
-    testingDatasets: Option[Set[DatasetId]],
+    filters: Option[FilterRule],
+    trainingDatasets: Set[DatasetId],
+    testingDatasets: Set[DatasetId],
     algorithms: List[AlgorithmSpec],
-    /** List of datasets used for validation. Ignored for cross-validation methods */
-    validationDatasets: Option[Set[DatasetId]],
+    validationDatasets: Set[DatasetId],
     validations: List[ValidationSpec],
     executionPlan: Option[ExecutionPlan]
 ) extends Query
 
-/** Response to a query */
+/** Response to a query
+  *
+  * @param jobId Id of the job producing the result
+  * @param node Node where the result was computed
+  * @param timestamp Date of creation of the result
+  * @param shape Shape of the result. A MIME type
+  * @param algorithm Name of the algorithm that produced the result
+  * @param data Contains the result serialized as a Json string, object or array.
+  * The format of the result is defined by the MIME type defined in the shape field.
+  * It can be for example a JSON document defining the PFA model if the shape field is 'application/pfa+json'.
+  * @param error Contains the error message if the query was not successful
+  */
 case class QueryResult(
-    /** Id of the job producing the result */
     jobId: String,
-    /** Node where the result was computed */
     node: String,
-    /** Date of creation of the result */
     timestamp: OffsetDateTime,
-    /** Shape of the result. A MIME type */
     shape: String,
-    /** Name of the algorithm that produced the result */
     algorithm: String,
-    /** Contains the result serialized as a Json string, object or array.
-      * The format of the result is defined by the MIME type defined in the shape field.
-      * It can be for example a JSON document defining the PFA model if the shape field is 'application/pfa+json'.
-      */
     data: Option[JsValue],
-    /** Contains the error message if the query was not successful */
     error: Option[String]
 )
 
