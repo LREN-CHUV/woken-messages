@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.woken.messages.external
+package eu.hbp.mip.woken.messages.query
 
 import akka.serialization.Serializer
 import spray.json._
-import ExternalAPIProtocol._
+import queryProtocol._
 
 class QueryResultSerializer extends Serializer {
 

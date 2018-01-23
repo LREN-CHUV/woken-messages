@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.woken.meta
+package eu.hbp.mip.woken.messages.variables
 
 import eu.hbp.mip.woken.JsonUtils
 import org.scalatest.{ Matchers, WordSpec }
 import spray.json._
-import VariableMetaDataProtocol._
-import eu.hbp.mip.woken.meta.{ EnumeratedValue => EV }
+import variablesProtocol._
+import eu.hbp.mip.woken.messages.variables.{ EnumeratedValue => EV }
 
 class VariableMetaDataTest extends WordSpec with Matchers with JsonUtils {
 
@@ -32,10 +32,11 @@ class VariableMetaDataTest extends WordSpec with Matchers with JsonUtils {
     description = Some("Apolipoprotein E (APOE) e4 allele"),
     methodology = Some("mip-cde"),
     units = None,
-    enumerations = Some(List(EV("0", "0"), EV("1", "1"), EV("2", "2")))
+    enumerations = Some(List(EV("0", "0"), EV("1", "1"), EV("2", "2"))),
+    datasets = Set()
   )
 
-  val apoe4Json: JsValue = loadJson("/meta/apoe4-variable.json")
+  val apoe4Json: JsValue = loadJson("/messages/variables/apoe4-variable.json")
 
   "VariableMetaData" should {
 

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.woken.messages.external
+package eu.hbp.mip.woken.messages.query
 
 import eu.hbp.mip.woken.JsonUtils
 import org.scalatest.{ Matchers, WordSpec }
 import spray.json.JsString
+import queryProtocol._
 
 class ExecutionPlanTest extends WordSpec with Matchers with JsonUtils {
-  import ExternalAPIProtocol._
 
   "An execution plan" should {
 
@@ -37,7 +37,7 @@ class ExecutionPlanTest extends WordSpec with Matchers with JsonUtils {
 
     "be read from detailed Json description" in {
 
-      val plan = ExecutionPlanFormat.read(loadJson("/messages/external/custom-execution-plan.json"))
+      val plan = ExecutionPlanFormat.read(loadJson("/messages/query/custom-execution-plan.json"))
 
       val expected = ExecutionPlan(
         List(

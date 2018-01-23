@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.woken.messages.queryFilters
+package eu.hbp.mip.woken.messages.query.filters
 
 import eu.hbp.mip.woken.JsonUtils
 import org.scalatest.{ Matchers, WordSpec }
-import QueryFiltersProtocol._
+import queryFiltersProtocol._
 
 class QueryFiltersTest extends WordSpec with Matchers with JsonUtils {
 
   "A query filter" should {
     "be read from detailed Json description" in {
 
-      val filter = FilterRuleJsonFormat.read(loadJson("/messages/queryFilters/filters.json"))
+      val filter = FilterRuleJsonFormat.read(loadJson("/messages/query/filters/filters.json"))
 
       val expected = CompoundFilterRule(
         Condition.and,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.woken.messages.queryFilters
+package eu.hbp.mip.woken.messages.query.filters
 
 /*
  * Filters as defined by http://querybuilder.js.org/

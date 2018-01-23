@@ -14,25 +14,31 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.woken.meta
+package eu.hbp.mip.woken.messages.variables
 
+import eu.hbp.mip.woken.messages.datasets.{ DatasetId, DatasetsProtocol }
 import spray.json._
 
-case class EnumeratedValue(code: String, label: String)
-
-case class VariableMetaData(
-    code: String,
-    label: String,
-    `type`: String,
-    sqlType: Option[String],
-    description: Option[String],
-    methodology: Option[String],
-    units: Option[String],
-    enumerations: Option[List[EnumeratedValue]]
-)
-
 // Get target variable's meta data
-object VariableMetaDataProtocol extends DefaultJsonProtocol {
+trait VariablesProtocol extends DefaultJsonProtocol {
+  this: DatasetsProtocol =>
+
+  implicit val VariableIdJsonFormat: JsonFormat[VariableId] = jsonFormat1(VariableId)
+
+  implicit val GroupIdJsonFormat: JsonFormat[GroupId] = jsonFormat2(GroupId)
+
+  implicit object FeatureIdentifierJsonFormat extends JsonFormat[FeatureIdentifier] {
+    override def read(json: JsValue): FeatureIdentifier =
+      if (json.asJsObject.fields.contains("code"))
+        VariableIdJsonFormat.read(json)
+      else
+        GroupIdJsonFormat.read(json)
+
+    override def write(obj: FeatureIdentifier): JsValue = obj match {
+      case v: VariableId => VariableIdJsonFormat.write(v)
+      case g: GroupId    => GroupIdJsonFormat.write(g)
+    }
+  }
 
   implicit object EnumeratedValueFormat extends RootJsonFormat[EnumeratedValue] {
     private val numPattern = "([0-9]+)".r
@@ -75,7 +81,8 @@ object VariableMetaDataProtocol extends DefaultJsonProtocol {
           item.enumerations.map("enumerations" -> _.toJson),
           Some("code"                          -> item.code.toJson),
           Some("label"                         -> item.label.toJson),
-          Some("type"                          -> item.`type`.toJson)
+          Some("type"                          -> item.`type`.toJson),
+          Some("datasets"                      -> item.datasets.toJson)
         ).flatten: _*
       )
 
@@ -95,7 +102,8 @@ object VariableMetaDataProtocol extends DefaultJsonProtocol {
             jsObject.fields.get("description").map(_.convertTo[String]),
             jsObject.fields.get("methodology").map(_.convertTo[String]),
             jsObject.fields.get("units").map(_.convertTo[String]),
-            jsObject.fields.get("enumerations").map(_.convertTo[List[EnumeratedValue]])
+            jsObject.fields.get("enumerations").map(_.convertTo[List[EnumeratedValue]]),
+            jsObject.fields.get("datasets").map(_.convertTo[Set[DatasetId]]).getOrElse(Set())
           )
         case _ =>
           deserializationError(
@@ -104,4 +112,12 @@ object VariableMetaDataProtocol extends DefaultJsonProtocol {
       }
     }
   }
+
+  implicit val VariablesForDatasetQueryFormat: RootJsonFormat[VariablesForDatasetQuery] =
+    jsonFormat2(
+      VariablesForDatasetQuery
+    )
+
+  implicit val VariablesForDatasetResponseFormat: RootJsonFormat[VariablesForDatasetResponse] =
+    jsonFormat1(VariablesForDatasetResponse)
 }

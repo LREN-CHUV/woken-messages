@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.woken.messages.external
+package eu.hbp.mip.woken.messages.query
 
 import java.time.{ LocalDateTime, OffsetDateTime, ZoneOffset }
 
+import eu.hbp.mip.woken.messages.datasets.DatasetsProtocol
+import eu.hbp.mip.woken.messages.query.filters.QueryFiltersProtocol
+import eu.hbp.mip.woken.messages.variables.VariablesProtocol
+import eu.hbp.mip.woken.utils.JsonEnums
 import spray.json._
 
-object ExternalAPIProtocol extends DefaultJsonProtocol {
+trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
+  this: DatasetsProtocol with VariablesProtocol with QueryFiltersProtocol =>
 
   implicit object OffsetDateTimeJsonFormat extends RootJsonFormat[OffsetDateTime] {
     override def write(x: OffsetDateTime): JsNumber = {
@@ -39,23 +44,9 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
 
   implicit val UserIdJsonFormat: JsonFormat[UserId] = jsonFormat1(UserId)
 
-  implicit val DatasetIdJsonFormat: JsonFormat[DatasetId] = jsonFormat1(DatasetId)
-
-  implicit val VariableIdJsonFormat: JsonFormat[VariableId] = jsonFormat1(VariableId)
-
   implicit val AlgorithmSpecJsonFormat: JsonFormat[AlgorithmSpec] = jsonFormat2(AlgorithmSpec)
 
   implicit val ValidationSpecJsonFormat: JsonFormat[ValidationSpec] = jsonFormat2(ValidationSpec)
-
-  def jsonEnum[T <: Enumeration](enu: T): JsonFormat[T#Value] = new JsonFormat[T#Value] {
-    def write(obj: T#Value) = JsString(obj.toString)
-
-    def read(json: JsValue): enu.Value = json match {
-      case JsString(txt) => enu.withName(txt)
-      case something =>
-        deserializationError(s"Expected a value from enum $enu instead of $something")
-    }
-  }
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   implicit object StepInputFormat extends JsonFormat[StepInput] {
@@ -104,8 +95,6 @@ object ExternalAPIProtocol extends DefaultJsonProtocol {
       case js                         => caseClassFormat.read(js)
     }
   }
-
-  import eu.hbp.mip.woken.messages.queryFilters.QueryFiltersProtocol._
 
   implicit object MiningQueryJsonFormat extends RootJsonFormat[MiningQuery] {
     private val caseClassFormat                   = jsonFormat7(MiningQuery)

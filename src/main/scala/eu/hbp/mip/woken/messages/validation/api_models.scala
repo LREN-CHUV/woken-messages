@@ -16,7 +16,7 @@
 
 package eu.hbp.mip.woken.messages.validation
 
-import eu.hbp.mip.woken.meta.VariableMetaData
+import eu.hbp.mip.woken.messages.variables.VariableMetaData
 import spray.json.JsObject
 import cats.data.NonEmptyList
 import eu.hbp.mip.woken.messages.RemoteMessage

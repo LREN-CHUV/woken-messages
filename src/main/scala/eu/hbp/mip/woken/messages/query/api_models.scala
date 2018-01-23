@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.woken.messages.external
+package eu.hbp.mip.woken.messages.query
 
 import java.time.OffsetDateTime
 
-import eu.hbp.mip.woken.messages.queryFilters.FilterRule
-import eu.hbp.mip.woken.messages.{ RemoteMessage, queryFilters }
+import eu.hbp.mip.woken.messages.query.filters.FilterRule
+import eu.hbp.mip.woken.messages.RemoteMessage
+import eu.hbp.mip.woken.messages.datasets.DatasetId
+import eu.hbp.mip.woken.messages.variables.FeatureIdentifier
 import io.swagger.annotations.ApiModel
 import spray.json.JsValue
 
@@ -55,30 +57,6 @@ case class AlgorithmSpec(
   description = "Id of a user"
 )
 case class UserId(
-    code: String
-)
-
-/**
-  * Id of a dataset
-  *
-  * @param code Unique dataset code, used to select
-  */
-@ApiModel(
-  description = "Id of a dataset"
-)
-case class DatasetId(
-    code: String
-)
-
-/**
-  * Id of a variable
-  *
-  * @param code Unique dataset code, used to request
-  */
-@ApiModel(
-  description = "Id of a variable"
-)
-case class VariableId(
     code: String
 )
 
@@ -194,15 +172,15 @@ abstract class Query() extends RemoteMessage {
   def user: UserId
 
   /** List of variables ( aka dependent features ) */
-  def variables: List[VariableId]
+  def variables: List[FeatureIdentifier]
 
   /** List of covariables (aka independent features ) */
-  def covariables: List[VariableId]
+  def covariables: List[FeatureIdentifier]
 
   /** List of groupings */
   // TODO: the concept of groupings is hazy, like a SQL group by but not only that, for example in R there are variants such as a:b and a*b
   // We may need to move away from it and be able to express full R formula (see https://stat.ethz.ch/R-manual/R-devel/library/stats/html/formula.html)
-  def grouping: List[VariableId]
+  def grouping: List[FeatureIdentifier]
 
   /** Filters to apply on the data. Currently, a SQL where clause */
   def filters: Option[FilterRule]
@@ -221,9 +199,9 @@ abstract class Query() extends RemoteMessage {
   */
 case class MiningQuery(
     user: UserId,
-    variables: List[VariableId],
-    covariables: List[VariableId],
-    grouping: List[VariableId],
+    variables: List[FeatureIdentifier],
+    covariables: List[FeatureIdentifier],
+    grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
     datasets: Set[DatasetId],
     algorithm: AlgorithmSpec
@@ -246,9 +224,9 @@ case class MiningQuery(
   */
 case class ExperimentQuery(
     user: UserId,
-    variables: List[VariableId],
-    covariables: List[VariableId],
-    grouping: List[VariableId],
+    variables: List[FeatureIdentifier],
+    covariables: List[FeatureIdentifier],
+    grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
     trainingDatasets: Set[DatasetId],
     testingDatasets: Set[DatasetId],

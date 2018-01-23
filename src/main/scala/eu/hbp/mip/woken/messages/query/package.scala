@@ -16,7 +16,19 @@
 
 package eu.hbp.mip.woken.messages
 
+import eu.hbp.mip.woken.messages.datasets.DatasetsProtocol
+import eu.hbp.mip.woken.messages.query.filters.QueryFiltersProtocol
+import eu.hbp.mip.woken.messages.variables.VariablesProtocol
+
 /**
   * Defines the messages exchanged between Woken and an external system
   */
-package object external
+package object query {
+
+  object queryProtocol
+      extends QueryProtocol
+      with QueryFiltersProtocol
+      with DatasetsProtocol
+      with VariablesProtocol
+
+}

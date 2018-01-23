@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.woken.messages.queryFilters
+package eu.hbp.mip.woken.messages.query.filters
 
-import eu.hbp.mip.woken.messages.external.ExternalAPIProtocol.jsonEnum
+import eu.hbp.mip.woken.utils.JsonEnums
 import spray.json._
 
-object QueryFiltersProtocol extends DefaultJsonProtocol {
+trait QueryFiltersProtocol extends DefaultJsonProtocol with JsonEnums {
 
   implicit val InputTypeJsonFormat: JsonFormat[InputType.Value] = jsonEnum(InputType)
   implicit val OperatorJsonFormat: JsonFormat[Operator.Value]   = jsonEnum(Operator)

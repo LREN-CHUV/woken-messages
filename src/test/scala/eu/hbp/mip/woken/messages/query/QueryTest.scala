@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.woken.messages.external
+package eu.hbp.mip.woken.messages.query
 
 import eu.hbp.mip.woken.JsonUtils
+import eu.hbp.mip.woken.messages.datasets.DatasetId
+import eu.hbp.mip.woken.messages.variables.VariableId
 import org.scalatest.{ Matchers, WordSpec }
+import queryProtocol._
 
-class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
-  import ExternalAPIProtocol._
+class QueryTest extends WordSpec with Matchers with JsonUtils {
 
-  "Woken external API" should {
+  "Woken query API" should {
 
     "read specs for algorithms from json" in {
-      val jsonAst   = loadJson("/messages/external/algorithm.json").asJsObject
+      val jsonAst   = loadJson("/messages/query/algorithm.json").asJsObject
       val algorithm = jsonAst.convertTo[AlgorithmSpec]
 
       val expected = AlgorithmSpec("knn", List(CodeValue("k", "5")))
@@ -34,7 +36,7 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
     }
 
     "read specs for validations from json" in {
-      val jsonAst    = loadJson("/messages/external/validation.json").asJsObject
+      val jsonAst    = loadJson("/messages/query/validation.json").asJsObject
       val validation = jsonAst.convertTo[ValidationSpec]
 
       val expected = ValidationSpec("kfold", List(CodeValue("k", "2")))
@@ -43,7 +45,7 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
     }
 
     "read a mining query from json" in {
-      val jsonAst     = loadJson("/messages/external/mining_query.json").asJsObject
+      val jsonAst     = loadJson("/messages/query/mining_query.json").asJsObject
       val miningQuery = jsonAst.convertTo[MiningQuery]
 
       val expected = MiningQuery(
@@ -60,7 +62,7 @@ class ExternalAPITest extends WordSpec with Matchers with JsonUtils {
     }
 
     "read an experiment query from json" in {
-      val jsonAst         = loadJson("/messages/external/experiment_query.json").asJsObject
+      val jsonAst         = loadJson("/messages/query/experiment_query.json").asJsObject
       val experimentQuery = jsonAst.convertTo[ExperimentQuery]
 
       val expected = ExperimentQuery(
