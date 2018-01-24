@@ -33,7 +33,7 @@ lazy val library =
     object Version {
       val scalaCheck         = "1.13.5"
       val scalaTest          = "3.0.3"
-      val akka               = "2.5.8"
+      val akka               = "2.5.9"
       val akkaTracing        = "0.6.1"
       val swaggerAnnotations = "1.5.16"
       val sprayJson          = "1.3.4"
@@ -58,7 +58,6 @@ lazy val settings = commonSettings ++ gitSettings ++ scalafmtSettings ++ bintray
 
 lazy val commonSettings =
   Seq(
-    scalaVersion := "2.11.8",
     organization in ThisBuild := "eu.humanbrainproject.mip",
     organizationName in ThisBuild := "Human Brain Project MIP by LREN CHUV",
     homepage in ThisBuild := Some(url(s"https://github.com/HBPMedical/${name.value}/#readme")),
@@ -77,6 +76,7 @@ lazy val commonSettings =
       "-Yno-adapted-args",
       "-Ywarn-dead-code",
       "-Ywarn-value-discard",
+      "-Ypartial-unification",
       "-language:_",
       "-target:jvm-1.8",
       "-encoding",

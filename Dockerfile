@@ -1,7 +1,7 @@
 # Pull base image
-FROM hbpmip/scala-base-build:0.13.16-5 as scala-build-env
+FROM hbpmip/scala-base-build:1.1.0-0 as scala-build-env
 
-MAINTAINER Arnaud Jutzeler <arnaud.jutzeler@chuv.ch>
+MAINTAINER Ludovic Claude <ludovic.claude@chuv.ch>
 
 ARG BINTRAY_USER
 ARG BINTRAY_PASS

@@ -43,10 +43,11 @@ case class VariableId(
   description = "Id of a group"
 )
 case class GroupId(path: List[PathSegment]) extends FeatureIdentifier {
-  def parent: Option[GroupId] = if (path.size > 1)
-    Some(GroupId(path.take(path.size - 1)))
-  else
-    None
+  def parent: Option[GroupId] =
+    if (path.size > 1)
+      Some(GroupId(path.take(path.size - 1)))
+    else
+      None
 }
 
 case class EnumeratedValue(code: String, label: String)
