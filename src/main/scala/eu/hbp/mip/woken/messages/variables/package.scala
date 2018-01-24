@@ -19,6 +19,7 @@ package eu.hbp.mip.woken.messages
 import eu.hbp.mip.woken.messages.datasets.DatasetsProtocol
 
 package object variables {
+  type PathSegment = String
 
   object variablesProtocol extends VariablesProtocol with DatasetsProtocol
 

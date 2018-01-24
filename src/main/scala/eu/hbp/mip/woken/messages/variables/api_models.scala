@@ -37,16 +37,17 @@ case class VariableId(
 /**
   * Id of a group
   *
-  * @param parent Parent group, or None
-  * @param pathSegment part of the path identifying this group relative to its parent
+  * @param path part of the path identifying this group relative to its parent
   */
 @ApiModel(
   description = "Id of a group"
 )
-case class GroupId(
-    parent: Option[GroupId],
-    pathSegment: String
-) extends FeatureIdentifier
+case class GroupId(path: List[PathSegment]) extends FeatureIdentifier {
+  def parent: Option[GroupId] = if (path.size > 1)
+    Some(GroupId(path.take(path.size - 1)))
+  else
+    None
+}
 
 case class EnumeratedValue(code: String, label: String)
 

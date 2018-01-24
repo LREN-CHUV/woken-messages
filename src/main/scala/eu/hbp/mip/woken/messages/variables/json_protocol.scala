@@ -25,7 +25,7 @@ trait VariablesProtocol extends DefaultJsonProtocol {
 
   implicit val VariableIdJsonFormat: JsonFormat[VariableId] = jsonFormat1(VariableId)
 
-  implicit val GroupIdJsonFormat: JsonFormat[GroupId] = jsonFormat2(GroupId)
+  implicit val GroupIdJsonFormat: JsonFormat[GroupId] = jsonFormat1(GroupId)
 
   implicit object FeatureIdentifierJsonFormat extends JsonFormat[FeatureIdentifier] {
     override def read(json: JsValue): FeatureIdentifier =
