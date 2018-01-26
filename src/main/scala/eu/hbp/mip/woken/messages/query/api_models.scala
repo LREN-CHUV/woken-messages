@@ -166,7 +166,7 @@ case class MethodsResponse(
 )
 
 /** A query for data mining or more complex operations on data */
-abstract class Query() extends RemoteMessage {
+sealed trait Query extends RemoteMessage {
 
   /** User issuing the query */
   def user: UserId
