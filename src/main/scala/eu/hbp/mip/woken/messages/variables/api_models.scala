@@ -20,7 +20,7 @@ import eu.hbp.mip.woken.messages.RemoteMessage
 import eu.hbp.mip.woken.messages.datasets.DatasetId
 import io.swagger.annotations.ApiModel
 
-trait FeatureIdentifier
+sealed trait FeatureIdentifier
 
 /**
   * Id of a variable
