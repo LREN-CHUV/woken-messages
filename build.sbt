@@ -13,6 +13,7 @@ lazy val `woken-messages` =
           library.akkaActor,
           library.akkaRemote,
           library.akkaCluster,
+          library.akkaClusterTools,
           //library.akkaTracingCore,
           library.swaggerAnnotations,
           library.sprayJson,
@@ -38,16 +39,23 @@ lazy val library =
       val swaggerAnnotations = "1.5.16"
       val sprayJson          = "1.3.4"
       val cats               = "1.0.1"
+      val slf4j              = "1.7.25"
+      val log4j              = "2.9.1"
+      val disruptor          = "3.3.7"
     }
     val scalaCheck: ModuleID  = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
     val scalaTest: ModuleID   = "org.scalatest"     %% "scalatest"    % Version.scalaTest
     val akkaActor: ModuleID   = "com.typesafe.akka" %% "akka-actor"   % Version.akka
     val akkaRemote: ModuleID  = "com.typesafe.akka" %% "akka-remote"  % Version.akka
     val akkaCluster: ModuleID = "com.typesafe.akka" %% "akka-cluster" % Version.akka
+    val akkaClusterTools: ModuleID = "com.typesafe.akka" %% "akka-cluster-tools" % Version.akka
     val akkaTracingCore: ModuleID = "com.github.levkhomich" %% "akka-tracing-core" % Version.akkaTracing
     val swaggerAnnotations: ModuleID = "io.swagger"  % "swagger-annotations"       % Version.swaggerAnnotations
     val sprayJson: ModuleID   = "io.spray"          %% "spray-json"   % Version.sprayJson
     val catsCore: ModuleID    = "org.typelevel"     %% "cats-core"    % Version.cats
+    val slf4j: ModuleID       = "org.slf4j"          % "slf4j-api"    % Version.slf4j
+    val log4jSlf4j: ModuleID  = "org.apache.logging.log4j" % "log4j-slf4j-impl" % Version.log4j
+    val disruptor: ModuleID   = "com.lmax"           % "disruptor"    % Version.disruptor
   }
 
 // *****************************************************************************
