@@ -55,7 +55,8 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         grouping = List(VariableId("COLPROT")),
         filters = None,
         datasets = Set(),
-        algorithm = AlgorithmSpec("knn", List(CodeValue("k", "5")))
+        algorithm = AlgorithmSpec("knn", List(CodeValue("k", "5"))),
+        executionPlan = None
       )
 
       miningQuery shouldBe expected

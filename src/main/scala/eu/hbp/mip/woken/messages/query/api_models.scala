@@ -204,7 +204,8 @@ case class MiningQuery(
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
     datasets: Set[DatasetId],
-    algorithm: AlgorithmSpec
+    algorithm: AlgorithmSpec,
+    executionPlan: Option[ExecutionPlan]
 ) extends Query
 
 /**
