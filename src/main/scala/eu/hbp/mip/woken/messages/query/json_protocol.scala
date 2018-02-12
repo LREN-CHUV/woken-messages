@@ -97,7 +97,7 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
   }
 
   implicit object MiningQueryJsonFormat extends RootJsonFormat[MiningQuery] {
-    private val caseClassFormat                   = jsonFormat8(MiningQuery)
+    private val caseClassFormat                   = jsonFormat9(MiningQuery)
     override def write(obj: MiningQuery): JsValue = caseClassFormat.write(obj)
 
     override def read(json: JsValue): MiningQuery = {
@@ -110,7 +110,7 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
   }
 
   implicit object ExperimentQueryJsonFormat extends RootJsonFormat[ExperimentQuery] {
-    private val caseClassFormat                       = jsonFormat11(ExperimentQuery)
+    private val caseClassFormat                       = jsonFormat12(ExperimentQuery)
     override def write(obj: ExperimentQuery): JsValue = caseClassFormat.write(obj)
 
     override def read(json: JsValue): ExperimentQuery = {

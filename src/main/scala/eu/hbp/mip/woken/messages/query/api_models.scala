@@ -184,6 +184,9 @@ sealed trait Query extends RemoteMessage {
 
   /** Filters to apply on the data. Currently, a SQL where clause */
   def filters: Option[FilterRule]
+
+  /** Name of the target table. Defaults to the settings defined in Woken configuration */
+  def targetTable: Option[String]
 }
 
 /**
@@ -194,6 +197,7 @@ sealed trait Query extends RemoteMessage {
   * @param covariables List of covariables (aka independent features )
   * @param grouping List of groupings
   * @param filters Filters to apply on the data. Currently, a SQL where clause
+  * @param targetTable Name of the target table. Defaults to the settings defined in Woken configuration
   * @param datasets Selection of the datasets to query
   * @param algorithm Algorithm to execute, with parameters defined
   */
@@ -203,6 +207,7 @@ case class MiningQuery(
     covariables: List[FeatureIdentifier],
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
+    targetTable: Option[String],
     datasets: Set[DatasetId],
     algorithm: AlgorithmSpec,
     executionPlan: Option[ExecutionPlan]
@@ -216,6 +221,7 @@ case class MiningQuery(
   * @param covariables List of covariables (aka independent features )
   * @param grouping List of groupings
   * @param filters Filters to apply on the data. Currently, a SQL where clause
+  * @param targetTable Name of the target table. Defaults to the settings defined in Woken configuration
   * @param trainingDatasets Set of datasets used for training
   * @param testingDatasets Set of datasets used for testing. Ignored for cross-validation methods
   * @param algorithms List of algorithms to execute, with parameters defined
@@ -229,6 +235,7 @@ case class ExperimentQuery(
     covariables: List[FeatureIdentifier],
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
+    targetTable: Option[String],
     trainingDatasets: Set[DatasetId],
     testingDatasets: Set[DatasetId],
     algorithms: List[AlgorithmSpec],

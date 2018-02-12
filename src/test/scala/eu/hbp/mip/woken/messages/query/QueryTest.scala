@@ -54,6 +54,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         covariables = List(VariableId("AGE")),
         grouping = List(VariableId("COLPROT")),
         filters = None,
+        targetTable = None,
         datasets = Set(),
         algorithm = AlgorithmSpec("knn", List(CodeValue("k", "5"))),
         executionPlan = None
@@ -72,6 +73,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         covariables = List(VariableId("AGE")),
         grouping = List(VariableId("COLPROT")),
         filters = None,
+        targetTable = None,
         trainingDatasets = Set("research", "clinical1", "clinical2").map(DatasetId),
         testingDatasets = Set(),
         validationDatasets = Set(),
