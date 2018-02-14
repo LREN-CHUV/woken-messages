@@ -44,7 +44,7 @@ case class VariableId(
 )
 case class GroupId(path: List[PathSegment]) extends FeatureIdentifier {
   def parent: Option[GroupId] =
-    if (path.size > 1)
+    if (path.lengthCompare(1) > 0)
       Some(GroupId(path.take(path.size - 1)))
     else
       None
