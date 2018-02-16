@@ -75,7 +75,8 @@ lazy val commonSettings =
     organizationName in ThisBuild := "LREN CHUV for Human Brain Project",
     homepage in ThisBuild := Some(url(s"https://github.com/HBPMedical/${name.value}/#readme")),
     licenses in ThisBuild := Seq("AGPL-3.0" ->
-      url(s"https://github.com/sbt/${name.value}/blob/${version.value}/LICENSE")),
+      url(s"https://github.com/sbt/${name.value}/blob/${version.value}/LICENSE")
+    ),
     startYear in ThisBuild := Some(2017),
     description in ThisBuild := "Library of messages passed between Woken components",
     developers in ThisBuild := List(
@@ -124,6 +125,7 @@ lazy val scalafmtSettings =
 // Publish to BinTray
 lazy val bintraySettings =
   Seq(
+    bintrayEnsureLicenses := false,
     bintrayOrganization := Some("hbpmedical"),
     bintrayRepository := "maven",
     bintrayPackageLabels := Seq("woken", "library", "algorithm-factory")
