@@ -57,18 +57,25 @@ object VariableType extends Enumeration {
 
   /** Integer value */
   val integer: Value = Value("integer")
+
   /** Real value */
   val real: Value = Value("real")
+
   /** Boolean value (true, false) */
   val boolean: Value = Value("boolean")
+
   /** Date value, */
   val date: Value = Value("date")
+
   /** A value selected from a list (enumeration) */
   val polynominal: Value = Value("polynominal")
+
   /** A value with one state or another */
   val binominal: Value = Value("binominal")
+
   /** Text value */
   val text: Value = Value("text")
+
   /** An image */
   val image: Value = Value("image")
 }
@@ -78,10 +85,13 @@ object SqlType extends Enumeration {
 
   /** Integer value */
   val int: Value = Value("int")
+
   /** Numeric (decimal) value */
   val numeric: Value = Value("numeric")
+
   /** Char value, can be a fixed length string */
   val char: Value = Value("char")
+
   /** Varchar value, for variable length string */
   val varchar: Value = Value("varchar")
 }
@@ -100,6 +110,9 @@ import SqlType.SqlType
   * @param description Description of the variable
   * @param units Units
   * @param enumerations List of valid values for enumerations
+  * @param length Maximum length for textual variables
+  * @param minValue Minimum value for numerical variables
+  * @param maxValue Maximum value for numerical variables
   * @param datasets List of datasets where this variable appears
   */
 case class VariableMetaData(
@@ -111,6 +124,9 @@ case class VariableMetaData(
     description: Option[String],
     units: Option[String],
     enumerations: Option[List[EnumeratedValue]],
+    length: Option[Int],
+    minValue: Option[Double],
+    maxValue: Option[Double],
     datasets: Set[DatasetId]
 ) {
   def toId: VariableId = VariableId(code)
@@ -126,12 +142,12 @@ case class VariableMetaData(
   * @param variables List of variables contained in the group
   */
 case class GroupMetaData(
-  code: String,
-  description: Option[String],
-  label: String,
-  parent: List[PathSegment],
-  groups: List[GroupMetaData],
-  variables: List[VariableMetaData]
+    code: String,
+    description: Option[String],
+    label: String,
+    parent: List[PathSegment],
+    groups: List[GroupMetaData],
+    variables: List[VariableMetaData]
 ) {
   def toId: GroupId = GroupId(parent :+ code)
 }

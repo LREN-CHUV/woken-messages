@@ -3,7 +3,6 @@
   "groups": [
     {
       "code": "all",
-      "groups": [],
       "label": "All",
       "variables": [
         {

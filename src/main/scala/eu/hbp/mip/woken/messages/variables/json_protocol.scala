@@ -16,7 +16,7 @@
 
 package eu.hbp.mip.woken.messages.variables
 
-import eu.hbp.mip.woken.messages.datasets.{DatasetId, DatasetsProtocol}
+import eu.hbp.mip.woken.messages.datasets.{ DatasetId, DatasetsProtocol }
 import spray.json._
 
 // Get target variable's meta data
@@ -69,15 +69,16 @@ trait VariablesProtocol extends DefaultJsonProtocol {
   }
 
   implicit val VariableTypeFormat: JsonFormat[VariableType.Value] = jsonEnum(VariableType)
-  implicit val SqlTypeFormat: JsonFormat[SqlType.Value] = jsonEnum(SqlType)
+  implicit val SqlTypeFormat: JsonFormat[SqlType.Value]           = jsonEnum(SqlType)
 
-  import VariableType.VariableType
+  import VariableType._
   import SqlType.SqlType
 
   implicit object VariableMetaDataFormat extends RootJsonFormat[VariableMetaData] {
     // Some fields are optional so we produce a list of options and
     // then flatten it to only write the fields that were Some(..)
-    def write(item: VariableMetaData): JsObject =
+    def write(item: VariableMetaData): JsObject = {
+      val datasets = if (item.datasets.nonEmpty) Some(item.datasets) else None
       JsObject(
         List[Option[(String, JsValue)]](
           item.sqlType.map("sql_type"          -> _.toJson),
@@ -85,12 +86,21 @@ trait VariablesProtocol extends DefaultJsonProtocol {
           item.methodology.map("methodology"   -> _.toJson),
           item.units.map("units"               -> _.toJson),
           item.enumerations.map("enumerations" -> _.toJson),
-          Some("code"                          -> item.code.toJson),
-          Some("label"                         -> item.label.toJson),
-          Some("type"                          -> item.`type`.toJson),
-          Some("datasets"                      -> item.datasets.toJson)
+          item.length.map("length"             -> _.toJson),
+          item.minValue.map { m =>
+            "minValue" -> (if (item.`type` == integer) JsNumber(m.toInt) else JsNumber(m))
+          },
+          item.minValue.map { m =>
+            "maxValue" -> (if (item.`type` == integer) JsNumber(m.toInt) else JsNumber(m))
+          },
+          item.maxValue.map("maxValue" -> _.toJson),
+          datasets.map("datasets"      -> _.toJson),
+          Some("code"                  -> item.code.toJson),
+          Some("label"                 -> item.label.toJson),
+          Some("type"                  -> item.`type`.toJson)
         ).flatten: _*
       )
+    }
 
     // We use the "standard" getFields method to extract the mandatory fields.
     // For optional fields we extract them directly from the fields map using get,
@@ -108,8 +118,13 @@ trait VariablesProtocol extends DefaultJsonProtocol {
             description = jsObject.fields.get("description").map(_.convertTo[String]),
             methodology = jsObject.fields.get("methodology").map(_.convertTo[String]),
             units = jsObject.fields.get("units").map(_.convertTo[String]),
-            enumerations = jsObject.fields.get("enumerations").map(_.convertTo[List[EnumeratedValue]]),
-            datasets = jsObject.fields.get("datasets").map(_.convertTo[Set[DatasetId]]).getOrElse(Set())
+            enumerations =
+              jsObject.fields.get("enumerations").map(_.convertTo[List[EnumeratedValue]]),
+            length = jsObject.fields.get("length").map(_.convertTo[Int]),
+            minValue = jsObject.fields.get("minValue").map(_.convertTo[Double]),
+            maxValue = jsObject.fields.get("maxValue").map(_.convertTo[Double]),
+            datasets =
+              jsObject.fields.get("datasets").map(_.convertTo[Set[DatasetId]]).getOrElse(Set())
           )
         case _ =>
           deserializationError(
@@ -121,44 +136,86 @@ trait VariablesProtocol extends DefaultJsonProtocol {
 
   implicit object GroupMetaDataFormat extends RootJsonFormat[GroupMetaData] {
     case class Group(
-                              code: String,
-                              description: Option[String],
-                              label: String,
-                              groups: List[Group],
-                              variables: List[VariableMetaData]
-                            ) {
+        code: String,
+        description: Option[String],
+        label: String,
+        groups: List[Group],
+        variables: List[VariableMetaData]
+    ) {
       def toMeta: GroupMetaData = {
-        def defineParent(parent: List[PathSegment])(gm: GroupMetaData): GroupMetaData = {
+        def defineParent(parent: List[PathSegment])(gm: GroupMetaData): GroupMetaData =
           gm.copy(parent = parent, groups = gm.groups.map(defineParent(parent :+ gm.code)))
-        }
-        val meta = GroupMetaData(code = this.code, description = this.description, label = this.label, groups = this.groups.map(_.toMeta), variables = this.variables, parent = Nil)
+        val meta = GroupMetaData(code = this.code,
+                                 description = this.description,
+                                 label = this.label,
+                                 groups = this.groups.map(_.toMeta),
+                                 variables = this.variables,
+                                 parent = Nil)
         defineParent(Nil)(meta)
       }
     }
 
-    implicit val caseClassFormat: JsonFormat[Group] = lazyFormat(jsonFormat(Group, "code", "description", "label", "groups", "variables"))
+    private val defaultFields = Map(
+      "variables" -> JsArray(),
+      "groups"    -> JsArray()
+    )
+
+    implicit object groupFormat extends RootJsonFormat[Group] {
+      implicit val caseClassFormat: JsonFormat[Group] = lazyFormat(
+        jsonFormat(Group, "code", "description", "label", "groups", "variables")
+      )
+      override def read(json: JsValue): Group =
+        caseClassFormat.read(JsObject(json.asJsObject.fields.withDefault(defaultFields)))
+
+      override def write(obj: Group): JsValue = {
+        val fields: Map[String, JsValue] = Map(
+          "code"  -> JsString(obj.code),
+          "label" -> JsString(obj.label)
+        )
+        val fields2 = obj.description.fold(fields)(d => fields + ("description" -> JsString(d)))
+        val fields3 =
+          if (obj.groups.isEmpty)
+            fields2 + ("variables" -> obj.variables.toJson)
+          else if (obj.variables.isEmpty)
+            fields2 + ("groups" -> JsArray(obj.groups.map(write).toVector))
+          else
+            fields2 + ("variables" -> obj.variables.toJson) + ("groups" -> JsArray(
+              obj.groups.map(write).toVector
+            ))
+        JsObject(fields3)
+      }
+    }
 
     private def toGroup(gm: GroupMetaData): Group =
-      Group(code = gm.code, description = gm.description, label = gm.label, groups = gm.groups.map(toGroup), variables = gm.variables)
+      Group(code = gm.code,
+            description = gm.description,
+            label = gm.label,
+            groups = gm.groups.map(toGroup),
+            variables = gm.variables)
 
     override def write(gm: GroupMetaData): JsValue = {
       val group = toGroup(gm)
-      caseClassFormat.write(group)
+      groupFormat.write(group)
     }
 
-    override def read(json: JsValue): GroupMetaData = {
-      val defaultFields = Map(
-        "variables" -> JsArray(),
-        "groups" -> JsArray()
-      )
-      def injectDefaultFields(group: JsValue): JsObject = {
-        val fields = group.asJsObject.fields
-        val updated = fields.withDefault(defaultFields)
-        val subGroups = fields("groups").asInstanceOf[JsArray].elements.map(injectDefaultFields)
-        JsObject(updated.updated("groups", JsArray(subGroups)))
-      }
-      caseClassFormat.read(injectDefaultFields(json)).toMeta
+    def injectDefaultFields(group: JsValue): JsValue = {
+      val fields = group.asJsObject.fields
+      if (fields.contains("groups") || fields.contains("variables")) {
+        val fieldsWithDefaults = fields.withDefault(defaultFields)
+        val subGroups =
+          fieldsWithDefaults("groups").asInstanceOf[JsArray].elements.map(injectDefaultFields)
+        val variables =
+          fieldsWithDefaults("variables").asInstanceOf[JsArray].elements.map(injectDefaultFields)
+        val updatedFields =
+          fieldsWithDefaults
+            .updated("groups", JsArray(subGroups))
+            .updated("variables", JsArray(variables))
+        JsObject(updatedFields)
+      } else group
     }
+
+    override def read(json: JsValue): GroupMetaData =
+      groupFormat.read(injectDefaultFields(json)).toMeta
 
   }
 

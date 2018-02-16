@@ -23,6 +23,7 @@ import variablesProtocol._
 import eu.hbp.mip.woken.messages.variables.{ EnumeratedValue => EV }
 import VariableType._
 import SqlType._
+import eu.hbp.mip.woken.messages.datasets.DatasetId
 
 class VariableMetaDataTest extends WordSpec with Matchers with JsonUtils {
 
@@ -35,10 +36,13 @@ class VariableMetaDataTest extends WordSpec with Matchers with JsonUtils {
     methodology = Some("mip-cde"),
     units = None,
     enumerations = Some(List(EV("0", "0"), EV("1", "1"), EV("2", "2"))),
-    datasets = Set()
+    length = None,
+    minValue = None,
+    maxValue = None,
+    datasets = Set("setA", "setB").map(DatasetId)
   )
 
-  val apoe4Json: JsValue = loadJson("/messages/variables/apoe4-variable.json")
+  val apoe4Json: JsValue           = loadJson("/messages/variables/apoe4-variable.json")
   val sampleVariablesJson: JsValue = loadJson("/messages/variables/sample_variables.json")
   val mipCDEVariablesJson: JsValue = loadJson("/messages/variables/mip_cde_variables.json")
 
@@ -84,7 +88,7 @@ class VariableMetaDataTest extends WordSpec with Matchers with JsonUtils {
       val root = mipCDEVariablesJson.convertTo[GroupMetaData]
 
       root.code shouldBe "root"
-      root.label shouldBe "root"
+      root.label shouldBe "/"
       root.groups.size shouldBe 6
       root.variables.isEmpty shouldBe true
       root.parent.isEmpty shouldBe true
@@ -97,21 +101,22 @@ class VariableMetaDataTest extends WordSpec with Matchers with JsonUtils {
       genetic.variables.isEmpty shouldBe true
       genetic.parent shouldBe List("root")
 
-      val polymorphic = genetic.groups.head
+      val polymorphism = genetic.groups.head
 
-      polymorphic.code shouldBe "polymorphic"
-      polymorphic.label shouldBe "Polymorphic"
-      polymorphic.variables.size shouldBe 10
-      polymorphic.groups.isEmpty shouldBe true
-      polymorphic.parent shouldBe List("root", "genetic")
+      polymorphism.code shouldBe "polymorphism"
+      polymorphism.label shouldBe "polymorphism"
+      polymorphism.variables.size shouldBe 14
+      polymorphism.groups.isEmpty shouldBe true
+      polymorphism.parent shouldBe List("root", "genetic")
 
-      val apoe4: VariableMetaData = polymorphic.variables.head
+      val apoe4: VariableMetaData = polymorphism.variables.head
 
       apoe4.code shouldBe "apoe4"
       apoe4.label shouldBe "ApoE4"
       apoe4.sqlType shouldBe Some(int)
+
+      root.toJson shouldBe mipCDEVariablesJson
+
     }
-
   }
-
 }

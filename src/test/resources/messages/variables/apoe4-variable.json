@@ -1,6 +1,13 @@
 {
   "code": "apoe4",
-  "datasets": [],
+  "datasets": [
+    {
+      "code": "setA"
+    },
+    {
+      "code": "setB"
+    }
+  ],
   "description": "Apolipoprotein E (APOE) e4 allele",
   "enumerations": [
     {
