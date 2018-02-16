@@ -1,11 +1,16 @@
 
 # Changelog
 
-## 2.3.0 - 2018-02-16
+## 2.4.0 - 2018-02-16
 
 * Rebranding, migrate classes to package ch.chuv.lren.woken.*
 * Add metadata for groups
 * Update Dataset
+
+## 2.3.0 - 2018-01-24
+
+* Reorganise and add datasets, queries on variables
+* Improve definition of GroupId
 
 ## 2.2.0 - 2018-01-15
 
