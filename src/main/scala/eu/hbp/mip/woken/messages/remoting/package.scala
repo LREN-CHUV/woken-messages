@@ -16,11 +16,8 @@
 
 package eu.hbp.mip.woken.messages
 
-import eu.hbp.mip.woken.messages.datasets.DatasetsProtocol
-import eu.hbp.mip.woken.messages.remoting.RemotingProtocol
+package object remoting {
 
-package object variables {
-  type PathSegment = String
+  object remotingProtocol extends RemotingProtocol
 
-  object variablesProtocol extends VariablesProtocol with DatasetsProtocol with RemotingProtocol
 }

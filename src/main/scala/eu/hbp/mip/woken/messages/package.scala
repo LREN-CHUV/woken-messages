@@ -19,6 +19,7 @@ package eu.hbp.mip.woken
 import eu.hbp.mip.woken.messages.datasets.DatasetsProtocol
 import eu.hbp.mip.woken.messages.query.QueryProtocol
 import eu.hbp.mip.woken.messages.query.filters.QueryFiltersProtocol
+import eu.hbp.mip.woken.messages.remoting.RemotingProtocol
 import eu.hbp.mip.woken.messages.variables.VariablesProtocol
 
 /**
@@ -33,5 +34,5 @@ package object messages {
       with QueryFiltersProtocol
       with DatasetsProtocol
       with VariablesProtocol
-
+      with RemotingProtocol
 }

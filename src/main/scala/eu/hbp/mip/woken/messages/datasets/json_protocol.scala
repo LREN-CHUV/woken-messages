@@ -16,10 +16,12 @@
 
 package eu.hbp.mip.woken.messages.datasets
 
+import eu.hbp.mip.woken.messages.remoting.RemotingProtocol
 import eu.hbp.mip.woken.utils.JsonEnums
 import spray.json._
 
 trait DatasetsProtocol extends DefaultJsonProtocol with JsonEnums {
+  this: RemotingProtocol =>
 
   implicit val DatasetIdJsonFormat: JsonFormat[DatasetId] = jsonFormat1(DatasetId)
 
@@ -27,7 +29,7 @@ trait DatasetsProtocol extends DefaultJsonProtocol with JsonEnums {
     AnonymisationLevel
   )
 
-  implicit val DatasetJsonFormat: JsonFormat[Dataset] = jsonFormat5(Dataset)
+  implicit val DatasetJsonFormat: JsonFormat[Dataset] = jsonFormat6(Dataset)
 
   implicit val DatasetsResponseFormat: RootJsonFormat[DatasetsResponse] = jsonFormat1(
     DatasetsResponse

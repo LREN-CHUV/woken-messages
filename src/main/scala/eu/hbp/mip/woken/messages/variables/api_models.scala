@@ -155,9 +155,10 @@ case class GroupMetaData(
 /**
   * Query the list of variables available for a dataset. It should return a Set of VariableId and GroupId
   *
-  * @param dataset Dataset to query
-  * @param includeNulls If true, include variables that contain only null values
+  * @param datasets Set of datasets to query. If empty, all datasets available are selected
+  * @param includeNulls If true, include variables that contain only null values in all datasets selected
   */
-case class VariablesForDatasetQuery(dataset: DatasetId, includeNulls: Boolean) extends RemoteMessage
+case class VariablesForDatasetsQuery(datasets: Set[DatasetId], includeNulls: Boolean)
+    extends RemoteMessage
 
-case class VariablesForDatasetResponse(variables: Set[FeatureIdentifier])
+case class VariablesForDatasetsResponse(variables: Set[FeatureIdentifier])

@@ -15,6 +15,7 @@ lazy val `woken-messages` =
           library.akkaCluster,
           library.akkaClusterTools,
           library.akkaSlf4j,
+          library.akkaHttp,
           //library.akkaTracingCore,
           library.swaggerAnnotations,
           library.sprayJson,
@@ -36,6 +37,7 @@ lazy val library =
       val scalaCheck         = "1.13.5"
       val scalaTest          = "3.0.3"
       val akka               = "2.5.9"
+      val akkaHttp           = "10.0.11"
       val akkaTracing        = "0.6.1"
       val swaggerAnnotations = "1.5.16"
       val sprayJson          = "1.3.4"
@@ -51,6 +53,7 @@ lazy val library =
     val akkaCluster: ModuleID = "com.typesafe.akka" %% "akka-cluster" % Version.akka
     val akkaClusterTools: ModuleID = "com.typesafe.akka" %% "akka-cluster-tools" % Version.akka
     val akkaSlf4j: ModuleID   = "com.typesafe.akka" %% "akka-slf4j"   % Version.akka
+    val akkaHttp: ModuleID    = "com.typesafe.akka" %% "akka-http"    % Version.akkaHttp
     val akkaTracingCore: ModuleID = "com.github.levkhomich" %% "akka-tracing-core" % Version.akkaTracing
     val swaggerAnnotations: ModuleID = "io.swagger"  % "swagger-annotations"       % Version.swaggerAnnotations
     val sprayJson: ModuleID   = "io.spray"          %% "spray-json"   % Version.sprayJson

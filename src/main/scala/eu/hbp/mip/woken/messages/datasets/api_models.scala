@@ -17,6 +17,7 @@
 package eu.hbp.mip.woken.messages.datasets
 
 import eu.hbp.mip.woken.messages.RemoteMessage
+import eu.hbp.mip.woken.messages.remoting.RemoteLocation
 import io.swagger.annotations.ApiModel
 
 /**
@@ -36,11 +37,19 @@ object AnonymisationLevel extends Enumeration {
   val Identifying, Depersonalised, Anonymised = Value
 }
 
+import AnonymisationLevel.AnonymisationLevel
+
 case class Dataset(dataset: DatasetId,
                    label: String,
                    description: String,
                    tables: List[String],
-                   anonymisationLevel: AnonymisationLevel.Value)
+                   anonymisationLevel: AnonymisationLevel,
+                   location: Option[RemoteLocation]) {
+
+  def withoutAuthenticationDetails: Dataset =
+    copy(location = location.map(_.copy(credentials = None)))
+
+}
 
 /**
   * Should return a list of Dataset

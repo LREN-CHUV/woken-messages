@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package eu.hbp.mip.woken.messages
+package eu.hbp.mip.woken.messages.remoting
 
-import eu.hbp.mip.woken.messages.datasets.DatasetsProtocol
-import eu.hbp.mip.woken.messages.remoting.RemotingProtocol
+import akka.http.scaladsl.model.Uri
 
-package object variables {
-  type PathSegment = String
-
-  object variablesProtocol extends VariablesProtocol with DatasetsProtocol with RemotingProtocol
-}
+case class BasicAuthentication(user: String, password: String)
+case class RemoteLocation(url: Uri, credentials: Option[BasicAuthentication])

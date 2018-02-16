@@ -16,8 +16,10 @@
 
 package eu.hbp.mip.woken.messages
 
+import eu.hbp.mip.woken.messages.remoting.RemotingProtocol
+
 package object datasets {
 
-  object datasetsProtocol extends DatasetsProtocol
+  object datasetsProtocol extends DatasetsProtocol with RemotingProtocol
 
 }

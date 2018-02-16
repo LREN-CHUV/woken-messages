@@ -198,6 +198,7 @@ trait VariablesProtocol extends DefaultJsonProtocol {
       groupFormat.write(group)
     }
 
+    @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
     def injectDefaultFields(group: JsValue): JsValue = {
       val fields = group.asJsObject.fields
       if (fields.contains("groups") || fields.contains("variables")) {
@@ -219,11 +220,9 @@ trait VariablesProtocol extends DefaultJsonProtocol {
 
   }
 
-  implicit val VariablesForDatasetQueryFormat: RootJsonFormat[VariablesForDatasetQuery] =
-    jsonFormat2(
-      VariablesForDatasetQuery
-    )
+  implicit val VariablesForDatasetsQueryFormat: RootJsonFormat[VariablesForDatasetsQuery] =
+    jsonFormat2(VariablesForDatasetsQuery)
 
-  implicit val VariablesForDatasetResponseFormat: RootJsonFormat[VariablesForDatasetResponse] =
-    jsonFormat1(VariablesForDatasetResponse)
+  implicit val VariablesForDatasetsResponseFormat: RootJsonFormat[VariablesForDatasetsResponse] =
+    jsonFormat1(VariablesForDatasetsResponse)
 }
