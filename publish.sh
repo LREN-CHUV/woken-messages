@@ -100,11 +100,11 @@ echo "Build the project for distribution..."
 #./tests/test.sh
 echo "[ok] Done"
 
-git push
-git push --tags
-
 # Publish on BinTray
 docker run -e BINTRAY_USER=${BINTRAY_USER} -e BINTRAY_PASS=${BINTRAY_PASS:-$BINTRAY_API_KEY} woken-messages-build:latest sbt +publish
+
+git push
+git push --tags
 
 # Notify on slack
 sed "s/USER/${USER^}/" $WORKSPACE/slack.json > $WORKSPACE/.slack.json
