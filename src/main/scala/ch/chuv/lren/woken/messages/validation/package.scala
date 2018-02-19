@@ -20,4 +20,8 @@ package ch.chuv.lren.woken.messages
 /**
   * Defines the messages exchanged between Woken and Woken-validation
   */
-package object validation
+package object validation {
+
+  object validationProtocol extends ValidationProtocol
+
+}

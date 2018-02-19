@@ -21,6 +21,7 @@ import ch.chuv.lren.woken.messages.datasets.DatasetsProtocol
 import ch.chuv.lren.woken.messages.query.QueryProtocol
 import ch.chuv.lren.woken.messages.query.filters.QueryFiltersProtocol
 import ch.chuv.lren.woken.messages.remoting.RemotingProtocol
+import ch.chuv.lren.woken.messages.validation.ValidationProtocol
 import ch.chuv.lren.woken.messages.variables.VariablesProtocol
 
 /**
@@ -36,4 +37,5 @@ package object messages {
       with DatasetsProtocol
       with VariablesProtocol
       with RemotingProtocol
+      with ValidationProtocol
 }

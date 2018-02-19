@@ -23,6 +23,14 @@ import ch.chuv.lren.woken.messages.variables.VariableMetaData
 import spray.json.JsObject
 import cats.data.NonEmptyList
 
+// TODO: test data should come from the database
+/**
+  *
+  * @param fold    Name of the fold
+  * @param model   PFA model
+  * @param data    Test data
+  * @param varInfo Metadata for the variable to validate
+  */
 case class ValidationQuery(
     fold: String,
     model: JsObject,
@@ -43,6 +51,55 @@ case class ScoringQuery(algorithmOutput: NonEmptyList[String],
                         targetMetaData: VariableMetaData)
     extends RemoteMessage
 
+case class Matrix(
+    labels: List[String],
+    values: Array[Array[Double]]
+) {
+  assert (values.length == labels.length)
+
+  override def equals(obj: scala.Any): Boolean = obj match {
+    case Matrix(l, v) if l.equals(labels) && v.length == values.length => {
+      v.deep == values.deep
+    }
+    case _ => false
+
+  }
+}
+
+sealed trait Score
+sealed trait VariableScore extends Score
+
+case class BinaryClassificationScore(
+    `Confusion matrix`: Matrix,
+    `Accuracy`: Double,
+    `Recall`: Double,
+    `Precision`: Double,
+    `F1-score`: Double,
+    `False positive rate`: Double
+) extends VariableScore
+
+case class PolynomialClassificationScore(
+    `Confusion matrix`: Matrix,
+    `Accuracy`: Double,
+    `Weighted recall`: Double,
+    `Weighted precision`: Double,
+    `Weighted F1-score`: Double,
+    `Weighted false positive rate`: Double
+) extends VariableScore
+
+case class RegressionScore(
+    `MSE`: Double,
+    `RMSE`: Double,
+    `R-squared`: Double,
+    `MAE`: Double,
+    `Explained variance`: Double
+) extends VariableScore
+
+case class KFoldCrossValidationScore(
+    average: VariableScore,
+    folds: Map[String, VariableScore]
+) extends Score
+
 case class ScoringResult(
-    scores: JsObject
+    score: Score
 )
