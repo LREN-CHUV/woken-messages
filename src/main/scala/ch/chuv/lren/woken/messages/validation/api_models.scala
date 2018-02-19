@@ -19,29 +19,28 @@ package ch.chuv.lren.woken.messages.validation
 
 import ch.chuv.lren.woken.messages.RemoteMessage
 import ch.chuv.lren.woken.messages.variables.VariableMetaData
-
-import spray.json.JsObject
+import spray.json.{ JsObject, JsValue }
 import cats.data.NonEmptyList
 
 // TODO: test data should come from the database
 /**
   *
   * @param fold    Name of the fold
-  * @param model   PFA model
+  * @param pfaModel PFA model
   * @param data    Test data
   * @param varInfo Metadata for the variable to validate
   */
 case class ValidationQuery(
-    fold: String,
-    model: JsObject,
-    data: List[String],
+    fold: Int,
+    pfaModel: JsObject,
+    data: List[JsValue],
     varInfo: VariableMetaData
 ) extends RemoteMessage
 
 case class ValidationResult(
-    fold: String,
+    fold: Int,
     varInfo: VariableMetaData,
-    outputData: List[String],
+    outputData: List[JsObject],
     error: Option[String]
 )
 
@@ -101,5 +100,5 @@ case class KFoldCrossValidationScore(
 ) extends Score
 
 case class ScoringResult(
-    score: Score
+    result: Either[String, Score]
 )
