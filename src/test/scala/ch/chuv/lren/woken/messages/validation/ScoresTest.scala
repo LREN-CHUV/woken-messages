@@ -44,8 +44,6 @@ class ScoresTest extends WordSpec with Matchers with JsonUtils {
 
       val json = score.toJson
 
-      println(json.prettyPrint)
-
       json.convertTo[VariableScore] shouldBe score
 
     }

@@ -55,7 +55,7 @@ case class Matrix(
     labels: List[String],
     values: Array[Array[Double]]
 ) {
-  assert (values.length == labels.length)
+  assert(values.length == labels.length)
 
   override def equals(obj: scala.Any): Boolean = obj match {
     case Matrix(l, v) if l.equals(labels) && v.length == values.length => {
