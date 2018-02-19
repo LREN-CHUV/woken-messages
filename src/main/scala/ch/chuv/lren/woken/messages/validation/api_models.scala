@@ -40,13 +40,12 @@ case class ValidationQuery(
 case class ValidationResult(
     fold: Int,
     varInfo: VariableMetaData,
-    outputData: List[JsObject],
-    error: Option[String]
+    result: Either[String, List[JsObject]]
 )
 
 // TODO: the NonEmptyList[String] contain actually a Json value to deserialise and that maps usually to String or Double
-case class ScoringQuery(algorithmOutput: NonEmptyList[String],
-                        groundTruth: NonEmptyList[String],
+case class ScoringQuery(algorithmOutput: NonEmptyList[JsValue],
+                        groundTruth: NonEmptyList[JsValue],
                         targetMetaData: VariableMetaData)
     extends RemoteMessage
 
@@ -57,9 +56,8 @@ case class Matrix(
   assert(values.length == labels.length)
 
   override def equals(obj: scala.Any): Boolean = obj match {
-    case Matrix(l, v) if l.equals(labels) && v.length == values.length => {
+    case Matrix(l, v) if l.equals(labels) && v.length == values.length =>
       v.deep == values.deep
-    }
     case _ => false
 
   }
