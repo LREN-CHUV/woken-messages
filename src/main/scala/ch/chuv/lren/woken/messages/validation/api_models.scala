@@ -94,7 +94,7 @@ case class RegressionScore(
 
 case class KFoldCrossValidationScore(
     average: VariableScore,
-    folds: Map[String, VariableScore]
+    folds: Map[Int, VariableScore]
 ) extends Score
 
 case class ScoringResult(

@@ -17,9 +17,30 @@
 
 package ch.chuv.lren.woken.messages.validation
 
+import cats.data.NonEmptyList
+import cats.syntax.list._
+import ch.chuv.lren.woken.messages.variables.VariablesProtocol
 import spray.json._
 
 trait ValidationProtocol extends DefaultJsonProtocol {
+  this: VariablesProtocol =>
+
+  implicit def nonEmptyListFormat[T: JsonFormat] = new JsonFormat[NonEmptyList[T]] {
+    override def write(obj: NonEmptyList[T]): JsValue = obj.toList.toJson
+
+    override def read(json: JsValue): NonEmptyList[T] =
+      json
+        .convertTo[List[T]]
+        .toNel
+        .getOrElse(deserializationError("NonEmptyList expects at least one item"))
+  }
+
+  implicit val ValidationQueryProtocol: JsonFormat[ValidationQuery] = jsonFormat4(ValidationQuery)
+  implicit val ValidationResultProtocol: JsonFormat[ValidationResult] = jsonFormat3(
+    ValidationResult
+  )
+
+  implicit val ScoringQueryProtocol: JsonFormat[ScoringQuery] = jsonFormat3(ScoringQuery)
 
   implicit val MatrixProtocol: JsonFormat[Matrix] = jsonFormat2(Matrix)
 
@@ -53,7 +74,26 @@ trait ValidationProtocol extends DefaultJsonProtocol {
       }
   }
 
-  implicit val KFoldCrossValidationScoreProtocol: JsonFormat[KFoldCrossValidationScore] =
+  private implicit val KFoldCrossValidationScoreProtocol: JsonFormat[KFoldCrossValidationScore] =
     jsonFormat2(KFoldCrossValidationScore)
+
+  @SuppressWarnings(Array("org.wartremover.warts.Throw"))
+  implicit object ScoreJsonFormat extends JsonFormat[Score] {
+    def write(s: Score): JsObject =
+      JsObject((s match {
+        case v: VariableScore             => v.toJson
+        case k: KFoldCrossValidationScore => k.toJson
+      }).asJsObject.fields + ("type" -> JsString(s.getClass.getSimpleName)))
+
+    def read(value: JsValue): Score =
+      // If you need to read, you will need something in the
+      // JSON that will tell you which subclass to use
+      value.asJsObject.fields("type") match {
+        case JsString("KFoldCrossValidationScore") => value.convertTo[KFoldCrossValidationScore]
+        case _                                     => value.convertTo[VariableScore]
+      }
+  }
+
+  implicit val ScoringResultProtocol: JsonFormat[ScoringResult] = jsonFormat1(ScoringResult)
 
 }

@@ -17,11 +17,19 @@
 
 package ch.chuv.lren.woken.messages
 
+import ch.chuv.lren.woken.messages.datasets.DatasetsProtocol
+import ch.chuv.lren.woken.messages.remoting.RemotingProtocol
+import ch.chuv.lren.woken.messages.variables.VariablesProtocol
+
 /**
   * Defines the messages exchanged between Woken and Woken-validation
   */
 package object validation {
 
-  object validationProtocol extends ValidationProtocol
+  object validationProtocol
+      extends ValidationProtocol
+      with VariablesProtocol
+      with DatasetsProtocol
+      with RemotingProtocol
 
 }
