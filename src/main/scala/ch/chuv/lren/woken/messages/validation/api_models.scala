@@ -40,7 +40,7 @@ case class ValidationQuery(
 case class ValidationResult(
     fold: Int,
     varInfo: VariableMetaData,
-    result: Either[String, List[JsObject]]
+    result: Either[String, List[JsValue]]
 )
 
 // TODO: the NonEmptyList[String] contain actually a Json value to deserialise and that maps usually to String or Double
