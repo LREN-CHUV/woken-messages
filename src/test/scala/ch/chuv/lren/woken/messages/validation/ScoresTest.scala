@@ -92,4 +92,46 @@ class ScoresTest extends WordSpec with Matchers with JsonUtils {
     }
   }
 
+  "A KFoldCrossValidationScore" should {
+    "be serializable to Json and back" in {
+
+      val avgScore: VariableScore = RegressionScore(
+        `MSE` = 0.3,
+        `RMSE` = 0.1,
+        `R-squared` = 3,
+        `MAE` = 2.4,
+        `Explained variance` = 0.9
+      )
+
+      val f0Score: VariableScore = RegressionScore(
+        `MSE` = 0.2,
+        `RMSE` = 0.1,
+        `R-squared` = 4,
+        `MAE` = 2.2,
+        `Explained variance` = 0.9
+      )
+
+      val f1Score: VariableScore = RegressionScore(
+        `MSE` = 0.5,
+        `RMSE` = 0.2,
+        `R-squared` = 2,
+        `MAE` = 2.6,
+        `Explained variance` = 0.8
+      )
+
+      val xScore: Score = KFoldCrossValidationScore(
+        average = avgScore,
+        folds = Map(
+          0 -> f0Score,
+          1 -> f1Score
+        )
+      )
+
+      val json = xScore.toJson
+
+      json.convertTo[Score] shouldBe xScore
+
+    }
+  }
+
 }

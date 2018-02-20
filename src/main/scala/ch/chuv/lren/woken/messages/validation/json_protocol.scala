@@ -74,16 +74,34 @@ trait ValidationProtocol extends DefaultJsonProtocol {
       }
   }
 
-  private implicit val KFoldCrossValidationScoreProtocol: JsonFormat[KFoldCrossValidationScore] =
-    jsonFormat2(KFoldCrossValidationScore)
+  private implicit object KFoldCrossValidationScoreProtocol
+      extends JsonFormat[KFoldCrossValidationScore] {
+    override def write(obj: KFoldCrossValidationScore): JsValue = JsObject(
+      "average" -> obj.average.toJson,
+      "folds"   -> obj.folds.map { case (k, v) => (k.toString, v) }.toJson,
+      "type"    -> JsString(obj.getClass.getSimpleName)
+    )
+
+    override def read(json: JsValue): KFoldCrossValidationScore =
+      json.asJsObject.getFields("average", "folds", "type") match {
+        case Seq(avgJson, foldsJson, JsString("KFoldCrossValidationScore")) =>
+          KFoldCrossValidationScore(
+            average = avgJson.convertTo[VariableScore],
+            folds = foldsJson
+              .convertTo[Map[String, VariableScore]]
+              .map { case (k, v) => (k.toInt, v) }
+          )
+        case _ => deserializationError(s"Cannot read KFoldCrossValidationScore from $json")
+      }
+  }
 
   @SuppressWarnings(Array("org.wartremover.warts.Throw"))
   implicit object ScoreJsonFormat extends JsonFormat[Score] {
-    def write(s: Score): JsObject =
-      JsObject((s match {
+    def write(s: Score): JsValue =
+      s match {
         case v: VariableScore             => v.toJson
         case k: KFoldCrossValidationScore => k.toJson
-      }).asJsObject.fields + ("type" -> JsString(s.getClass.getSimpleName)))
+      }
 
     def read(value: JsValue): Score =
       // If you need to read, you will need something in the
