@@ -20,6 +20,7 @@ lazy val `woken-messages` =
           library.swaggerAnnotations,
           library.sprayJson,
           library.catsCore,
+          library.postgresQl,
           library.scalaCheck % Test,
           library.scalaTest  % Test
         ),
@@ -45,6 +46,7 @@ lazy val library =
       val slf4j              = "1.7.25"
       val log4j              = "2.10.0"
       val disruptor          = "3.3.7"
+      val postgresQl         = "42.2.1"
     }
     val scalaCheck: ModuleID  = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
     val scalaTest: ModuleID   = "org.scalatest"     %% "scalatest"    % Version.scalaTest
@@ -61,6 +63,7 @@ lazy val library =
     val slf4j: ModuleID       = "org.slf4j"          % "slf4j-api"    % Version.slf4j
     val log4jSlf4j: ModuleID  = "org.apache.logging.log4j" % "log4j-slf4j-impl" % Version.log4j
     val disruptor: ModuleID   = "com.lmax"           % "disruptor"    % Version.disruptor
+    val postgresQl: ModuleID  = "org.postgresql"     % "postgresql"   % Version.postgresQl
   }
 
 // *****************************************************************************
