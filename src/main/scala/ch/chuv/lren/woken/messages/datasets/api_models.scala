@@ -55,6 +55,6 @@ case class Dataset(dataset: DatasetId,
 /**
   * Should return a list of Dataset
   */
-object DatasetsQuery extends RemoteMessage
+case object DatasetsQuery extends RemoteMessage
 
 case class DatasetsResponse(datasets: Set[Dataset])
