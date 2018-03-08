@@ -40,6 +40,7 @@ class VariableMetaDataTest extends WordSpec with Matchers with JsonUtils {
     length = None,
     minValue = None,
     maxValue = None,
+    summaryStatistics = None,
     datasets = Set("setA", "setB").map(DatasetId)
   )
 

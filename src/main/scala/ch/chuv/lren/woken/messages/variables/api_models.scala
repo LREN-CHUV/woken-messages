@@ -97,7 +97,6 @@ object SqlType extends Enumeration {
   val varchar: Value = Value("varchar")
 }
 
-
 /**
   * Common measures of location, or central tendency
   *
@@ -107,11 +106,11 @@ object SqlType extends Enumeration {
 // The common measure of dependence between paired random variables is the Pearson product-moment correlation coefficient, while a common alternative summary statistic is Spearman's rank correlation coefficient. A value of zero for the distance correlation implies independence.
 // The interquartile mean (IQM) (or midmean) is a statistical measure of central tendency based on the truncated mean of the interquartile range.
 case class LocationStatistics(
-                             mean: Double,
-                             median: Double
-                             //mode: Double,
-                             // interquartile mean: Double
-                             )
+    mean: Double,
+    median: Double
+    //mode: Double,
+    // interquartile mean: Double
+)
 
 /**
   * Common measures of statistical dispersion
@@ -122,10 +121,10 @@ case class LocationStatistics(
   */
 // variance, interquartile range, absolute deviation, mean absolute difference and the distance standard deviation. Measures that assess spread in comparison to the typical size of data values include the coefficient of variation.
 case class DispersionStatistics(
-                               std: Double,
-                               min: Double,
-                               max: Double
-                               )
+    std: Double,
+    min: Double,
+    max: Double
+)
 
 /**
   * Summary statistics
@@ -134,9 +133,9 @@ case class DispersionStatistics(
   * @param dispersion Measures of statistical dispersion
   */
 case class SummaryStatistics(
-                            location: LocationStatistics,
-                            dispersion: DispersionStatistics
-                            )
+    location: LocationStatistics,
+    dispersion: DispersionStatistics
+)
 
 import VariableType.VariableType
 import SqlType.SqlType
@@ -153,8 +152,9 @@ import SqlType.SqlType
   * @param units Units
   * @param enumerations List of valid values for enumerations
   * @param length Maximum length for textual variables
-  * @param minValue Minimum value for numerical variables
-  * @param maxValue Maximum value for numerical variables
+  * @param minValue Minimum value for numerical variables, defined by a specialist
+  * @param maxValue Maximum value for numerical variables, defined by a specialist
+  * @param summaryStatistics Summary statistics collected from the datasets
   * @param datasets List of datasets where this variable appears
   */
 case class VariableMetaData(
@@ -169,6 +169,7 @@ case class VariableMetaData(
     length: Option[Int],
     minValue: Option[Double],
     maxValue: Option[Double],
+    summaryStatistics: Option[SummaryStatistics],
     datasets: Set[DatasetId]
 ) {
   def toId: VariableId = VariableId(code)
