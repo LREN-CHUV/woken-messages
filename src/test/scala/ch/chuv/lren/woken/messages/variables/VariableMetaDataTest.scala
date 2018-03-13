@@ -47,6 +47,7 @@ class VariableMetaDataTest extends WordSpec with Matchers with JsonUtils {
   val apoe4Json: JsValue           = loadJson("/messages/variables/apoe4-variable.json")
   val sampleVariablesJson: JsValue = loadJson("/messages/variables/sample_variables.json")
   val mipCDEVariablesJson: JsValue = loadJson("/messages/variables/mip_cde_variables.json")
+  val churnVariablesJson: JsValue = loadJson("/messages/variables/churn_variables.json")
 
   "VariableMetaData" should {
 
@@ -118,6 +119,33 @@ class VariableMetaDataTest extends WordSpec with Matchers with JsonUtils {
       apoe4.sqlType shouldBe Some(int)
 
       root.toJson shouldBe mipCDEVariablesJson
+
+    }
+
+    "be deserializable from Churn variables metadata" in {
+      val root = churnVariablesJson.convertTo[GroupMetaData]
+
+      root.code shouldBe "root"
+      root.label shouldBe "/"
+      root.groups.size shouldBe 1
+      root.variables.isEmpty shouldBe true
+      root.parent.isEmpty shouldBe true
+
+      val all = root.groups.head
+
+      all.code shouldBe "all"
+      all.label shouldBe "All"
+      all.groups.isEmpty shouldBe true
+      all.variables.size shouldBe 21
+      all.parent shouldBe List("root")
+
+      val state: VariableMetaData = all.variables.head
+
+      state.code shouldBe "state"
+      state.label shouldBe "State"
+      state.`type` shouldBe text
+
+      root.toJson shouldBe churnVariablesJson
 
     }
   }
