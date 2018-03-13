@@ -32,6 +32,8 @@ trait DatasetsProtocol extends DefaultJsonProtocol with JsonEnums {
 
   implicit val DatasetJsonFormat: JsonFormat[Dataset] = jsonFormat6(Dataset)
 
+  implicit val DatasetsQueryFormat: RootJsonFormat[DatasetsQuery] = jsonFormat1(DatasetsQuery)
+
   implicit val DatasetsResponseFormat: RootJsonFormat[DatasetsResponse] = jsonFormat1(
     DatasetsResponse
   )

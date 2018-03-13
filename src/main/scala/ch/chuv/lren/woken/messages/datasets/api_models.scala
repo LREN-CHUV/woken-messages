@@ -54,7 +54,9 @@ case class Dataset(dataset: DatasetId,
 
 /**
   * Should return a list of Dataset
+  * @param table The target table containing the data to explore. If empty, default to the feature table defined
+  *              in Woken (jobs.featuresTable configuration property)
   */
-case object DatasetsQuery extends RemoteMessage
+case class DatasetsQuery(table: Option[String]) extends RemoteMessage
 
 case class DatasetsResponse(datasets: Set[Dataset])
