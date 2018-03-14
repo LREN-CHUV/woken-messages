@@ -162,4 +162,4 @@ case class GroupMetaData(
 case class VariablesForDatasetsQuery(datasets: Set[DatasetId], includeNulls: Boolean)
     extends RemoteMessage
 
-case class VariablesForDatasetsResponse(variables: Set[FeatureIdentifier])
+case class VariablesForDatasetsResponse(variables: Set[VariableMetaData])
