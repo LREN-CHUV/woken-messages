@@ -69,6 +69,16 @@ trait VariablesProtocol extends DefaultJsonProtocol {
     }
   }
 
+  implicit val SummaryStatisticsJsonFormat: JsonFormat[SummaryStatistics] = jsonFormat2(
+    SummaryStatistics
+  )
+  implicit val LocationStatisticsJsonFormat: JsonFormat[LocationStatistics] = jsonFormat2(
+    LocationStatistics
+  )
+  implicit val DispersionStatisticsJsonFormat: JsonFormat[DispersionStatistics] = jsonFormat3(
+    DispersionStatistics
+  )
+
   implicit val VariableTypeFormat: JsonFormat[VariableType.Value] = jsonEnum(VariableType)
   implicit val SqlTypeFormat: JsonFormat[SqlType.Value]           = jsonEnum(SqlType)
 
@@ -94,11 +104,12 @@ trait VariablesProtocol extends DefaultJsonProtocol {
           item.minValue.map { m =>
             "maxValue" -> (if (item.`type` == integer) JsNumber(m.toInt) else JsNumber(m))
           },
-          item.maxValue.map("maxValue" -> _.toJson),
-          datasets.map("datasets"      -> _.toJson),
-          Some("code"                  -> item.code.toJson),
-          Some("label"                 -> item.label.toJson),
-          Some("type"                  -> item.`type`.toJson)
+          item.maxValue.map("maxValue"                   -> _.toJson),
+          item.summaryStatistics.map("summaryStatistics" -> _.toJson),
+          datasets.map("datasets"                        -> _.toJson),
+          Some("code"                                    -> item.code.toJson),
+          Some("label"                                   -> item.label.toJson),
+          Some("type"                                    -> item.`type`.toJson)
         ).flatten: _*
       )
     }
@@ -124,6 +135,8 @@ trait VariablesProtocol extends DefaultJsonProtocol {
             length = jsObject.fields.get("length").map(_.convertTo[Int]),
             minValue = jsObject.fields.get("minValue").map(_.convertTo[Double]),
             maxValue = jsObject.fields.get("maxValue").map(_.convertTo[Double]),
+            summaryStatistics =
+              jsObject.fields.get("summaryStatistics").map(_.convertTo[SummaryStatistics]),
             datasets =
               jsObject.fields.get("datasets").map(_.convertTo[Set[DatasetId]]).getOrElse(Set())
           )
