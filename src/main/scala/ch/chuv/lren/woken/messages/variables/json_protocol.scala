@@ -238,5 +238,5 @@ trait VariablesProtocol extends DefaultJsonProtocol {
     jsonFormat2(VariablesForDatasetsQuery)
 
   implicit val VariablesForDatasetsResponseFormat: RootJsonFormat[VariablesForDatasetsResponse] =
-    jsonFormat1(VariablesForDatasetsResponse)
+    jsonFormat2(VariablesForDatasetsResponse)
 }
