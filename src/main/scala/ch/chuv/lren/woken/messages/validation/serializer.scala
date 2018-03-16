@@ -21,14 +21,16 @@ import akka.serialization.Serializer
 import spray.json._
 import validationProtocol._
 
+// Message serializers for Akka
+
 class ValidationQuerySerializer extends Serializer {
 
   override def identifier: Int = 93561924
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def toBinary(o: AnyRef): Array[Byte] = {
-    val queryResult        = o.asInstanceOf[ValidationQuery]
-    val bytes: Array[Byte] = queryResult.toJson.compactPrint.getBytes
+    val query        = o.asInstanceOf[ValidationQuery]
+    val bytes: Array[Byte] = query.toJson.compactPrint.getBytes
     bytes
   }
 
@@ -46,8 +48,8 @@ class ValidationResultSerializer extends Serializer {
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def toBinary(o: AnyRef): Array[Byte] = {
-    val queryResult        = o.asInstanceOf[ValidationResult]
-    val bytes: Array[Byte] = queryResult.toJson.compactPrint.getBytes
+    val result        = o.asInstanceOf[ValidationResult]
+    val bytes: Array[Byte] = result.toJson.compactPrint.getBytes
     bytes
   }
 
@@ -65,8 +67,8 @@ class ScoringQuerySerializer extends Serializer {
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def toBinary(o: AnyRef): Array[Byte] = {
-    val queryResult        = o.asInstanceOf[ScoringQuery]
-    val bytes: Array[Byte] = queryResult.toJson.compactPrint.getBytes
+    val query        = o.asInstanceOf[ScoringQuery]
+    val bytes: Array[Byte] = query.toJson.compactPrint.getBytes
     bytes
   }
 
@@ -84,8 +86,8 @@ class ScoringResultSerializer extends Serializer {
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def toBinary(o: AnyRef): Array[Byte] = {
-    val queryResult        = o.asInstanceOf[ScoringResult]
-    val bytes: Array[Byte] = queryResult.toJson.compactPrint.getBytes
+    val result        = o.asInstanceOf[ScoringResult]
+    val bytes: Array[Byte] = result.toJson.compactPrint.getBytes
     bytes
   }
 

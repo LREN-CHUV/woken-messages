@@ -21,6 +21,39 @@ import akka.serialization.Serializer
 import spray.json._
 import queryProtocol._
 
+// Message serializers for Akka
+
+class MethodsQuerySerializer extends Serializer {
+
+  override def identifier: Int = 83561456
+
+  override def toBinary(o: AnyRef): Array[Byte] = "".getBytes
+
+  override def includeManifest: Boolean = false
+
+  override def fromBinary(bytes: Array[Byte], manifest: Option[Class[_]]): AnyRef = MethodsQuery
+
+}
+
+class MethodsResponseSerializer extends Serializer {
+
+  override def identifier: Int = 30496704
+
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+  override def toBinary(o: AnyRef): Array[Byte] = {
+    val queryResult        = o.asInstanceOf[MethodsResponse]
+    val bytes: Array[Byte] = queryResult.toJson.compactPrint.getBytes
+    bytes
+  }
+
+  override def includeManifest: Boolean = false
+
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+  override def fromBinary(bytes: Array[Byte], manifest: Option[Class[_]]): AnyRef =
+    new String(bytes).parseJson.convertTo[MethodsResponse].asInstanceOf[AnyRef]
+
+}
+
 class QueryResultSerializer extends Serializer {
 
   override def identifier: Int = 76561945
