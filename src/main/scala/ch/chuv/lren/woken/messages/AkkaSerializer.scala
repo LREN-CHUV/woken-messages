@@ -96,7 +96,7 @@ class AkkaSerializer extends Serializer {
       case `validationQueryClass`  => json.convertTo[ValidationQuery]
       case `validationResultClass` => json.convertTo[ValidationResult]
       case `scoringQueryClass`     => json.convertTo[ScoringQuery]
-      case `scoringResultClass`    => json.convertTo[ValidationResult]
+      case `scoringResultClass`    => json.convertTo[ScoringResult]
 
       case `variablesForDatasetsQueryClass`  => json.convertTo[VariablesForDatasetsQuery]
       case `variablesForDatasetsResultClass` => json.convertTo[VariablesForDatasetsResponse]

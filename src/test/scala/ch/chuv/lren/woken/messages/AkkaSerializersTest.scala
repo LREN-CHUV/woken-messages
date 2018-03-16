@@ -23,13 +23,14 @@ import ch.chuv.lren.woken.JsonUtils
 import org.scalatest.{ Matchers, WordSpec }
 import ch.chuv.lren.woken.messages.datasets._
 import ch.chuv.lren.woken.messages.query._
-import ch.chuv.lren.woken.messages.validation.{ ValidationQuery, ValidationResult }
+import ch.chuv.lren.woken.messages.validation._
 import ch.chuv.lren.woken.messages.variables.{
   VariableId,
   VariableMetaData,
   VariablesForDatasetsQuery,
   VariablesForDatasetsResponse
 }
+import cats.data.NonEmptyList
 import spray.json._
 import queryProtocol._
 
@@ -109,6 +110,18 @@ class AkkaSerializersTest extends WordSpec with Matchers with JsonUtils {
       val apoe4Json: JsValue = loadJson("/messages/variables/apoe4-variable.json")
       val apoe4              = apoe4Json.convertTo[VariableMetaData]
       val r                  = ValidationResult(1, apoe4, Right(List(JsNumber(.5))))
+      ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r
+    }
+
+    "serialize Scoring query" in {
+      val apoe4Json: JsValue = loadJson("/messages/variables/apoe4-variable.json")
+      val apoe4              = apoe4Json.convertTo[VariableMetaData]
+      val q                  = ScoringQuery(NonEmptyList.one(JsNumber(1.0)), NonEmptyList.one(JsNumber(1.4)), apoe4)
+      ser.fromBinary(ser.toBinary(q), Some(q.getClass)) shouldBe q
+    }
+
+    "serialize Scoring response" in {
+      val r = ScoringResult(Right(RegressionScore(0.1, 0.2, 0.3, 0.4, 0.5)))
       ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r
     }
 
