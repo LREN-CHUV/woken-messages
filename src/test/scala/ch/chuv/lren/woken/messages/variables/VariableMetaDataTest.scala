@@ -47,7 +47,7 @@ class VariableMetaDataTest extends WordSpec with Matchers with JsonUtils {
   val apoe4Json: JsValue           = loadJson("/messages/variables/apoe4-variable.json")
   val sampleVariablesJson: JsValue = loadJson("/messages/variables/sample_variables.json")
   val mipCDEVariablesJson: JsValue = loadJson("/messages/variables/mip_cde_variables.json")
-  val churnVariablesJson: JsValue = loadJson("/messages/variables/churn_variables.json")
+  val churnVariablesJson: JsValue  = loadJson("/messages/variables/churn_variables.json")
 
   "VariableMetaData" should {
 

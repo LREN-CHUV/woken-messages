@@ -15,12 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ch.chuv.lren.woken
+package ch.chuv.lren.woken.messages.datasets
 
-import org.scalatest.Tag
+import ch.chuv.lren.woken.JsonUtils
+import org.scalatest.{ Matchers, WordSpec }
+import datasetsProtocol._
 
-package object messages {
+class DatasetsTest extends WordSpec with Matchers with JsonUtils {
 
-  object Security extends Tag("ch.chuv.lren.woken.messages.Security")
+  "Woken datasets API" should {
+
+    "read a datasets query from json" in {
+      val jsonAst = loadJson("/messages/datasets/datasets_query.json").asJsObject
+      val query   = jsonAst.convertTo[DatasetsQuery]
+
+      val expected = DatasetsQuery(Some("sample"))
+
+      query shouldBe expected
+    }
+  }
 
 }

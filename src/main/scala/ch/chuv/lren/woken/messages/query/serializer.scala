@@ -54,6 +54,44 @@ class MethodsResponseSerializer extends Serializer {
 
 }
 
+class MiningQuerySerializer extends Serializer {
+
+  override def identifier: Int = 20576335
+
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+  override def toBinary(o: AnyRef): Array[Byte] = {
+    val query              = o.asInstanceOf[MiningQuery]
+    val bytes: Array[Byte] = query.toJson.compactPrint.getBytes
+    bytes
+  }
+
+  override def includeManifest: Boolean = false
+
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+  override def fromBinary(bytes: Array[Byte], manifest: Option[Class[_]]): AnyRef =
+    new String(bytes).parseJson.convertTo[MiningQuery].asInstanceOf[AnyRef]
+
+}
+
+class ExperimentQuerySerializer extends Serializer {
+
+  override def identifier: Int = 86570432
+
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+  override def toBinary(o: AnyRef): Array[Byte] = {
+    val query              = o.asInstanceOf[ExperimentQuery]
+    val bytes: Array[Byte] = query.toJson.compactPrint.getBytes
+    bytes
+  }
+
+  override def includeManifest: Boolean = false
+
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+  override def fromBinary(bytes: Array[Byte], manifest: Option[Class[_]]): AnyRef =
+    new String(bytes).parseJson.convertTo[ExperimentQuery].asInstanceOf[AnyRef]
+
+}
+
 class QueryResultSerializer extends Serializer {
 
   override def identifier: Int = 76561945

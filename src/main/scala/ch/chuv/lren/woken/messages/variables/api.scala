@@ -15,12 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ch.chuv.lren.woken
+package ch.chuv.lren.woken.messages.variables
 
-import org.scalatest.Tag
+import ch.chuv.lren.woken.messages.RemoteMessage
+import ch.chuv.lren.woken.messages.datasets.DatasetId
 
-package object messages {
+/**
+  * Query the list of variables available for a dataset. It should return a Set of VariableId and GroupId
+  *
+  * @param datasets Set of datasets to query. If empty, all datasets available are selected
+  * @param includeNulls If true, include variables that contain only null values in all datasets selected
+  */
+case class VariablesForDatasetsQuery(datasets: Set[DatasetId], includeNulls: Boolean)
+    extends RemoteMessage
 
-  object Security extends Tag("ch.chuv.lren.woken.messages.Security")
-
-}
+case class VariablesForDatasetsResponse(variables: Set[FeatureIdentifier])

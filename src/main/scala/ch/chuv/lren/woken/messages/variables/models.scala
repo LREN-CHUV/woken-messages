@@ -17,7 +17,6 @@
 
 package ch.chuv.lren.woken.messages.variables
 
-import ch.chuv.lren.woken.messages.RemoteMessage
 import ch.chuv.lren.woken.messages.datasets.DatasetId
 import io.swagger.annotations.ApiModel
 
@@ -194,14 +193,3 @@ case class GroupMetaData(
 ) {
   def toId: GroupId = GroupId(parent :+ code)
 }
-
-/**
-  * Query the list of variables available for a dataset. It should return a Set of VariableId and GroupId
-  *
-  * @param datasets Set of datasets to query. If empty, all datasets available are selected
-  * @param includeNulls If true, include variables that contain only null values in all datasets selected
-  */
-case class VariablesForDatasetsQuery(datasets: Set[DatasetId], includeNulls: Boolean)
-    extends RemoteMessage
-
-case class VariablesForDatasetsResponse(variables: Set[FeatureIdentifier])

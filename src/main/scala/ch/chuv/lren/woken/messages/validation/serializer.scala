@@ -29,7 +29,7 @@ class ValidationQuerySerializer extends Serializer {
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def toBinary(o: AnyRef): Array[Byte] = {
-    val query        = o.asInstanceOf[ValidationQuery]
+    val query              = o.asInstanceOf[ValidationQuery]
     val bytes: Array[Byte] = query.toJson.compactPrint.getBytes
     bytes
   }
@@ -48,7 +48,7 @@ class ValidationResultSerializer extends Serializer {
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def toBinary(o: AnyRef): Array[Byte] = {
-    val result        = o.asInstanceOf[ValidationResult]
+    val result             = o.asInstanceOf[ValidationResult]
     val bytes: Array[Byte] = result.toJson.compactPrint.getBytes
     bytes
   }
@@ -67,7 +67,7 @@ class ScoringQuerySerializer extends Serializer {
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def toBinary(o: AnyRef): Array[Byte] = {
-    val query        = o.asInstanceOf[ScoringQuery]
+    val query              = o.asInstanceOf[ScoringQuery]
     val bytes: Array[Byte] = query.toJson.compactPrint.getBytes
     bytes
   }
@@ -86,7 +86,7 @@ class ScoringResultSerializer extends Serializer {
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   override def toBinary(o: AnyRef): Array[Byte] = {
-    val result        = o.asInstanceOf[ScoringResult]
+    val result             = o.asInstanceOf[ScoringResult]
     val bytes: Array[Byte] = result.toJson.compactPrint.getBytes
     bytes
   }

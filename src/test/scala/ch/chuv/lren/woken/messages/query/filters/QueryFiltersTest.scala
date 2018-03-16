@@ -18,14 +18,14 @@
 package ch.chuv.lren.woken.messages.query.filters
 
 import ch.chuv.lren.woken.JsonUtils
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.{ Matchers, WordSpec }
 import FilterRule._
 import ch.chuv.lren.woken.messages.Security
 import queryFiltersProtocol._
 
 class QueryFiltersTest extends WordSpec with Matchers with JsonUtils {
 
-  val is: AfterWord = afterWord("is")
+  val is: AfterWord        = afterWord("is")
   val canBeFrom: AfterWord = afterWord("can be from")
 
   "A query filter" should {
@@ -113,28 +113,28 @@ class QueryFiltersTest extends WordSpec with Matchers with JsonUtils {
 
       "a numerical comparison (a > b)" in {
         val simpleFilter = SingleFilterRule("col1",
-          "col1",
-          "string",
-          InputType.number,
-          Operator.greaterOrEqual,
-          List("10.5"))
+                                            "col1",
+                                            "string",
+                                            InputType.number,
+                                            Operator.greaterOrEqual,
+                                            List("10.5"))
         simpleFilter.toSqlWhere shouldBe """"col1" >= 10.5"""
       }
 
       "an AND conjunction of 2 tests" in {
         val left = SingleFilterRule("col1",
-          "col1",
-          "string",
-          InputType.number,
-          Operator.greaterOrEqual,
-          List("10.5"))
+                                    "col1",
+                                    "string",
+                                    InputType.number,
+                                    Operator.greaterOrEqual,
+                                    List("10.5"))
 
         val right = SingleFilterRule("col2",
-          "col2",
-          "string",
-          InputType.text,
-          Operator.beginsWith,
-          List("beginning"))
+                                     "col2",
+                                     "string",
+                                     InputType.text,
+                                     Operator.beginsWith,
+                                     List("beginning"))
 
         val compoundFilter = CompoundFilterRule(Condition.and, List(left, right))
         compoundFilter.toSqlWhere shouldBe """"col1" >= 10.5 AND "col2" LIKE 'beginning%'""".stripMargin
@@ -142,17 +142,14 @@ class QueryFiltersTest extends WordSpec with Matchers with JsonUtils {
 
       "an IN clause" in {
         val inFilter = SingleFilterRule("col1",
-          "dataset",
-          "text",
-          InputType.text,
-          Operator.in,
-          List("setA", "setB"))
+                                        "dataset",
+                                        "text",
+                                        InputType.text,
+                                        Operator.in,
+                                        List("setA", "setB"))
         inFilter.toSqlWhere shouldBe """"dataset" IN ('setA','setB')"""
       }
     }
-
-
-
     // try to find some tricky filters, filters with bad values that may be injected by an attacker
   }
 

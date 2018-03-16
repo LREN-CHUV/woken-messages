@@ -19,7 +19,7 @@ package ch.chuv.lren.woken.messages.datasets
 
 import ch.chuv.lren.woken.messages.RemoteMessage
 
-// This file contains the API for messages exchanged via Akka
+// This file contains the API defined by messages exchanged via Akka
 
 /**
   * Should return a list of Dataset
