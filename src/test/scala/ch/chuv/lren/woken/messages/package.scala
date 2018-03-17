@@ -15,9 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ch.chuv.lren.woken.messages
+package ch.chuv.lren.woken
 
-/**
-  * Marker for Akka messages exchanged between applications
-  */
-trait RemoteMessage
+import org.scalatest.Tag
+
+package object messages {
+
+  object Security extends Tag("ch.chuv.lren.woken.messages.Security")
+
+}

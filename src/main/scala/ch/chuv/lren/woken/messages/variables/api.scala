@@ -15,9 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ch.chuv.lren.woken.messages
+package ch.chuv.lren.woken.messages.variables
+
+import ch.chuv.lren.woken.messages.RemoteMessage
+import ch.chuv.lren.woken.messages.datasets.DatasetId
 
 /**
-  * Marker for Akka messages exchanged between applications
+  * Query the list of variables available for a dataset. It should return a Set of VariableId and GroupId
+  *
+  * @param datasets Set of datasets to query. If empty, all datasets available are selected
+  * @param includeNulls If true, include variables that contain only null values in all datasets selected
   */
-trait RemoteMessage
+case class VariablesForDatasetsQuery(datasets: Set[DatasetId], includeNulls: Boolean)
+    extends RemoteMessage
+
+case class VariablesForDatasetsResponse(variables: Set[FeatureIdentifier])

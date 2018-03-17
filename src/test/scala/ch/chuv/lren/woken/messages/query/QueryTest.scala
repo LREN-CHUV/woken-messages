@@ -25,7 +25,7 @@ import queryProtocol._
 
 class QueryTest extends WordSpec with Matchers with JsonUtils {
 
-  "Woken query API" should {
+  "Woken query models" should {
 
     "read specs for algorithms from json" in {
       val jsonAst   = loadJson("/messages/query/algorithm.json").asJsObject
@@ -44,6 +44,9 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
 
       validation shouldBe expected
     }
+  }
+
+  "Woken query API" should {
 
     "read a mining query from json" in {
       val jsonAst     = loadJson("/messages/query/mining_query.json").asJsObject

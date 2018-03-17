@@ -15,27 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ch.chuv.lren.woken.messages.query
+package ch.chuv.lren.woken.messages.datasets
 
-import akka.serialization.Serializer
-import spray.json._
-import queryProtocol._
+import ch.chuv.lren.woken.JsonUtils
+import org.scalatest.{ Matchers, WordSpec }
+import datasetsProtocol._
 
-class QueryResultSerializer extends Serializer {
+class DatasetsTest extends WordSpec with Matchers with JsonUtils {
 
-  override def identifier: Int = 76561945
+  "Woken datasets API" should {
 
-  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
-  override def toBinary(o: AnyRef): Array[Byte] = {
-    val queryResult        = o.asInstanceOf[QueryResult]
-    val bytes: Array[Byte] = queryResult.toJson.compactPrint.getBytes
-    bytes
+    "read a datasets query from json" in {
+      val jsonAst = loadJson("/messages/datasets/datasets_query.json").asJsObject
+      val query   = jsonAst.convertTo[DatasetsQuery]
+
+      val expected = DatasetsQuery(Some("sample"))
+
+      query shouldBe expected
+    }
   }
-
-  override def includeManifest: Boolean = false
-
-  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
-  override def fromBinary(bytes: Array[Byte], manifest: Option[Class[_]]): AnyRef =
-    new String(bytes).parseJson.convertTo[QueryResult].asInstanceOf[AnyRef]
 
 }

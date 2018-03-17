@@ -20,9 +20,13 @@ package ch.chuv.lren.woken.messages.query.filters
 import ch.chuv.lren.woken.JsonUtils
 import org.scalatest.{ Matchers, WordSpec }
 import FilterRule._
+import ch.chuv.lren.woken.messages.Security
 import queryFiltersProtocol._
 
 class QueryFiltersTest extends WordSpec with Matchers with JsonUtils {
+
+  val is: AfterWord        = afterWord("is")
+  val canBeFrom: AfterWord = afterWord("can be from")
 
   "A query filter" should {
     "be read from detailed Json description" in {
@@ -83,54 +87,69 @@ class QueryFiltersTest extends WordSpec with Matchers with JsonUtils {
       "a'b'c".safeValue shouldBe "'a''b''c'"
     }
 
-    "prevent SQL injection from values [security]" in {
-      "Bobby'; DROP DATABASE; --".safeValue shouldBe "'Bobby''; DROP DATABASE; --'"
-      "10; DROP DATABASE; --".safeValue shouldBe "'10; DROP DATABASE; --'"
-      "' + (SELECT TOP 1 password FROM users ) + '".safeValue shouldBe "''' + (SELECT TOP 1 password FROM users ) + '''"
-    }
-
     "quote identifiers" in {
       "a".identifier shouldBe """"a""""
       "3".identifier shouldBe """"3""""
       "a c".identifier shouldBe """"a c""""
     }
 
-    "prevent SQL injection from identifiers [security]" in {
-      """Bob"; DROP DATABASE --""".identifier shouldBe """"Bob""; DROP DATABASE --""""
+    "prevent SQL injection" which canBeFrom {
+
+      "values" taggedAs Security in {
+        "Bobby'; DROP DATABASE; --".safeValue shouldBe "'Bobby''; DROP DATABASE; --'"
+        "10; DROP DATABASE; --".safeValue shouldBe "'10; DROP DATABASE; --'"
+        "' + (SELECT TOP 1 password FROM users ) + '".safeValue shouldBe "''' + (SELECT TOP 1 password FROM users ) + '''"
+      }
+
+      "identifiers" taggedAs Security in {
+        """Bob"; DROP DATABASE --""".identifier shouldBe """"Bob""; DROP DATABASE --""""
+      }
     }
+
   }
 
   "FilterRuleToSql" should {
+    "generate the where clause for a filter " which is {
 
-    "generate the where clause for a simple filter" in {
-      val simpleFilter = SingleFilterRule("col1",
-                                          "col1",
-                                          "string",
-                                          InputType.number,
-                                          Operator.greaterOrEqual,
-                                          List("10.5"))
-      simpleFilter.toSqlWhere shouldBe """"col1" >= 10.5"""
+      "a numerical comparison (a > b)" in {
+        val simpleFilter = SingleFilterRule("col1",
+                                            "col1",
+                                            "string",
+                                            InputType.number,
+                                            Operator.greaterOrEqual,
+                                            List("10.5"))
+        simpleFilter.toSqlWhere shouldBe """"col1" >= 10.5"""
+      }
+
+      "an AND conjunction of 2 tests" in {
+        val left = SingleFilterRule("col1",
+                                    "col1",
+                                    "string",
+                                    InputType.number,
+                                    Operator.greaterOrEqual,
+                                    List("10.5"))
+
+        val right = SingleFilterRule("col2",
+                                     "col2",
+                                     "string",
+                                     InputType.text,
+                                     Operator.beginsWith,
+                                     List("beginning"))
+
+        val compoundFilter = CompoundFilterRule(Condition.and, List(left, right))
+        compoundFilter.toSqlWhere shouldBe """"col1" >= 10.5 AND "col2" LIKE 'beginning%'""".stripMargin
+      }
+
+      "an IN clause" in {
+        val inFilter = SingleFilterRule("col1",
+                                        "dataset",
+                                        "text",
+                                        InputType.text,
+                                        Operator.in,
+                                        List("setA", "setB"))
+        inFilter.toSqlWhere shouldBe """"dataset" IN ('setA','setB')"""
+      }
     }
-
-    "generate the where clause for a more complex filter" in {
-      val left = SingleFilterRule("col1",
-                                  "col1",
-                                  "string",
-                                  InputType.number,
-                                  Operator.greaterOrEqual,
-                                  List("10.5"))
-
-      val right = SingleFilterRule("col2",
-                                   "col2",
-                                   "string",
-                                   InputType.text,
-                                   Operator.beginsWith,
-                                   List("beginning"))
-
-      val compoundFilter = CompoundFilterRule(Condition.and, List(left, right))
-      compoundFilter.toSqlWhere shouldBe """"col1" >= 10.5 AND "col2" LIKE 'beginning%'""".stripMargin
-    }
-
     // try to find some tricky filters, filters with bad values that may be injected by an attacker
   }
 

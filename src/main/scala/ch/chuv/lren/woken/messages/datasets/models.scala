@@ -17,7 +17,6 @@
 
 package ch.chuv.lren.woken.messages.datasets
 
-import ch.chuv.lren.woken.messages.RemoteMessage
 import ch.chuv.lren.woken.messages.remoting.RemoteLocation
 import io.swagger.annotations.ApiModel
 
@@ -51,12 +50,3 @@ case class Dataset(dataset: DatasetId,
     copy(location = location.map(_.copy(credentials = None)))
 
 }
-
-/**
-  * Should return a list of Dataset
-  * @param table The target table containing the data to explore. If empty, default to the feature table defined
-  *              in Woken (jobs.featuresTable configuration property)
-  */
-case class DatasetsQuery(table: Option[String]) extends RemoteMessage
-
-case class DatasetsResponse(datasets: Set[Dataset])

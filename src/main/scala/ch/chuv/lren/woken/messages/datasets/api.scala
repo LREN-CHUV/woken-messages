@@ -15,9 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ch.chuv.lren.woken.messages
+package ch.chuv.lren.woken.messages.datasets
+
+import ch.chuv.lren.woken.messages.RemoteMessage
+
+// This file contains the API defined by messages exchanged via Akka
 
 /**
-  * Marker for Akka messages exchanged between applications
+  * Should return a list of Dataset
+  * @param table The target table containing the data to explore. If empty, default to the feature table defined
+  *              in Woken (jobs.featuresTable configuration property)
   */
-trait RemoteMessage
+case class DatasetsQuery(table: Option[String]) extends RemoteMessage
+
+case class DatasetsResponse(datasets: Set[Dataset])

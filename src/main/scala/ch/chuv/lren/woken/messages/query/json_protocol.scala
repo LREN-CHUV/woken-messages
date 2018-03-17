@@ -97,6 +97,8 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
     }
   }
 
+  implicit val MethodsResponseFormat: JsonFormat[MethodsResponse] = jsonFormat1(MethodsResponse)
+
   implicit object MiningQueryJsonFormat extends RootJsonFormat[MiningQuery] {
     private val caseClassFormat                   = jsonFormat9(MiningQuery)
     override def write(obj: MiningQuery): JsValue = caseClassFormat.write(obj)
