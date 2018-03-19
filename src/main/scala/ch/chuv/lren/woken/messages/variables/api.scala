@@ -24,9 +24,10 @@ import ch.chuv.lren.woken.messages.datasets.DatasetId
   * Query the list of variables available for a dataset. It should return a Set of VariableId and GroupId
   *
   * @param datasets Set of datasets to query. If empty, all datasets available are selected
-  * @param includeNulls If true, include variables that contain only null values in all datasets selected
+  * @param exhaustive If true, included variables must be present in all datasets selected
   */
-case class VariablesForDatasetsQuery(datasets: Set[DatasetId], includeNulls: Boolean)
+case class VariablesForDatasetsQuery(datasets: Set[DatasetId], exhaustive: Boolean)
     extends RemoteMessage
 
-case class VariablesForDatasetsResponse(variables: Set[FeatureIdentifier])
+case class VariablesForDatasetsResponse(variables: Set[VariableMetaData],
+                                        error: Option[String] = None)
