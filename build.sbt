@@ -67,7 +67,7 @@ lazy val library =
 // Settings
 // *****************************************************************************
 
-lazy val settings = commonSettings ++ gitSettings ++ scalafmtSettings ++ publishLocalSettings // bintraySettings ++ publishSettings
+lazy val settings = commonSettings ++ gitSettings ++ scalafmtSettings ++ bintraySettings ++ publishSettings
 
 lazy val commonSettings =
   Seq(
@@ -123,22 +123,17 @@ lazy val scalafmtSettings =
   )
 
 // Publish to BinTray
-//lazy val bintraySettings =
-//  Seq(
-//    bintrayEnsureLicenses := false,
-//    bintrayOrganization := Some("hbpmedical"),
-//    bintrayRepository := "maven",
-//    bintrayPackageLabels := Seq("woken", "library", "algorithm-factory")
-//  )
+lazy val bintraySettings =
+  Seq(
+    bintrayEnsureLicenses := false,
+    bintrayOrganization := Some("hbpmedical"),
+    bintrayRepository := "maven",
+    bintrayPackageLabels := Seq("woken", "library", "algorithm-factory")
+  )
 
 lazy val publishSettings = Seq(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   homepage := Some(url("https://github.com/LREN-CHUV/woken-messages")),
   pomIncludeRepository := Function.const(false)
-)
-
-lazy val publishLocalSettings = Seq(
-  publishTo := Some("Artifactory Realm" at "http://artifactory.isenda.com/artifactory/sbt-dev-local"),
-  credentials += Credentials("Artifactory Realm", "artifactory.isenda.com", "cgarcia", "AP4HBVMfWfALvZa8rKbFpykbQes")
 )

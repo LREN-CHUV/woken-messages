@@ -3,7 +3,6 @@ scalacOptions ++= Seq( "-unchecked", "-deprecation" )
 resolvers += Classpaths.sbtPluginReleases
 
 resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
-resolvers += "Artifactory" at "http://artifactory.isenda.com/artifactory/sbt-dev-local/"
 
 // App Packaging
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.5")
@@ -11,7 +10,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.5")
 // Dependency Resolution
 addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0")
 
-//addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.2")
+addSbtPlugin("org.foundweekends" % "sbt-bintray" % "0.5.2")
 
 // Code Quality
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0") // scalastyle
