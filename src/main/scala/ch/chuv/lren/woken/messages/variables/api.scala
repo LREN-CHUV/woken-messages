@@ -29,5 +29,6 @@ import ch.chuv.lren.woken.messages.datasets.DatasetId
 case class VariablesForDatasetsQuery(datasets: Set[DatasetId], exhaustive: Boolean)
     extends RemoteMessage
 
+@SuppressWarnings(Array("org.wartremover.warts.DefaultArguments"))
 case class VariablesForDatasetsResponse(variables: Set[VariableMetaData],
                                         error: Option[String] = None)
