@@ -25,7 +25,6 @@ import ch.chuv.lren.woken.messages.datasets._
 import ch.chuv.lren.woken.messages.query._
 import ch.chuv.lren.woken.messages.validation._
 import ch.chuv.lren.woken.messages.variables.{
-  VariableId,
   VariableMetaData,
   VariablesForDatasetsQuery,
   VariablesForDatasetsResponse
@@ -130,12 +129,14 @@ class AkkaSerializersTest extends WordSpec with Matchers with JsonUtils {
   "Variables API" should {
 
     "serialize VariablesForDatasets query" in {
-      val q = VariablesForDatasetsQuery(Set(DatasetId("setA")), includeNulls = false)
+      val q = VariablesForDatasetsQuery(Set(DatasetId("setA")), exhaustive = false)
       ser.fromBinary(ser.toBinary(q), Some(q.getClass)) shouldBe q
     }
 
     "serialize VariablesForDatasets response" in {
-      val r = VariablesForDatasetsResponse(Set(VariableId("apoe4")))
+      val apoe4Json: JsValue = loadJson("/messages/variables/apoe4-variable.json")
+      val apoe4              = apoe4Json.convertTo[VariableMetaData]
+      val r                  = VariablesForDatasetsResponse(Set(apoe4))
       ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r
     }
 
