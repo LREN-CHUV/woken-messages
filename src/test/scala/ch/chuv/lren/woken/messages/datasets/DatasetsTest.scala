@@ -17,8 +17,11 @@
 
 package ch.chuv.lren.woken.messages.datasets
 
+import akka.http.scaladsl.model.Uri
 import ch.chuv.lren.woken.JsonUtils
+import ch.chuv.lren.woken.messages.remoting.RemoteLocation
 import org.scalatest.{ Matchers, WordSpec }
+import spray.json._
 import datasetsProtocol._
 
 class DatasetsTest extends WordSpec with Matchers with JsonUtils {
@@ -32,6 +35,22 @@ class DatasetsTest extends WordSpec with Matchers with JsonUtils {
       val expected = DatasetsQuery(Some("sample"))
 
       query shouldBe expected
+    }
+  }
+
+  val dataset = Dataset(
+    DatasetId("test"),
+    "Test",
+    "Test dataset",
+    tables = List("table_a"),
+    anonymisationLevel = AnonymisationLevel.Identifying,
+    location = Some(RemoteLocation(Uri("http://remote"), None))
+  )
+
+  "Datasets" should {
+
+    "be serializable to Json and back" in {
+      dataset.toJson.convertTo[Dataset] shouldBe dataset
     }
   }
 
