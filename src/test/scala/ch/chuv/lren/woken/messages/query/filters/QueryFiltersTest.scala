@@ -121,6 +121,23 @@ class QueryFiltersTest extends WordSpec with Matchers with JsonUtils {
         simpleFilter.toSqlWhere shouldBe """"col1" >= 10.5"""
       }
 
+      "an AND conjunction of 0 tests" in {
+        val compoundFilter = CompoundFilterRule(Condition.and, List())
+        compoundFilter.toSqlWhere shouldBe ""
+      }
+
+      "an AND conjunction of 1 test" in {
+        val left = SingleFilterRule("col1",
+                                    "col1",
+                                    "string",
+                                    InputType.number,
+                                    Operator.greaterOrEqual,
+                                    List("10.5"))
+
+        val compoundFilter = CompoundFilterRule(Condition.and, List(left))
+        compoundFilter.toSqlWhere shouldBe """"col1" >= 10.5"""
+      }
+
       "an AND conjunction of 2 tests" in {
         val left = SingleFilterRule("col1",
                                     "col1",
@@ -137,7 +154,106 @@ class QueryFiltersTest extends WordSpec with Matchers with JsonUtils {
                                      List("beginning"))
 
         val compoundFilter = CompoundFilterRule(Condition.and, List(left, right))
-        compoundFilter.toSqlWhere shouldBe """"col1" >= 10.5 AND "col2" LIKE 'beginning%'""".stripMargin
+        compoundFilter.toSqlWhere shouldBe """"col1" >= 10.5 AND "col2" LIKE 'beginning%'"""
+      }
+
+      "an AND conjunction of a test and an empty conjunction" in {
+        val left = SingleFilterRule("col1",
+                                    "col1",
+                                    "string",
+                                    InputType.number,
+                                    Operator.greaterOrEqual,
+                                    List("10.5"))
+
+        val right = CompoundFilterRule(Condition.and, List())
+
+        val compoundFilter = CompoundFilterRule(Condition.and, List(left, right))
+        compoundFilter.toSqlWhere shouldBe """"col1" >= 10.5"""
+      }
+
+      "an AND conjunction of a test and an AND conjuction of 1 test" in {
+        val left = SingleFilterRule("col1",
+                                    "col1",
+                                    "string",
+                                    InputType.number,
+                                    Operator.greaterOrEqual,
+                                    List("10.5"))
+
+        val right1 = SingleFilterRule("col2",
+                                      "col2",
+                                      "string",
+                                      InputType.text,
+                                      Operator.beginsWith,
+                                      List("beginning"))
+
+        val right = CompoundFilterRule(Condition.and, List(right1))
+
+        val compoundFilter = CompoundFilterRule(Condition.and, List(left, right))
+        compoundFilter.toSqlWhere shouldBe """"col1" >= 10.5 AND "col2" LIKE 'beginning%'"""
+      }
+
+      "an AND conjunction of a test and an AND conjuction of 2 tests" in {
+        val left = SingleFilterRule("col1",
+                                    "col1",
+                                    "string",
+                                    InputType.number,
+                                    Operator.greaterOrEqual,
+                                    List("10.5"))
+
+        val right1 = SingleFilterRule("col2",
+                                      "col2",
+                                      "string",
+                                      InputType.text,
+                                      Operator.beginsWith,
+                                      List("beginning"))
+
+        val right2 = SingleFilterRule("col2",
+                                      "col3",
+                                      "string",
+                                      InputType.number,
+                                      Operator.between,
+                                      List("2", "3"))
+
+        val right = CompoundFilterRule(Condition.and, List(right1, right2))
+
+        val compoundFilter = CompoundFilterRule(Condition.and, List(left, right))
+        compoundFilter.toSqlWhere shouldBe """"col1" >= 10.5 AND ("col2" LIKE 'beginning%' AND "col3" BETWEEN 2 AND 3)"""
+      }
+
+      "an OR conjunction of 0 tests" in {
+        val compoundFilter = CompoundFilterRule(Condition.or, List())
+        compoundFilter.toSqlWhere shouldBe ""
+      }
+
+      "an OR conjunction of 1 test" in {
+        val left = SingleFilterRule("col1",
+                                    "col1",
+                                    "string",
+                                    InputType.number,
+                                    Operator.greaterOrEqual,
+                                    List("10.5"))
+
+        val compoundFilter = CompoundFilterRule(Condition.or, List(left))
+        compoundFilter.toSqlWhere shouldBe """"col1" >= 10.5"""
+      }
+
+      "an OR conjunction of 2 tests" in {
+        val left = SingleFilterRule("col1",
+                                    "col1",
+                                    "string",
+                                    InputType.number,
+                                    Operator.greaterOrEqual,
+                                    List("10.5"))
+
+        val right = SingleFilterRule("col2",
+                                     "col2",
+                                     "string",
+                                     InputType.text,
+                                     Operator.beginsWith,
+                                     List("beginning"))
+
+        val compoundFilter = CompoundFilterRule(Condition.or, List(left, right))
+        compoundFilter.toSqlWhere shouldBe """"col1" >= 10.5 OR "col2" LIKE 'beginning%'"""
       }
 
       "an IN clause" in {

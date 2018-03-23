@@ -116,9 +116,11 @@ object FilterRule {
       case c: CompoundFilterRule =>
         c.rules
           .map {
-            case r: SingleFilterRule    => r.toSqlWhere
-            case sc: CompoundFilterRule => s"(${sc.toSqlWhere})"
+            case r: SingleFilterRule                                      => r.toSqlWhere
+            case sc: CompoundFilterRule if sc.rules.lengthCompare(1) <= 0 => s"${sc.toSqlWhere}"
+            case sc: CompoundFilterRule                                   => s"(${sc.toSqlWhere})"
           }
+          .filter(_.nonEmpty)
           .mkString(s" ${c.condition.toString} ")
       case s: SingleFilterRule =>
         s.operator match {
