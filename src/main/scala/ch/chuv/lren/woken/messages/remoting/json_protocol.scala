@@ -18,7 +18,7 @@
 package ch.chuv.lren.woken.messages.remoting
 
 import akka.http.scaladsl.model.Uri
-import spray.json.{ DefaultJsonProtocol, JsString, JsValue, JsonFormat, RootJsonFormat }
+import spray.json._
 
 trait RemotingProtocol extends DefaultJsonProtocol {
 
@@ -32,6 +32,31 @@ trait RemotingProtocol extends DefaultJsonProtocol {
   implicit val BasicAuthenticationFormat: JsonFormat[BasicAuthentication] = jsonFormat2(
     BasicAuthentication
   )
-  implicit val RemoteLocationFormat: RootJsonFormat[RemoteLocation] = jsonFormat2(RemoteLocation)
+  implicit object RemoteLocationFormat extends RootJsonFormat[RemoteLocation] {
+
+    override def write(rl: RemoteLocation): JsValue =
+      JsObject(
+        List[Option[(String, JsValue)]](
+          Some("url"                       -> JsString(rl.url.toString)),
+          rl.credentials.map("credentials" -> _.toJson)
+        ).flatten: _*
+      )
+
+    override def read(json: JsValue): RemoteLocation = {
+      val jsObject = json.asJsObject
+      jsObject.getFields("url") match {
+        case Seq(url) =>
+          RemoteLocation(
+            url = Uri(url.convertTo[String]),
+            credentials = jsObject.fields.get("credentials").map(_.convertTo[BasicAuthentication])
+          )
+        case _ =>
+          deserializationError(
+            s"Cannot deserialize RemoteLocation: invalid input. Raw input: $json"
+          )
+      }
+    }
+
+  }
 
 }
