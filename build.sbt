@@ -42,8 +42,8 @@ lazy val library =
       val sprayJson          = "1.3.4"
       val cats               = "1.1.0"
       val slf4j              = "1.7.25"
-      val log4j              = "2.10.0"
-      val disruptor          = "3.3.7"
+      val log4j              = "2.11.0"
+      val disruptor          = "3.4.2"
       val postgresQl         = "42.2.2"
     }
     val scalaCheck: ModuleID  = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
