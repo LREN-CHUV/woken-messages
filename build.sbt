@@ -23,7 +23,7 @@ lazy val `woken-messages` =
           library.scalaCheck % Test,
           library.scalaTest  % Test
         ),
-        crossScalaVersions := Seq("2.11.12", "2.12.4")
+        crossScalaVersions := Seq("2.11.12", "2.12.5")
       )
     )
 
@@ -35,16 +35,16 @@ lazy val library =
   new {
     object Version {
       val scalaCheck         = "1.13.5"
-      val scalaTest          = "3.0.3"
-      val akka               = "2.5.11"
+      val scalaTest          = "3.0.5"
+      val akka               = "2.5.12"
       val akkaHttp           = "10.1.1"
-      val swaggerAnnotations = "1.5.16"
+      val swaggerAnnotations = "1.5.19"
       val sprayJson          = "1.3.4"
-      val cats               = "1.0.1"
+      val cats               = "1.1.0"
       val slf4j              = "1.7.25"
-      val log4j              = "2.10.0"
-      val disruptor          = "3.3.7"
-      val postgresQl         = "42.2.1"
+      val log4j              = "2.11.0"
+      val disruptor          = "3.4.2"
+      val postgresQl         = "42.2.2"
     }
     val scalaCheck: ModuleID  = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
     val scalaTest: ModuleID   = "org.scalatest"     %% "scalatest"    % Version.scalaTest
