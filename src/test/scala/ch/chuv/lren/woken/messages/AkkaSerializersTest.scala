@@ -85,11 +85,11 @@ class AkkaSerializersTest extends WordSpec with Matchers with JsonUtils {
     }
 
     "serialize Query response" in {
-      val r = QueryResult("1",
+      val r = QueryResult(Some("1"),
                           "local",
                           OffsetDateTime.of(2018, 1, 1, 1, 0, 0, 0, ZoneOffset.UTC),
-                          "fuzzy",
-                          "text/plain",
+                          Shapes.text,
+                          Some("fuzzy"),
                           Some(JsString("Hi!")),
                           None)
       ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r

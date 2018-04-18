@@ -117,8 +117,6 @@ case class ExperimentQuery(
     executionPlan: Option[ExecutionPlan]
 ) extends Query
 
-// TODO: shape should be an enum
-
 /** Response to a query
   *
   * @param jobId Id of the job producing the result
@@ -132,11 +130,11 @@ case class ExperimentQuery(
   * @param error Contains the error message if the query was not successful
   */
 case class QueryResult(
-    jobId: String,
+    jobId: Option[String],
     node: String,
     timestamp: OffsetDateTime,
-    shape: String,
-    algorithm: String,
+    shape: Shapes.Shape,
+    algorithm: Option[String],
     data: Option[JsValue],
     error: Option[String]
 )

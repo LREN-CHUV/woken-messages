@@ -129,6 +129,15 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
     }
   }
 
+  implicit object ShapeFormat extends RootJsonFormat[Shapes.Shape] {
+    override def read(json: JsValue): Shapes.Shape = json match {
+      case JsString(mime) =>
+        Shapes.fromString(mime).getOrElse(deserializationError(s"Unknown shape $mime"))
+      case other => deserializationError(s"Cannot deserialise Shape object $other")
+    }
+    override def write(obj: Shapes.Shape): JsValue = JsString(obj.mime)
+  }
+
   implicit val QueryResultJsonFormat: RootJsonFormat[QueryResult] = jsonFormat7(QueryResult)
 
 }
