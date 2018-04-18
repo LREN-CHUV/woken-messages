@@ -122,7 +122,7 @@ case class ExperimentQuery(
   * @param jobId Id of the job producing the result
   * @param node Node where the result was computed
   * @param timestamp Date of creation of the result
-  * @param shape Shape of the result. A MIME type
+  * @param `type` Shape of the result. A MIME type
   * @param algorithm Name of the algorithm that produced the result
   * @param data Contains the result serialized as a Json string, object or array.
   * The format of the result is defined by the MIME type defined in the shape field.
@@ -133,7 +133,7 @@ case class QueryResult(
     jobId: Option[String],
     node: String,
     timestamp: OffsetDateTime,
-    shape: Shapes.Shape,
+    `type`: Shapes.Shape,
     algorithm: Option[String],
     data: Option[JsValue],
     error: Option[String]
