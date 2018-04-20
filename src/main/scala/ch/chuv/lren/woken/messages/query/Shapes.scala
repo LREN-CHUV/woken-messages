@@ -195,10 +195,10 @@ object Shapes {
 
   /** Results stored as Json documents in the database */
   val visualisationJsonResults: Set[Shape] =
-    Set(highcharts, plotly, vega, vegaLite, tabularDataResource, json, text, compound)
+    Set(highcharts, plotly, vega, vegaLite, tabularDataResource, json, compound)
 
   /** Results stored as generic documents (strings) in the database */
-  val visualisationOtherResults: Set[Shape] = Set(html, svg, png, visjs)
+  val visualisationOtherResults: Set[Shape] = Set(html, svg, png, visjs, text)
 
   /** Results containing a model stored in a native serialization formant in the database */
   val serializedModelsResults: Set[Shape] =
