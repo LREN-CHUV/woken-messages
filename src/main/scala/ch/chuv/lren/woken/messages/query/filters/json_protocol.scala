@@ -31,6 +31,10 @@ trait QueryFiltersProtocol extends DefaultJsonProtocol with JsonEnums {
     override def write(obj: SingleFilterRule): JsValue = caseClassFormat.write(obj)
 
     override def read(json: JsValue): SingleFilterRule = json.asJsObject.fields("value") match {
+      case s: JsNumber =>
+        val adapted =
+          json.asJsObject.fields.updated("value", JsArray(JsString(s.toString)))
+        caseClassFormat.read(JsObject(adapted))
       case s: JsString =>
         val adapted = json.asJsObject.fields.updated("value", JsArray(s))
         caseClassFormat.read(JsObject(adapted))

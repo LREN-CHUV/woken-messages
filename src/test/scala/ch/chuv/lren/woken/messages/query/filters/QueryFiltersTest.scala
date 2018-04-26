@@ -21,6 +21,7 @@ import ch.chuv.lren.woken.JsonUtils
 import org.scalatest.{ Matchers, WordSpec }
 import FilterRule._
 import ch.chuv.lren.woken.messages.Security
+import spray.json._
 import queryFiltersProtocol._
 
 class QueryFiltersTest extends WordSpec with Matchers with JsonUtils {
@@ -267,6 +268,23 @@ class QueryFiltersTest extends WordSpec with Matchers with JsonUtils {
       }
     }
     // try to find some tricky filters, filters with bad values that may be injected by an attacker
+
+    "parse JSON generated from JQuery Filter component" which {
+      "includes a numeric comparison" in {
+        val json =
+          """
+             {"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":70}
+          """
+
+        val filter = json.parseJson.convertTo[SingleFilterRule]
+
+        filter.id shouldBe "subjectageyears"
+        filter.`type` shouldBe "integer"
+        filter.operator shouldBe Operator.greater
+        filter.value shouldBe List("70")
+
+      }
+    }
   }
 
 }
