@@ -50,3 +50,5 @@ case class Dataset(dataset: DatasetId,
     copy(location = location.map(_.copy(credentials = None)))
 
 }
+
+case class Table(name: String, defaultGroupings: Set[String])

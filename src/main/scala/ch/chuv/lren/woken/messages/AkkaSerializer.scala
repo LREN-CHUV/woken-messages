@@ -17,7 +17,12 @@
 
 package ch.chuv.lren.woken.messages
 
-import ch.chuv.lren.woken.messages.datasets.{ DatasetsQuery, DatasetsResponse }
+import ch.chuv.lren.woken.messages.datasets.{
+  DatasetsQuery,
+  DatasetsResponse,
+  TablesQuery,
+  TablesResponse
+}
 import ch.chuv.lren.woken.messages.query._
 import ch.chuv.lren.woken.messages.validation.{
   ScoringQuery,
@@ -47,6 +52,8 @@ class AkkaSerializer extends Serializer {
       case p: Pong             => p.toJson
       case q: DatasetsQuery    => q.toJson
       case r: DatasetsResponse => r.toJson
+      case q: TablesQuery      => q.toJson
+      case r: TablesResponse   => r.toJson
       case MethodsQuery        => JsString("")
       case r: MethodsResponse  => r.toJson
       case q: MiningQuery      => q.toJson
@@ -76,6 +83,8 @@ class AkkaSerializer extends Serializer {
     val pongClass             = classOf[Pong]
     val datasetsQueryClass    = classOf[DatasetsQuery]
     val datasetsResponseClass = classOf[DatasetsResponse]
+    val tablesQueryClass      = classOf[TablesQuery]
+    val tablesResponseClass   = classOf[TablesResponse]
     val methodsQueryClass     = MethodsQuery.getClass
     val methodsResponseClass  = classOf[MethodsResponse]
     val miningQueryClass      = classOf[MiningQuery]
@@ -94,6 +103,8 @@ class AkkaSerializer extends Serializer {
       case `pongClass`             => json.convertTo[Pong]
       case `datasetsQueryClass`    => json.convertTo[DatasetsQuery]
       case `datasetsResponseClass` => json.convertTo[DatasetsResponse]
+      case `tablesQueryClass`      => json.convertTo[TablesQuery]
+      case `tablesResponseClass`   => json.convertTo[TablesResponse]
       case `methodsQueryClass`     => MethodsQuery
       case `methodsResponseClass`  => json.convertTo[MethodsResponse]
       case `miningQueryClass`      => json.convertTo[MiningQuery]

@@ -29,3 +29,10 @@ import ch.chuv.lren.woken.messages.RemoteMessage
 case class DatasetsQuery(table: Option[String]) extends RemoteMessage
 
 case class DatasetsResponse(datasets: Set[Dataset])
+
+/**
+  * Should return a list of Table
+  */
+case class TablesQuery() extends RemoteMessage
+
+case class TablesResponse(tables: Set[Table])

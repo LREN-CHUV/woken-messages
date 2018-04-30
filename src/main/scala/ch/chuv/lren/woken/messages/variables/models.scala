@@ -198,12 +198,15 @@ case class VariableMetaData(
 
   def merge(other: VariableMetaData): Option[VariableMetaData] =
     if (isMergeable(other))
-      Some(copy(datasets = this.datasets ++ other.datasets,
-        length = this.length.flatMap(l => other.length.map(o => Math.max(l, o))),
-        minValue = this.minValue.flatMap(v => other.minValue.map(o => Math.min(v, o))),
-        maxValue = this.maxValue.flatMap(v => other.maxValue.map(o => Math.max(v, o))),
-        summaryStatistics = None
-      ))
+      Some(
+        copy(
+          datasets = this.datasets ++ other.datasets,
+          length = this.length.flatMap(l => other.length.map(o => Math.max(l, o))),
+          minValue = this.minValue.flatMap(v => other.minValue.map(o => Math.min(v, o))),
+          maxValue = this.maxValue.flatMap(v => other.maxValue.map(o => Math.max(v, o))),
+          summaryStatistics = None
+        )
+      )
     else
       None
 }
