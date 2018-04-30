@@ -176,7 +176,7 @@ case class VariableMetaData(
   /**
     * Return true if this variable is a candidate for merging with another variable.
     *
-    * The merge criterium used here is quite strict, and most fields, except length, minValue, maxValue,
+    * The merge criteria used here is quite strict, and most fields, except length, minValue, maxValue,
     * summaryStatistics and datasets must match exactly.
     *
     * @param other The other variable to check
@@ -196,6 +196,16 @@ case class VariableMetaData(
   // ignore summaryStatistics
   // ignore datasets, that's the main point, to be able to merge variables between datasets
 
+  def merge(other: VariableMetaData): Option[VariableMetaData] =
+    if (isMergeable(other))
+      Some(copy(datasets = this.datasets ++ other.datasets,
+        length = this.length.flatMap(l => other.length.map(o => Math.max(l, o))),
+        minValue = this.minValue.flatMap(v => other.minValue.map(o => Math.min(v, o))),
+        maxValue = this.maxValue.flatMap(v => other.maxValue.map(o => Math.max(v, o))),
+        summaryStatistics = None
+      ))
+    else
+      None
 }
 
 /**
