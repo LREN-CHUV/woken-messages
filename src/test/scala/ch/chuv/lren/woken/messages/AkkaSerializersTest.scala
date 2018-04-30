@@ -37,6 +37,22 @@ class AkkaSerializersTest extends WordSpec with Matchers with JsonUtils {
 
   val ser = new AkkaSerializer()
 
+  "Messages API" should {
+
+    "serialize Ping query" in {
+      val q = Ping(Some("woken"))
+      ser.fromBinary(ser.toBinary(q), Some(q.getClass)) shouldBe q
+    }
+
+    "serialize Pong response" in {
+      val r = Pong(
+        Set("woken")
+      )
+      ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r
+    }
+
+  }
+
   "Datasets API" should {
 
     "serialize Datasets query" in {

@@ -43,6 +43,8 @@ class AkkaSerializer extends Serializer {
 
   override def toBinary(o: AnyRef): Array[Byte] = {
     val json = o match {
+      case p: Ping             => p.toJson
+      case p: Pong             => p.toJson
       case q: DatasetsQuery    => q.toJson
       case r: DatasetsResponse => r.toJson
       case MethodsQuery        => JsString("")
@@ -70,6 +72,8 @@ class AkkaSerializer extends Serializer {
   override def fromBinary(bytes: Array[Byte], manifest: Option[Class[_]]): AnyRef = {
     val json = new String(bytes).parseJson
 
+    val pingClass             = classOf[Ping]
+    val pongClass             = classOf[Pong]
     val datasetsQueryClass    = classOf[DatasetsQuery]
     val datasetsResponseClass = classOf[DatasetsResponse]
     val methodsQueryClass     = MethodsQuery.getClass
@@ -86,6 +90,8 @@ class AkkaSerializer extends Serializer {
     val variablesForDatasetsResultClass = classOf[VariablesForDatasetsResponse]
 
     val result: AnyRef = manifest.getOrElse(classOf[Unit]) match {
+      case `pingClass`             => json.convertTo[Ping]
+      case `pongClass`             => json.convertTo[Pong]
       case `datasetsQueryClass`    => json.convertTo[DatasetsQuery]
       case `datasetsResponseClass` => json.convertTo[DatasetsResponse]
       case `methodsQueryClass`     => MethodsQuery

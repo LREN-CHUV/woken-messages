@@ -172,6 +172,30 @@ case class VariableMetaData(
     datasets: Set[DatasetId]
 ) {
   def toId: VariableId = VariableId(code)
+
+  /**
+    * Return true if this variable is a candidate for merging with another variable.
+    *
+    * The merge criterium used here is quite strict, and most fields, except length, minValue, maxValue,
+    * summaryStatistics and datasets must match exactly.
+    *
+    * @param other The other variable to check
+    * @return true if this variable is a candidate for merging with another variable.
+    */
+  def isMergeable(other: VariableMetaData): Boolean =
+    code == other.code &&
+    label == other.label &&
+    `type` == other.`type` &&
+    sqlType == other.sqlType &&
+    methodology == other.methodology &&
+    description == other.description &&
+    units == other.units &&
+    enumerations == other.enumerations
+  // ignore length (too subjective?)
+  // ignore minValue, maxValue
+  // ignore summaryStatistics
+  // ignore datasets, that's the main point, to be able to merge variables between datasets
+
 }
 
 /**

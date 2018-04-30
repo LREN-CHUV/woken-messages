@@ -32,7 +32,8 @@ import ch.chuv.lren.woken.messages.variables.VariablesProtocol
 package object messages {
 
   object APIJsonProtocol
-      extends QueryProtocol
+      extends MessagesProtocol
+      with QueryProtocol
       with QueryFiltersProtocol
       with DatasetsProtocol
       with VariablesProtocol
