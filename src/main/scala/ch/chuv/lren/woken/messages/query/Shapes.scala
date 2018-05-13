@@ -89,6 +89,12 @@ object Shapes {
     val values = Set(json, mime)
   }
 
+  object score extends Shape {
+    val json   = "score"
+    val mime   = "application/vnd.hbp.mip.score+json"
+    val values = Set(json, mime)
+  }
+
   object html extends Shape {
     val html   = "html"
     val mime   = "text/html"
@@ -195,7 +201,7 @@ object Shapes {
 
   /** Results stored as Json documents in the database */
   val visualisationJsonResults: Set[Shape] =
-    Set(highcharts, plotly, vega, vegaLite, tabularDataResource, json, compound)
+    Set(highcharts, plotly, vega, vegaLite, tabularDataResource, score, json, compound)
 
   /** Results stored as generic documents (strings) in the database */
   val visualisationOtherResults: Set[Shape] = Set(html, svg, png, visjs, text)
