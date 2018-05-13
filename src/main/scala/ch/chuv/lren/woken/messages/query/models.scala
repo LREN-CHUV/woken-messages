@@ -62,6 +62,7 @@ case class UserId(
   * @param code Code identifying the validation
   * @param parameters List of parameters to pass to the validation
   */
+// TODO: ValidationSpec should be a sealed trait, with classes KFoldCrossValidation(k), SiteValidation(siteName, datasets)
 case class ValidationSpec(
     code: String,
     parameters: List[CodeValue]
