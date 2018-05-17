@@ -111,6 +111,7 @@ case class ExecutionStep(name: String,
 
 case class ExecutionPlan(steps: List[ExecutionStep])
 
+// TODO: execution plan describes a high-level workflow. Re-build it upon existing workflow DSL in Scala
 object ExecutionPlan {
   val scatterGather = ExecutionPlan(
     List(
@@ -122,6 +123,7 @@ object ExecutionPlan {
                     execution = ExecutionStyle.gather,
                     input = PreviousResults(fromStep = "scatter"),
                     operation = Fold)
+      // TODO: ExecutionStep(name="remote-validate", execution = ExecutionStyle.map, input = SelectDataset.selectValidationDataset, operation=Validate())
     )
   )
   val mapReduce = ExecutionPlan(
@@ -134,6 +136,7 @@ object ExecutionPlan {
                     execution = ExecutionStyle.reduce,
                     input = PreviousResults(fromStep = "map"),
                     operation = Compute("compute-global"))
+      // TODO: ExecutionStep(name="remote-validate", execution = ExecutionStyle.map, input = SelectDataset.selectValidationDataset, operation=Validate())
     )
   )
   val streaming = ExecutionPlan(
@@ -146,6 +149,7 @@ object ExecutionPlan {
                     execution = ExecutionStyle.reduce,
                     input = PreviousResults(fromStep = "stream"),
                     operation = Compute("compute-global"))
+      // TODO: ExecutionStep(name="remote-validate", execution = ExecutionStyle.map, input = SelectDataset.selectValidationDataset, operation=Validate())
     )
   )
 }
