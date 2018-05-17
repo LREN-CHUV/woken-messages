@@ -15,13 +15,13 @@ Maven dependency:
   <dependency>
      <groupId>ch.chuv.lren.woken</groupId>
      <artifactId>woken-messages_2.11</artifactId>
-     <version>2.7.5</version>
+     <version>2.7.6</version>
   </dependency>
 ```
 sbt dependency:
 
 ```
-  "ch.chuv.lren.woken" %% "woken-messages" % 2.7.5
+  "ch.chuv.lren.woken" %% "woken-messages" % 2.7.6
 ```
 
 Woken-messages is provided for Scala 2.11 and Scala 2.12
