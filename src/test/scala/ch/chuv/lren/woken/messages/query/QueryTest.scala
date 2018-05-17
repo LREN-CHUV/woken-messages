@@ -31,7 +31,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
       val jsonAst   = loadJson("/messages/query/algorithm.json").asJsObject
       val algorithm = jsonAst.convertTo[AlgorithmSpec]
 
-      val expected = AlgorithmSpec("knn", List(CodeValue("k", "5")))
+      val expected = AlgorithmSpec("knn", List(CodeValue("k", "5")), None)
 
       algorithm shouldBe expected
     }
@@ -60,7 +60,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         filters = None,
         targetTable = None,
         datasets = Set(),
-        algorithm = AlgorithmSpec("knn", List(CodeValue("k", "5"))),
+        algorithm = AlgorithmSpec("knn", List(CodeValue("k", "5")), None),
         executionPlan = None
       )
 
@@ -81,7 +81,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         trainingDatasets = Set("research", "clinical1", "clinical2").map(DatasetId),
         testingDatasets = Set(),
         validationDatasets = Set(),
-        algorithms = List(AlgorithmSpec("linearRegression", List())),
+        algorithms = List(AlgorithmSpec("linearRegression", List(), None)),
         validations = List(ValidationSpec("kfold", List(CodeValue("k", "2")))),
         executionPlan = Some(ExecutionPlan.scatterGather)
       )

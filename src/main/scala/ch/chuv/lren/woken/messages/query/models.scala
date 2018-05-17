@@ -37,7 +37,8 @@ object CodeValue {
 )
 case class AlgorithmSpec(
     code: String,
-    parameters: List[CodeValue]
+    parameters: List[CodeValue],
+    step: Option[ExecutionStep]
 ) {
   @transient lazy val parametersAsMap: Map[String, String] = parameters.map(_.toTuple).toMap
 }

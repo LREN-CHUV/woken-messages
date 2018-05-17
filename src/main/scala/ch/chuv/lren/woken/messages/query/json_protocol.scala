@@ -45,7 +45,7 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
 
   implicit val UserIdJsonFormat: JsonFormat[UserId] = jsonFormat1(UserId)
 
-  implicit val AlgorithmSpecJsonFormat: JsonFormat[AlgorithmSpec] = jsonFormat2(AlgorithmSpec)
+  implicit val AlgorithmSpecJsonFormat: JsonFormat[AlgorithmSpec] = jsonFormat3(AlgorithmSpec)
 
   implicit val ValidationSpecJsonFormat: JsonFormat[ValidationSpec] = jsonFormat2(ValidationSpec)
 
