@@ -128,6 +128,7 @@ case class ExperimentQuery(
   * The format of the result is defined by the MIME type defined in the shape field.
   * It can be for example a JSON document defining the PFA model if the shape field is 'application/pfa+json'.
   * @param error Contains the error message if the query was not successful
+  * @param query The query that produced this result
   */
 case class QueryResult(
     jobId: Option[String],
@@ -136,5 +137,6 @@ case class QueryResult(
     `type`: Shapes.Shape,
     algorithm: Option[String],
     data: Option[JsValue],
-    error: Option[String]
+    error: Option[String],
+    query: Option[Query]
 )

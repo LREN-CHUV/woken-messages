@@ -137,6 +137,19 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
     }
   }
 
+  implicit object QueryJsonFormat extends RootJsonFormat[Query] {
+    override def write(query: Query): JsValue = query match {
+      case miningQuery: MiningQuery         => miningQuery.toJson
+      case experimentQuery: ExperimentQuery => experimentQuery.toJson
+    }
+
+    override def read(json: JsValue): Query =
+      if (json.asJsObject.fields.contains("algorithm"))
+        json.convertTo[MiningQuery]
+      else
+        json.convertTo[ExperimentQuery]
+  }
+
   implicit object ShapeFormat extends RootJsonFormat[Shapes.Shape] {
     override def read(json: JsValue): Shapes.Shape = json match {
       case JsString(mime) =>
@@ -146,6 +159,6 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
     override def write(obj: Shapes.Shape): JsValue = JsString(obj.mime)
   }
 
-  implicit val QueryResultJsonFormat: RootJsonFormat[QueryResult] = jsonFormat7(QueryResult)
+  implicit val QueryResultJsonFormat: RootJsonFormat[QueryResult] = jsonFormat8(QueryResult)
 
 }
