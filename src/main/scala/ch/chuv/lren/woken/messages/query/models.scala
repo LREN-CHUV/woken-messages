@@ -91,13 +91,15 @@ sealed trait StepInput
 
 case class PreviousResults(fromStep: String) extends StepInput
 
-case class SelectDataset(selectionType: String) extends StepInput
+object DatasetType extends Enumeration {
+  type DatasetType = Value
 
-case object SelectDataset {
-  val selectTrainingDataset   = SelectDataset("training")
-  val selectTestingDataset    = SelectDataset("testing")
-  val selectValidationDataset = SelectDataset("validation")
+  val training: Value   = Value("training")
+  val testing: Value    = Value("testing")
+  val validation: Value = Value("validation")
 }
+
+case class SelectDataset(selectionType: DatasetType.Value) extends StepInput
 
 sealed trait Operation
 
@@ -111,13 +113,15 @@ case class ExecutionStep(name: String,
 
 case class ExecutionPlan(steps: List[ExecutionStep])
 
+import DatasetType._
+
 // TODO: execution plan describes a high-level workflow. Re-build it upon existing workflow DSL in Scala
 object ExecutionPlan {
   val scatterGather = ExecutionPlan(
     List(
       ExecutionStep(name = "scatter",
                     execution = ExecutionStyle.map,
-                    input = SelectDataset.selectTrainingDataset,
+                    input = SelectDataset(training),
                     operation = Compute("compute")),
       ExecutionStep(name = "gather",
                     execution = ExecutionStyle.gather,
@@ -130,7 +134,7 @@ object ExecutionPlan {
     List(
       ExecutionStep(name = "map",
                     execution = ExecutionStyle.map,
-                    input = SelectDataset.selectTrainingDataset,
+                    input = SelectDataset(training),
                     operation = Compute("compute-local")),
       ExecutionStep(name = "reduce",
                     execution = ExecutionStyle.reduce,
@@ -143,7 +147,7 @@ object ExecutionPlan {
     List(
       ExecutionStep(name = "stream",
                     execution = ExecutionStyle.stream,
-                    input = SelectDataset.selectTrainingDataset,
+                    input = SelectDataset(training),
                     operation = Compute("compute-partial")),
       ExecutionStep(name = "reduce",
                     execution = ExecutionStyle.reduce,

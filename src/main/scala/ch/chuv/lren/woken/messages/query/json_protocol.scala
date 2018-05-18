@@ -45,24 +45,28 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
 
   implicit val UserIdJsonFormat: JsonFormat[UserId] = jsonFormat1(UserId)
 
-  implicit val AlgorithmSpecJsonFormat: JsonFormat[AlgorithmSpec] = jsonFormat3(AlgorithmSpec)
-
-  implicit val ValidationSpecJsonFormat: JsonFormat[ValidationSpec] = jsonFormat2(ValidationSpec)
+  implicit val ExecutionStyleFormat: JsonFormat[ExecutionStyle.Value] = jsonEnum(ExecutionStyle)
+  implicit val DatasetTypeFormat: JsonFormat[DatasetType.Value]       = jsonEnum(DatasetType)
 
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   implicit object StepInputFormat extends JsonFormat[StepInput] {
-    def write(obj: StepInput): JsValue = obj match {
-      case PreviousResults(fromStep)    => JsObject("previousResults" -> JsString(fromStep))
-      case SelectDataset(selectionType) => JsObject("selectDataset"   -> JsString(selectionType))
-    }
+    implicit val PreviousResultsJsonFormat: JsonFormat[PreviousResults] = jsonFormat1(
+      PreviousResults
+    )
+    implicit val SelectDatasetJsonFormat: JsonFormat[SelectDataset] = jsonFormat1(SelectDataset)
 
-    def read(json: JsValue): StepInput = json match {
-      case JsObject(fields) if fields.contains("previousResults") =>
-        PreviousResults(fields.getOrElse("previousResults", "?").asInstanceOf[JsString].value)
-      case JsObject(fields) if fields.contains("selectDataset") =>
-        SelectDataset(fields.getOrElse("selectDataset", "?").asInstanceOf[JsString].value)
-      case other => deserializationError(s"Cannot deserialise StepInput object $other")
-    }
+    def write(obj: StepInput): JsValue =
+      JsObject((obj match {
+        case p: PreviousResults => p.toJson
+        case s: SelectDataset   => s.toJson
+      }).asJsObject.fields + ("type" -> JsString(obj.getClass.getSimpleName)))
+
+    def read(json: JsValue): StepInput =
+      json.asJsObject.fields("type") match {
+        case JsString("PreviousResults") => json.convertTo[PreviousResults]
+        case JsString("SelectDataset")   => json.convertTo[SelectDataset]
+        case other                       => deserializationError(s"Cannot deserialise StepInput object $other")
+      }
 
   }
 
@@ -82,8 +86,11 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
 
   }
 
-  implicit val ExecutionTemplateFormat: JsonFormat[ExecutionStyle.Value] = jsonEnum(ExecutionStyle)
-  implicit val ExecutionStepFormat: JsonFormat[ExecutionStep]            = jsonFormat4(ExecutionStep)
+  implicit val ExecutionStepFormat: JsonFormat[ExecutionStep] = jsonFormat4(ExecutionStep)
+
+  implicit val AlgorithmSpecJsonFormat: JsonFormat[AlgorithmSpec] = jsonFormat3(AlgorithmSpec)
+
+  implicit val ValidationSpecJsonFormat: JsonFormat[ValidationSpec] = jsonFormat2(ValidationSpec)
 
   implicit object ExecutionPlanFormat extends RootJsonFormat[ExecutionPlan] {
     private val caseClassFormat: RootJsonFormat[ExecutionPlan] = jsonFormat1(ExecutionPlan.apply)
@@ -93,7 +100,8 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
       case JsString("scatter-gather") => ExecutionPlan.scatterGather
       case JsString("map-reduce")     => ExecutionPlan.mapReduce
       case JsString("streaming")      => ExecutionPlan.streaming
-      case js                         => caseClassFormat.read(js)
+      case js: JsObject               => caseClassFormat.read(js)
+      case _                          => deserializationError(s"Cannot deserialize $json into ExecutionPlan")
     }
   }
 

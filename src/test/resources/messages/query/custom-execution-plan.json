@@ -3,7 +3,8 @@
     {
       "execution": "map",
       "input": {
-        "selectDataset": "training"
+        "selectionType": "training",
+        "type": "SelectDataset"
       },
       "name": "map",
       "operation": {
@@ -13,7 +14,8 @@
     {
       "execution": "reduce",
       "input": {
-        "previousResults": "map"
+        "fromStep": "map",
+        "type": "PreviousResults"
       },
       "name": "reduce",
       "operation": {

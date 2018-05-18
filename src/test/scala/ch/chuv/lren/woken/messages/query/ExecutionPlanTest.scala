@@ -19,7 +19,7 @@ package ch.chuv.lren.woken.messages.query
 
 import ch.chuv.lren.woken.JsonUtils
 import org.scalatest.{ Matchers, WordSpec }
-import spray.json.JsString
+import spray.json._
 import queryProtocol._
 
 class ExecutionPlanTest extends WordSpec with Matchers with JsonUtils {
@@ -44,7 +44,7 @@ class ExecutionPlanTest extends WordSpec with Matchers with JsonUtils {
         List(
           ExecutionStep(name = "map",
                         execution = ExecutionStyle.map,
-                        input = SelectDataset.selectTrainingDataset,
+                        input = SelectDataset(DatasetType.training),
                         operation = Compute("compute-1")),
           ExecutionStep(name = "reduce",
                         execution = ExecutionStyle.reduce,

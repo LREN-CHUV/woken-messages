@@ -21,6 +21,7 @@ import ch.chuv.lren.woken.JsonUtils
 import ch.chuv.lren.woken.messages.datasets.DatasetId
 import ch.chuv.lren.woken.messages.variables.VariableId
 import org.scalatest.{ Matchers, WordSpec }
+import spray.json._
 import queryProtocol._
 
 class QueryTest extends WordSpec with Matchers with JsonUtils {
@@ -88,6 +89,32 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
 
       experimentQuery shouldBe expected
 
+    }
+
+    "serialize a mining query with the specs for algorithm" in {
+
+      val miningQuery = MiningQuery(
+        UserId("user1"),
+        List(VariableId("brainstem")),
+        List(VariableId("leftcaudate")),
+        List(),
+        None,
+        Some("cde_features_mixed"),
+        Set(DatasetId("desd-synthdata"), DatasetId("qqni-synthdata")),
+        AlgorithmSpec("knn",
+                      List(),
+                      Some(
+                        ExecutionStep("map",
+                                      ExecutionStyle.map,
+                                      SelectDataset(DatasetType.training),
+                                      Compute("compute-local"))
+                      )),
+        None
+      )
+
+      val json = miningQuery.toJson
+
+      json.convertTo[MiningQuery] shouldBe miningQuery
     }
   }
 
