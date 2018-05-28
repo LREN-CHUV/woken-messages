@@ -10,6 +10,7 @@
       "code": "AGE"
     }
   ],
+  "covariablesMustExist": true,
   "executionPlan": "scatter-gather",
   "filters": "",
   "grouping": [

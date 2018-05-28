@@ -50,6 +50,9 @@ sealed trait Query extends RemoteMessage {
   /** List of covariables (aka independent features ) */
   def covariables: List[FeatureIdentifier]
 
+  /** True if all covariables must exist in the node where the computation is performed */
+  def covariablesMustExist: Boolean
+
   /** List of groupings */
   // TODO: the concept of groupings is hazy, like a SQL group by but not only that, for example in R there are variants such as a:b and a*b
   // We may need to move away from it and be able to express full R formula (see https://stat.ethz.ch/R-manual/R-devel/library/stats/html/formula.html)
@@ -78,6 +81,7 @@ case class MiningQuery(
     user: UserId,
     variables: List[FeatureIdentifier],
     covariables: List[FeatureIdentifier],
+    covariablesMustExist: Boolean,
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
     targetTable: Option[String],
@@ -106,6 +110,7 @@ case class ExperimentQuery(
     user: UserId,
     variables: List[FeatureIdentifier],
     covariables: List[FeatureIdentifier],
+    covariablesMustExist: Boolean,
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
     targetTable: Option[String],

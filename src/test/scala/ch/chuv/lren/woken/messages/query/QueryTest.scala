@@ -57,6 +57,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         user = UserId("user1"),
         variables = List(VariableId("LeftAmygdala")),
         covariables = List(VariableId("AGE")),
+        covariablesMustExist = true,
         grouping = List(VariableId("COLPROT")),
         filters = None,
         targetTable = None,
@@ -76,6 +77,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         user = UserId("user1"),
         variables = List(VariableId("LeftAmygdala")),
         covariables = List(VariableId("AGE")),
+        covariablesMustExist = true,
         grouping = List(VariableId("COLPROT")),
         filters = None,
         targetTable = None,
@@ -94,22 +96,23 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
     "serialize a mining query with the specs for algorithm" in {
 
       val miningQuery = MiningQuery(
-        UserId("user1"),
-        List(VariableId("brainstem")),
-        List(VariableId("leftcaudate")),
-        List(),
-        None,
-        Some("cde_features_mixed"),
-        Set(DatasetId("desd-synthdata"), DatasetId("qqni-synthdata")),
-        AlgorithmSpec("knn",
-                      List(),
-                      Some(
-                        ExecutionStep("map",
-                                      ExecutionStyle.map,
-                                      SelectDataset(DatasetType.training),
-                                      Compute("compute-local"))
-                      )),
-        None
+        user = UserId("user1"),
+        variables = List(VariableId("brainstem")),
+        covariables = List(VariableId("leftcaudate")),
+        covariablesMustExist = true,
+        grouping = List(),
+        filters = None,
+        targetTable = Some("cde_features_mixed"),
+        datasets = Set(DatasetId("desd-synthdata"), DatasetId("qqni-synthdata")),
+        algorithm = AlgorithmSpec("knn",
+                                  List(),
+                                  Some(
+                                    ExecutionStep("map",
+                                                  ExecutionStyle.map,
+                                                  SelectDataset(DatasetType.training),
+                                                  Compute("compute-local"))
+                                  )),
+        executionPlan = None
       )
 
       val json = miningQuery.toJson
