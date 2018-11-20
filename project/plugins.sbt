@@ -4,6 +4,11 @@ resolvers += Classpaths.sbtPluginReleases
 
 resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
 
+resolvers += Resolver.bintrayRepo("kamon-io", "sbt-plugins")
+
+libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.25" // Needed by sbt-git
+libraryDependencies += "org.slf4j" % "slf4j-nop" % "1.7.25" // Needed by sbt-git
+
 // App Packaging
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.9")
 
@@ -28,4 +33,5 @@ addSbtPlugin("de.heikoseeberger" % "sbt-header"      % "5.0.0")
 // Versioning
 addSbtPlugin("com.typesafe.sbt"  % "sbt-git"         % "1.0.0")
 
-libraryDependencies += "org.slf4j" % "slf4j-nop" % "1.7.25" // Needed by sbt-git
+// Monitoring
+addSbtPlugin("io.kamon" % "sbt-aspectj-runner"       % "1.1.1")
