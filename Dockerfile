@@ -1,5 +1,5 @@
 # Pull base image
-FROM hbpmip/scala-base-build:1.2.6-0 as scala-build-env
+FROM hbpmip/scala-base-build:1.2.6-2 as scala-build-env
 
 MAINTAINER Ludovic Claude <ludovic.claude@chuv.ch>
 
