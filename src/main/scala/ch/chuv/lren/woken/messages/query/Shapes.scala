@@ -47,9 +47,9 @@ object Shapes {
   }
 
   object error extends Shape {
-    val error  = "error"
-    val mime   = "text/plain+error"
-    val values = Set(error, mime)
+    val error               = "error"
+    val mime                = "text/plain+error"
+    val values: Set[String] = Set(error, mime)
   }
 
   /**
@@ -57,10 +57,10 @@ object Shapes {
     * @see http://dmg.org/pfa/
     */
   object pfa extends Shape {
-    val pfa    = "pfa"
-    val json   = "pfa_json"
-    val mime   = "application/pfa+json"
-    val values = Set(pfa, json, mime)
+    val pfa                 = "pfa"
+    val json                = "pfa_json"
+    val mime                = "application/pfa+json"
+    val values: Set[String] = Set(pfa, json, mime)
   }
 
   /**
@@ -68,15 +68,15 @@ object Shapes {
     * @see http://dmg.org/pfa/
     */
   object pfaYaml extends Shape {
-    val yaml   = "pfa_yaml"
-    val mime   = "application/pfa+yaml"
-    val values = Set(yaml, mime)
+    val yaml                = "pfa_yaml"
+    val mime                = "application/pfa+yaml"
+    val values: Set[String] = Set(yaml, mime)
   }
 
   object pfaExperiment extends Shape {
-    val json   = "pfa_experiment_json"
-    val mime   = "application/vnd.hbp.mip.experiment.pfa+json"
-    val values = Set(json, mime)
+    val json                = "pfa_experiment_json"
+    val mime                = "application/vnd.hbp.mip.experiment.pfa+json"
+    val values: Set[String] = Set(json, mime)
   }
 
   /**
@@ -84,116 +84,116 @@ object Shapes {
     * @see https://frictionlessdata.io/specs/tabular-data-resource/
     */
   object tabularDataResource extends Shape {
-    val json   = "tabular_data_resource_json"
-    val mime   = "application/vnd.dataresource+json"
-    val values = Set(json, mime)
+    val json                = "tabular_data_resource_json"
+    val mime                = "application/vnd.dataresource+json"
+    val values: Set[String] = Set(json, mime)
   }
 
   object score extends Shape {
-    val json   = "score"
-    val mime   = "application/vnd.hbp.mip.score+json"
-    val values = Set(json, mime)
+    val json                = "score"
+    val mime                = "application/vnd.hbp.mip.score+json"
+    val values: Set[String] = Set(json, mime)
   }
 
   object html extends Shape {
-    val html   = "html"
-    val mime   = "text/html"
-    val values = Set(html, mime)
+    val html                = "html"
+    val mime                = "text/html"
+    val values: Set[String] = Set(html, mime)
   }
 
   object svg extends Shape {
-    val svg       = "svg"
-    val svg_image = "svg_image"
-    val mime      = "image/svg+xml"
-    val values    = Set(svg, svg_image, mime)
+    val svg                 = "svg"
+    val svg_image           = "svg_image"
+    val mime                = "image/svg+xml"
+    val values: Set[String] = Set(svg, svg_image, mime)
   }
 
   object png extends Shape {
-    val png       = "png"
-    val png_image = "png_image"
-    val mime      = "image/png;base64"
-    val values    = Set(png, png_image, mime)
+    val png                 = "png"
+    val png_image           = "png_image"
+    val mime                = "image/png;base64"
+    val values: Set[String] = Set(png, png_image, mime)
   }
 
   object highcharts extends Shape {
-    val highcharts = "highcharts"
-    val json       = "highcharts_json"
-    val oldMime    = "application/highcharts+json"
-    val mime       = "application/vnd.highcharts+json"
-    val values     = Set(highcharts, json, oldMime, mime)
+    val highcharts          = "highcharts"
+    val json                = "highcharts_json"
+    val oldMime             = "application/highcharts+json"
+    val mime                = "application/vnd.highcharts+json"
+    val values: Set[String] = Set(highcharts, json, oldMime, mime)
   }
 
   object visjs extends Shape {
-    val visjs  = "visjs"
-    val js     = "visjs_javascript"
-    val mime   = "application/vnd.visjs+javascript"
-    val values = Set(visjs, js, mime)
+    val visjs               = "visjs"
+    val js                  = "visjs_javascript"
+    val mime                = "application/vnd.visjs+javascript"
+    val values: Set[String] = Set(visjs, js, mime)
   }
 
   object plotly extends Shape {
-    val plotly = "plotly"
-    val json   = "plotly_json"
-    val mime   = "application/vnd.plotly.v1+json"
-    val values = Set(plotly, json, mime)
+    val plotly              = "plotly"
+    val json                = "plotly_json"
+    val mime                = "application/vnd.plotly.v1+json"
+    val values: Set[String] = Set(plotly, json, mime)
   }
 
   object vega extends Shape {
-    val vega   = "vega"
-    val json   = "vega_json"
-    val mime   = "application/vnd.vega+json"
-    val values = Set(vega, json, mime)
+    val vega                = "vega"
+    val json                = "vega_json"
+    val mime                = "application/vnd.vega+json"
+    val values: Set[String] = Set(vega, json, mime)
   }
 
   object vegaLite extends Shape {
-    val vegaLite = "vegaLite"
-    val json     = "vega_lite_json"
-    val mime     = "application/vnd.vegalite+json"
-    val values   = Set(vegaLite, json, mime)
+    val vegaLite            = "vegaLite"
+    val json                = "vega_lite_json"
+    val mime                = "application/vnd.vegalite+json"
+    val values: Set[String] = Set(vegaLite, json, mime)
   }
 
   /**
     * Plain text, for unformatted outputs to display
     */
   object text extends Shape {
-    val text   = "text"
-    val mime   = "text/plain"
-    val values = Set(text, mime)
+    val text                = "text"
+    val mime                = "text/plain"
+    val values: Set[String] = Set(text, mime)
   }
 
   /**
     * Generic Json, for other types of visualisations
     */
   object json extends Shape {
-    val json   = "json"
-    val mime   = "application/json"
-    val values = Set(json, mime)
+    val json                = "json"
+    val mime                = "application/json"
+    val values: Set[String] = Set(json, mime)
   }
 
   object compound extends Shape {
-    val compound = "compound"
-    val mime     = "application/vnd.hbp.mip.compound+json"
-    val values   = Set(compound, mime)
+    val compound            = "compound"
+    val mime                = "application/vnd.hbp.mip.compound+json"
+    val values: Set[String] = Set(compound, mime)
   }
 
   /** Serialization of an object in Python using pickle */
   object pythonPickle extends Shape {
-    val pythonPickle = "python_pickle"
-    val mime         = "application/octet-stream+python-pickle;base64"
-    val values       = Set(pythonPickle, mime)
+    val pythonPickle        = "python_pickle"
+    val mime                = "application/octet-stream+python-pickle;base64"
+    val values: Set[String] = Set(pythonPickle, mime)
   }
 
   /** Serialization of an object in Java using Java serialization */
   object javaSerialization extends Shape {
-    val javaSerialization = "java_serialization"
-    val mime              = "application/java-serialized-object;base64"
-    val values            = Set(javaSerialization, mime)
+    val javaSerialization   = "java_serialization"
+    val mime                = "application/java-serialized-object;base64"
+    val values: Set[String] = Set(javaSerialization, mime)
   }
 
   /** Serialization of an object in R using saveRDS */
   object rdsSerialization extends Shape {
-    val rdsSerialization = "rds_serialization"
-    val mime             = "application/octet-stream+rds;base64"
-    val values           = Set(rdsSerialization, mime)
+    val rdsSerialization    = "rds_serialization"
+    val mime                = "application/octet-stream+rds;base64"
+    val values: Set[String] = Set(rdsSerialization, mime)
   }
 
   /** Results stored as PFA documents in the database */

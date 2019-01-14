@@ -160,16 +160,43 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
     override def write(obj: Shapes.Shape): JsValue = JsString(obj.mime)
   }
 
+  implicit object UserFeedbackFormat extends RootJsonFormat[UserFeedback] {
+    private val caseClassInfoFormat    = jsonFormat1(UserInfo)
+    private val caseClassWarningFormat = jsonFormat1(UserWarning)
+
+    override def read(json: JsValue): UserFeedback = {
+      val jsObject = json.asJsObject
+
+      jsObject.getFields("importance") match {
+        case Seq(JsString(importanceStr)) =>
+          val importance = FeedbackImportance.withName(importanceStr)
+          importance match {
+            case FeedbackImportance.info    => caseClassInfoFormat.read(jsObject)
+            case FeedbackImportance.warning => caseClassWarningFormat.read(jsObject)
+          }
+      }
+    }
+
+    override def write(obj: UserFeedback): JsValue = {
+      val jsObj = obj match {
+        case info: UserInfo       => caseClassInfoFormat.write(info).asJsObject
+        case warning: UserWarning => caseClassWarningFormat.write(warning).asJsObject
+      }
+      jsObj.copy(fields = jsObj.fields + ("importance" -> JsString(obj.importance.toString)))
+    }
+  }
+
   implicit object QueryResultJsonFormat extends RootJsonFormat[QueryResult] {
     override def read(json: JsValue): QueryResult = {
       val jsObject = json.asJsObject
 
-      jsObject.getFields("node", "datasets", "timestamp", "type") match {
-        case Seq(node, datasets, timestamp, t) =>
+      jsObject.getFields("node", "datasets", "feedback", "timestamp", "type") match {
+        case Seq(node, datasets, feedback, timestamp, t) =>
           QueryResult(
             jobId = jsObject.fields.get("jobId").map(_.convertTo[String]),
             node = node.convertTo[String],
             datasets = datasets.convertTo[Set[DatasetId]],
+            feedback = feedback.convertTo[List[UserFeedback]],
             timestamp = timestamp.convertTo[OffsetDateTime],
             `type` = t.convertTo[Shape],
             algorithm = jsObject.fields.get("algorithm").map(_.convertTo[String]),
@@ -186,6 +213,7 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
           obj.jobId.map("jobId"         -> _.toJson),
           Some("node"                   -> obj.node.toJson),
           Some("datasets"               -> obj.datasets.toJson),
+          Some("feedback"               -> obj.feedback.toJson),
           Some("timestamp"              -> obj.timestamp.toJson),
           Some("type"                   -> obj.`type`.toJson),
           obj.algorithm.map("algorithm" -> _.toJson),

@@ -129,6 +129,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         Some("1"),
         "local",
         Set(DatasetId("setA"), DatasetId("setB")),
+        List(UserWarning("Not much data"), UserInfo("250 records queried")),
         OffsetDateTime.of(2018, 1, 1, 1, 0, 0, 0, ZoneOffset.UTC),
         Shapes.text,
         Some("fuzzy"),
