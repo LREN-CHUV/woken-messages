@@ -100,17 +100,37 @@ class AkkaSerializersTest extends WordSpec with Matchers with JsonUtils {
       ser.fromBinary(ser.toBinary(q), Some(q.getClass)) shouldBe q
     }
 
-    "serialize Query response" in {
+    "serialize Query response for a mining query" in {
       val jsonAst = loadJson("/messages/query/mining_query.json").asJsObject
       val q       = jsonAst.convertTo[MiningQuery]
-      val r = QueryResult(Some("1"),
-                          "local",
-                          OffsetDateTime.of(2018, 1, 1, 1, 0, 0, 0, ZoneOffset.UTC),
-                          Shapes.text,
-                          Some("fuzzy"),
-                          Some(JsString("Hi!")),
-                          None,
-                          Some(q))
+      val r = QueryResult(
+        Some("1"),
+        "local",
+        Set(DatasetId("setA"), DatasetId("setB")),
+        OffsetDateTime.of(2018, 1, 1, 1, 0, 0, 0, ZoneOffset.UTC),
+        Shapes.text,
+        Some("fuzzy"),
+        Some(JsString("Hi!")),
+        None,
+        Some(q)
+      )
+      ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r
+    }
+
+    "serialize Query response for an experiment query" in {
+      val jsonAst = loadJson("/messages/query/experiment_query.json").asJsObject
+      val q       = jsonAst.convertTo[ExperimentQuery]
+      val r = QueryResult(
+        Some("1"),
+        "local",
+        Set(DatasetId("setA"), DatasetId("setB")),
+        OffsetDateTime.of(2018, 1, 1, 1, 0, 0, 0, ZoneOffset.UTC),
+        Shapes.text,
+        Some("fuzzy"),
+        Some(JsString("Hi!")),
+        None,
+        Some(q)
+      )
       ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r
     }
   }

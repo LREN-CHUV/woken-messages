@@ -126,6 +126,7 @@ case class ExperimentQuery(
   *
   * @param jobId Id of the job producing the result
   * @param node Node where the result was computed
+  * @param datasets Datasets used for the production of the main result (for example, training data used by the ML algorithm, ignoring test data)
   * @param timestamp Date of creation of the result
   * @param `type` Shape of the result. A MIME type
   * @param algorithm Name of the algorithm that produced the result
@@ -138,6 +139,7 @@ case class ExperimentQuery(
 case class QueryResult(
     jobId: Option[String],
     node: String,
+    datasets: Set[DatasetId],
     timestamp: OffsetDateTime,
     `type`: Shapes.Shape,
     algorithm: Option[String],

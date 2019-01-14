@@ -17,6 +17,8 @@
 
 package ch.chuv.lren.woken.messages.query
 
+import java.time.{ OffsetDateTime, ZoneOffset }
+
 import ch.chuv.lren.woken.JsonUtils
 import ch.chuv.lren.woken.messages.datasets.DatasetId
 import ch.chuv.lren.woken.messages.variables.VariableId
@@ -119,6 +121,27 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
 
       json.convertTo[MiningQuery] shouldBe miningQuery
     }
+
+    "serialize a query result" in {
+      val jsonAst = loadJson("/messages/query/mining_query.json").asJsObject
+      val q       = jsonAst.convertTo[MiningQuery]
+      val queryResult = QueryResult(
+        Some("1"),
+        "local",
+        Set(DatasetId("setA"), DatasetId("setB")),
+        OffsetDateTime.of(2018, 1, 1, 1, 0, 0, 0, ZoneOffset.UTC),
+        Shapes.text,
+        Some("fuzzy"),
+        Some(JsString("Hi!")),
+        None,
+        Some(q)
+      )
+
+      val json = queryResult.toJson
+
+      json.convertTo[QueryResult] shouldBe queryResult
+    }
+
   }
 
 }

@@ -19,7 +19,8 @@ package ch.chuv.lren.woken.messages.query
 
 import java.time.{ LocalDateTime, OffsetDateTime, ZoneOffset }
 
-import ch.chuv.lren.woken.messages.datasets.DatasetsProtocol
+import ch.chuv.lren.woken.messages.datasets.{ DatasetId, DatasetsProtocol }
+import ch.chuv.lren.woken.messages.query.Shapes.Shape
 import ch.chuv.lren.woken.messages.query.filters.QueryFiltersProtocol
 import ch.chuv.lren.woken.messages.variables.VariablesProtocol
 import ch.chuv.lren.woken.utils.JsonEnums
@@ -159,6 +160,41 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
     override def write(obj: Shapes.Shape): JsValue = JsString(obj.mime)
   }
 
-  implicit val QueryResultJsonFormat: RootJsonFormat[QueryResult] = jsonFormat8(QueryResult)
+  implicit object QueryResultJsonFormat extends RootJsonFormat[QueryResult] {
+    override def read(json: JsValue): QueryResult = {
+      val jsObject = json.asJsObject
+
+      jsObject.getFields("node", "datasets", "timestamp", "type") match {
+        case Seq(node, datasets, timestamp, t) =>
+          QueryResult(
+            jobId = jsObject.fields.get("jobId").map(_.convertTo[String]),
+            node = node.convertTo[String],
+            datasets = datasets.convertTo[Set[DatasetId]],
+            timestamp = timestamp.convertTo[OffsetDateTime],
+            `type` = t.convertTo[Shape],
+            algorithm = jsObject.fields.get("algorithm").map(_.convertTo[String]),
+            data = jsObject.fields.get("data"),
+            error = jsObject.fields.get("error").map(_.convertTo[String]),
+            query = jsObject.fields.get("query").map(_.convertTo[Query])
+          )
+      }
+    }
+
+    override def write(obj: QueryResult): JsValue =
+      JsObject(
+        List[Option[(String, JsValue)]](
+          obj.jobId.map("jobId"         -> _.toJson),
+          Some("node"                   -> obj.node.toJson),
+          Some("datasets"               -> obj.datasets.toJson),
+          Some("timestamp"              -> obj.timestamp.toJson),
+          Some("type"                   -> obj.`type`.toJson),
+          obj.algorithm.map("algorithm" -> _.toJson),
+          obj.data.map("data"           -> _),
+          obj.error.map("error"         -> _.toJson),
+          obj.query.map("query"         -> _.toJson)
+        ).flatten: _*
+      )
+
+  }
 
 }
