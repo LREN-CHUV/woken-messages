@@ -1,6 +1,8 @@
 
 # Changelog
 
+## 2.9.0  2019-01-14
+
 * Provenance: Keep track of original query in QueryResult
 * Provenance: Keep track of datasets used in QueryResult
 * Provide user feedback in QueryResult
