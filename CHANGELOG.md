@@ -1,6 +1,10 @@
 
 # Changelog
 
+## Unreleased
+
+* Add Bugsnag error reporter
+
 ## 2.9.0  2019-01-14
 
 * Provenance: Keep track of original query in QueryResult

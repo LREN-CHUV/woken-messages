@@ -20,10 +20,15 @@ lazy val `woken-messages` =
           library.sprayJson,
           library.catsCore,
           library.postgresQl,
+          library.bugsnag,
+          library.slf4j,
+          library.log4jSlf4j,
+          library.disruptor,
+          library.scalaLogging,
           library.scalaCheck % Test,
           library.scalaTest  % Test
         ),
-        crossScalaVersions := Seq("2.11.12", "2.12.7")
+        crossScalaVersions := Seq("2.11.12", "2.12.8")
       )
     )
 
@@ -44,23 +49,31 @@ lazy val library =
       val slf4j              = "1.7.25"
       val log4j              = "2.11.0"
       val disruptor          = "3.4.2"
+      val scalaLogging       = "3.9.0"
       val postgresQl         = "42.2.5"
+      val bugsnag            = "3.4.4"
     }
-    val scalaCheck: ModuleID  = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
-    val scalaTest: ModuleID   = "org.scalatest"     %% "scalatest"    % Version.scalaTest
-    val akkaActor: ModuleID   = "com.typesafe.akka" %% "akka-actor"   % Version.akka
-    val akkaRemote: ModuleID  = "com.typesafe.akka" %% "akka-remote"  % Version.akka
-    val akkaCluster: ModuleID = "com.typesafe.akka" %% "akka-cluster" % Version.akka
+    object ExclusionRules {
+      val excludeJackson = ExclusionRule(organization = "com.fasterxml.jackson.core")
+    }
+    val scalaCheck: ModuleID   = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
+    val scalaTest: ModuleID    = "org.scalatest"     %% "scalatest"    % Version.scalaTest
+    val akkaActor: ModuleID    = "com.typesafe.akka" %% "akka-actor"   % Version.akka
+    val akkaRemote: ModuleID   = "com.typesafe.akka" %% "akka-remote"  % Version.akka
+    val akkaCluster: ModuleID  = "com.typesafe.akka" %% "akka-cluster" % Version.akka
     val akkaClusterTools: ModuleID = "com.typesafe.akka" %% "akka-cluster-tools" % Version.akka
-    val akkaSlf4j: ModuleID   = "com.typesafe.akka" %% "akka-slf4j"   % Version.akka
-    val akkaHttp: ModuleID    = "com.typesafe.akka" %% "akka-http"    % Version.akkaHttp
+    val akkaSlf4j: ModuleID    = "com.typesafe.akka" %% "akka-slf4j"   % Version.akka
+    val akkaHttp: ModuleID     = "com.typesafe.akka" %% "akka-http"    % Version.akkaHttp
     val swaggerAnnotations: ModuleID = "io.swagger"  % "swagger-annotations"       % Version.swaggerAnnotations
-    val sprayJson: ModuleID   = "io.spray"          %% "spray-json"   % Version.sprayJson
-    val catsCore: ModuleID    = "org.typelevel"     %% "cats-core"    % Version.cats
-    val slf4j: ModuleID       = "org.slf4j"          % "slf4j-api"    % Version.slf4j
-    val log4jSlf4j: ModuleID  = "org.apache.logging.log4j" % "log4j-slf4j-impl" % Version.log4j
-    val disruptor: ModuleID   = "com.lmax"           % "disruptor"    % Version.disruptor
-    val postgresQl: ModuleID  = "org.postgresql"     % "postgresql"   % Version.postgresQl
+    val sprayJson: ModuleID    = "io.spray"          %% "spray-json"   % Version.sprayJson
+    val catsCore: ModuleID     = "org.typelevel"     %% "cats-core"    % Version.cats
+    val slf4j: ModuleID        = "org.slf4j"          % "slf4j-api"    % Version.slf4j
+    val log4jSlf4j: ModuleID   = "org.apache.logging.log4j" % "log4j-slf4j-impl" % Version.log4j
+    val disruptor: ModuleID    = "com.lmax"           % "disruptor"    % Version.disruptor
+    val scalaLogging: ModuleID = "com.typesafe.scala-logging" %% "scala-logging" % Version.scalaLogging
+    val postgresQl: ModuleID   = "org.postgresql"     % "postgresql"   % Version.postgresQl
+    val bugsnag: ModuleID      = "com.bugsnag"       % "bugsnag"       % Version.bugsnag excludeAll ExclusionRules.excludeJackson
+
   }
 
 // *****************************************************************************
