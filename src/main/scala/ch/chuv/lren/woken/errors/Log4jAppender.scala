@@ -28,10 +28,11 @@ import Log4jAppender._
 
 class Log4jAppender(reporter: ErrorReporter, layout: PatternLayout)
     extends AbstractAppender("ErrorReport", filter, layout) {
+
   override def append(event: LogEvent): Unit =
     Option(event.getThrown).fold {
       reporter.report(
-        new Exception("No exeception"),
+        new Exception("No exception"),
         GenericMetadata("Error", event.getLoggerFqcn, event.getMessage.getFormattedMessage)
       )
     } { e =>
@@ -51,6 +52,7 @@ object Log4jAppender {
   private val filter: Filter =
     LevelRangeFilter.createFilter(Level.ERROR, Level.FATAL, Result.ACCEPT, Result.DENY)
 
+  @SuppressWarnings(Array("org.wartremover.warts.Null", "org.wartremover.warts.AsInstanceOf"))
   def alsoReportErrorsTo(reporter: ErrorReporter): Unit = {
     val ctx: LoggerContext    = LogManager.getContext(false).asInstanceOf[LoggerContext]
     val config: Configuration = ctx.getConfiguration
@@ -62,18 +64,20 @@ object Log4jAppender {
     val appender: Log4jAppender = new Log4jAppender(reporter, layout)
     appender.start()
     config.addAppender(appender)
-    val ref: AppenderRef                 = AppenderRef.createAppenderRef("File", null, null)
-    val appenderRefs: Array[AppenderRef] = Array[AppenderRef](ref)
+
+    val ref: AppenderRef = AppenderRef.createAppenderRef("ErrorReport", Level.ERROR, null)
+    val appenderRefs     = Array[AppenderRef](ref)
+    val loggerName       = "ch.chuv.lren.woken.errorReporter"
     val loggerConfig: LoggerConfig = LoggerConfig.createLogger(false,
                                                                Level.INFO,
-                                                               "org.apache.logging.log4j",
+                                                               loggerName,
                                                                "true",
                                                                appenderRefs,
                                                                null,
                                                                config,
                                                                null)
     loggerConfig.addAppender(appender, null, null)
-    config.addLogger("org.apache.logging.log4j", loggerConfig)
+    config.addLogger(loggerName, loggerConfig)
 
   }
 

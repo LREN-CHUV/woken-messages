@@ -30,6 +30,7 @@ import com.typesafe.scalalogging.LazyLogging
 import scala.collection.immutable.Seq
 import spray.json._
 
+@SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyLogging {
 
   private val apiKey       = config.getString("bugsnag.apiKey")
@@ -114,7 +115,7 @@ case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyL
       logger.error(s"[Bugsnag - local / testing] Error report: $report")
       report.getException.printStackTrace()
     } else {
-      client.notify(report)
+      val _ = client.notify(report)
     }
   }
 
@@ -136,7 +137,9 @@ case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyL
     r.addToTab("Response", "Node", result.node)
     r.addToTab("Response", "Timestamp", result.timestamp.toString)
     if (result.feedback.nonEmpty)
-      r.addToTab("Response", "Feedback", result.feedback.map(f => s"${f.severity} ${f.msg}"))
+      r.addToTab("Response",
+                 "Feedback",
+                 result.feedback.map[String, List[String]](f => s"${f.severity} ${f.msg}"))
     r.addToTab("Response", "DataProvenance", result.dataProvenance.map(_.code).mkString(", "))
     r.addToTab("Response", "Type", result.`type`)
     result.algorithm.foreach(algorithm => r.addToTab("Query", "Algorithm", algorithm))
