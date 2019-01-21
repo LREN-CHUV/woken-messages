@@ -167,7 +167,7 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
     override def read(json: JsValue): UserFeedback = {
       val jsObject = json.asJsObject
 
-      jsObject.getFields("importance") match {
+      jsObject.getFields("severity") match {
         case Seq(JsString(importanceStr)) =>
           val importance = FeedbackImportance.withName(importanceStr)
           importance match {
@@ -182,7 +182,7 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
         case info: UserInfo       => caseClassInfoFormat.write(info).asJsObject
         case warning: UserWarning => caseClassWarningFormat.write(warning).asJsObject
       }
-      jsObj.copy(fields = jsObj.fields + ("importance" -> JsString(obj.importance.toString)))
+      jsObj.copy(fields = jsObj.fields + ("severity" -> JsString(obj.severity.toString)))
     }
   }
 
@@ -190,12 +190,12 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
     override def read(json: JsValue): QueryResult = {
       val jsObject = json.asJsObject
 
-      jsObject.getFields("node", "datasets", "feedback", "timestamp", "type") match {
+      jsObject.getFields("node", "dataProvenance", "feedback", "timestamp", "type") match {
         case Seq(node, datasets, feedback, timestamp, t) =>
           QueryResult(
             jobId = jsObject.fields.get("jobId").map(_.convertTo[String]),
             node = node.convertTo[String],
-            datasets = datasets.convertTo[Set[DatasetId]],
+            dataProvenance = datasets.convertTo[Set[DatasetId]],
             feedback = feedback.convertTo[List[UserFeedback]],
             timestamp = timestamp.convertTo[OffsetDateTime],
             `type` = t.convertTo[Shape],
@@ -212,7 +212,7 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
         List[Option[(String, JsValue)]](
           obj.jobId.map("jobId"         -> _.toJson),
           Some("node"                   -> obj.node.toJson),
-          Some("datasets"               -> obj.datasets.toJson),
+          Some("dataProvenance"         -> obj.dataProvenance.toJson),
           Some("feedback"               -> obj.feedback.toJson),
           Some("timestamp"              -> obj.timestamp.toJson),
           Some("type"                   -> obj.`type`.toJson),

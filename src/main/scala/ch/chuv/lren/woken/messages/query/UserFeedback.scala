@@ -28,13 +28,14 @@ import FeedbackImportance._
 
 sealed trait UserFeedback {
 
-  def importance: FeedbackImportance
+  def severity: FeedbackImportance
+  def msg: String
 }
 
 case class UserInfo(msg: String) extends UserFeedback {
-  override def importance: FeedbackImportance = info
+  override def severity: FeedbackImportance = info
 }
 
-case class UserWarning(warn: String) extends UserFeedback {
-  override def importance: FeedbackImportance = warning
+case class UserWarning(msg: String) extends UserFeedback {
+  override def severity: FeedbackImportance = warning
 }

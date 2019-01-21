@@ -17,7 +17,7 @@
 
 package ch.chuv.lren.woken.messages
 
-import ch.chuv.lren.woken.messages.datasets.DatasetsProtocol
+import ch.chuv.lren.woken.messages.datasets.{ DatasetId, DatasetsProtocol }
 import ch.chuv.lren.woken.messages.query.filters.QueryFiltersProtocol
 import ch.chuv.lren.woken.messages.remoting.RemotingProtocol
 import ch.chuv.lren.woken.messages.variables.VariablesProtocol
@@ -26,6 +26,9 @@ import ch.chuv.lren.woken.messages.variables.VariablesProtocol
   * Defines the messages exchanged between Woken and an external system
   */
 package object query {
+
+  type DataProvenance = Set[DatasetId]
+  type UserFeedbacks  = List[UserFeedback]
 
   object queryProtocol
       extends QueryProtocol

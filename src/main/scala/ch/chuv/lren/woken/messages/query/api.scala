@@ -126,7 +126,7 @@ case class ExperimentQuery(
   *
   * @param jobId Id of the job producing the result
   * @param node Node where the result was computed
-  * @param datasets Datasets used for the production of the main result (for example, training data used by the ML algorithm, ignoring test data)
+  * @param dataProvenance Datasets used for the production of the main result (for example, training data used by the ML algorithm, ignoring test data)
   * @param feedback Feedback messages returned to the user
   * @param timestamp Date of creation of the result
   * @param `type` Shape of the result. A MIME type
@@ -136,12 +136,14 @@ case class ExperimentQuery(
   * It can be for example a JSON document defining the PFA model if the shape field is 'application/pfa+json'.
   * @param error Contains the error message if the query was not successful
   * @param query The query that produced this result
+  *
   */
+// TODO: Query and jobId in the QueryResult should be mandatory
 case class QueryResult(
     jobId: Option[String],
     node: String,
-    datasets: Set[DatasetId],
-    feedback: List[UserFeedback],
+    dataProvenance: DataProvenance,
+    feedback: UserFeedbacks,
     timestamp: OffsetDateTime,
     `type`: Shapes.Shape,
     algorithm: Option[String],
