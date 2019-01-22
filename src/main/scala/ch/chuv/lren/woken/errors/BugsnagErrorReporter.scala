@@ -24,16 +24,21 @@ import ch.chuv.lren.woken.messages.query.QueryResult
 import ch.chuv.lren.woken.messages.query.queryProtocol._
 import ch.chuv.lren.woken.messages.validation.validationProtocol._
 import com.bugsnag.{ Bugsnag, Report }
-import com.typesafe.config.Config
+import com.typesafe.config.{ Config, ConfigFactory }
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.collection.immutable.Seq
 import spray.json._
 
+object BugsnagErrorReporter {
+  def apply(): BugsnagErrorReporter = BugsnagErrorReporter(ConfigFactory.load())
+}
+
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyLogging {
 
-  private val apiKey       = config.getString("bugsnag.apiKey")
+  private val apiKey =
+    if (!config.hasPathOrNull("bugsnag.apiKey")) "" else config.getString("bugsnag.apiKey")
   private val releaseStage = config.getString("bugsnag.releaseStage")
 
   private val appName   = config.getString("app.name")
@@ -111,7 +116,7 @@ case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyL
 
     // In case we're running in an env without api key (local or testing), just print the messages for debugging
     if (apiKey.isEmpty) {
-      logger.error(s"[Bugsnag - local / testing] Error report: $report")
+      logger.warn(s"[Bugsnag - local / testing] Error report: ${report.getExceptionMessage}")
       report.getException.printStackTrace()
     } else {
       val _ = client.notify(report)

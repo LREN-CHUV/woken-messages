@@ -20,14 +20,11 @@ package ch.chuv.lren.woken.errors
 import org.apache.logging.log4j.core.Filter.Result
 import org.apache.logging.log4j.{ Level, LogManager }
 import org.apache.logging.log4j.core.appender.AbstractAppender
-import org.apache.logging.log4j.core.config.{ AppenderRef, Configuration, LoggerConfig }
-import org.apache.logging.log4j.core.filter.LevelRangeFilter
-import org.apache.logging.log4j.core.layout.PatternLayout
-import org.apache.logging.log4j.core.{ Filter, LogEvent, LoggerContext }
-import Log4jAppender._
+import org.apache.logging.log4j.core.config.Configuration
+import org.apache.logging.log4j.core.filter.MarkerFilter
+import org.apache.logging.log4j.core.{ LogEvent, LoggerContext }
 
-class Log4jAppender(reporter: ErrorReporter, layout: PatternLayout)
-    extends AbstractAppender("ErrorReport", filter, layout) {
+class Log4jAppender(reporter: ErrorReporter) extends AbstractAppender("ErrorReport", null, null) {
 
   override def append(event: LogEvent): Unit =
     Option(event.getThrown).fold {
@@ -45,40 +42,28 @@ class Log4jAppender(reporter: ErrorReporter, layout: PatternLayout)
         )
       )
     }
+
+  private val category = LogManager.ROOT_LOGGER_NAME
+
+  def install(configuration: Configuration): Unit = {
+    val filter = MarkerFilter.createFilter("SKIP_REPORTING", Result.DENY, Result.NEUTRAL)
+
+    this.start()
+    configuration.addAppender(this)
+    configuration.getLoggerConfig(category).addAppender(this, Level.ERROR, filter)
+  }
+
+  def uninstall(): Unit = {
+    val loggerContext = LogManager.getContext(false).asInstanceOf[LoggerContext]
+    loggerContext.getConfiguration.removeLogger(category)
+    loggerContext.updateLoggers()
+  }
 }
 
 object Log4jAppender {
 
-  private val filter: Filter =
-    LevelRangeFilter.createFilter(Level.ERROR, Level.FATAL, Result.ACCEPT, Result.DENY)
+  val SKIP_REPORTING_MARKER: String = "SKIP_REPORTING"
 
-  @SuppressWarnings(Array("org.wartremover.warts.Null", "org.wartremover.warts.AsInstanceOf"))
-  def alsoReportErrorsTo(reporter: ErrorReporter): Unit = {
-    val ctx: LoggerContext    = LogManager.getContext(false).asInstanceOf[LoggerContext]
-    val config: Configuration = ctx.getConfiguration
-    val layout: PatternLayout = PatternLayout
-      .newBuilder()
-      .withPattern(PatternLayout.SIMPLE_CONVERSION_PATTERN)
-      .withConfiguration(config)
-      .build()
-    val appender: Log4jAppender = new Log4jAppender(reporter, layout)
-    appender.start()
-    config.addAppender(appender)
-
-    val ref: AppenderRef = AppenderRef.createAppenderRef("ErrorReport", Level.ERROR, null)
-    val appenderRefs     = Array[AppenderRef](ref)
-    val loggerName       = "ch.chuv.lren.woken.errorReporter"
-    val loggerConfig: LoggerConfig = LoggerConfig.createLogger(false,
-                                                               Level.INFO,
-                                                               loggerName,
-                                                               "true",
-                                                               appenderRefs,
-                                                               null,
-                                                               config,
-                                                               null)
-    loggerConfig.addAppender(appender, null, null)
-    config.addLogger(loggerName, loggerConfig)
-
-  }
+  def apply(): Log4jAppender = new Log4jAppender(BugsnagErrorReporter())
 
 }
