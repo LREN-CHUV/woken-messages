@@ -25,7 +25,8 @@ import org.apache.logging.log4j.core.LoggerContext
 /**
   * Initialise by adding the following line at the beginning of your program:
   *
-  * PluginManager.addPackages(JavaConverters.asJavaCollection(Array("ch.chuv.lren.woken.errors")))
+  * errors.reportErrorsToBugsnag()
+  *
   */
 @Plugin(name = "ReportingXMLConfigurationFactory", category = "ConfigurationFactory")
 @Order(10)
