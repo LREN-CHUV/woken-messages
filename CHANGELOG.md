@@ -11,7 +11,7 @@
 * Provenance: Keep track of datasets used in QueryResult
 * Provide user feedback in QueryResult
 * Add flag for 'covariables must exist' on the queries
-* [dev] Update Update Akka to 2.5.19, akka-http to 10.1.5, cats-core to 1.5.0, postgresql to 42.2.5
+* __dev__ Update Update Akka to 2.5.19, akka-http to 10.1.5, cats-core to 1.5.0, postgresql to 42.2.5
 
 ## 2.8.0 - 2018-05-18
 
@@ -21,29 +21,29 @@
 * Add shape for scores
 * Add optional step spec to algorithm spec
 * Rename shape field to type in Query result
-* [dev] Add common configuration for Akka remoting
-* [dev] Add merge operation for variable meta
-* [dev] Change execution plan for better serialization
-* [fix] Fix classification of text shape
+* __dev__ Add common configuration for Akka remoting
+* __dev__ Add merge operation for variable meta
+* __dev__ Change execution plan for better serialization
+* __fix__ Fix classification of text shape
 
 ## 2.7.0 - 2018-04-19
 
 * Update metadata variables messages
 * Filters for conjunctions containing empty rules
-* [dev] Update Akka to 2.5.12
-* [dev] Option to log config on start
-* [dev] Move Shapes to this library
-* [fix] Fix serialization of Scoring
-* [fix] Fix json serialization of Dataset and RemoteLocation
-* [test] Add test for serialisation of dataset
+* __dev__ Update Akka to 2.5.12
+* __dev__ Option to log config on start
+* __dev__ Move Shapes to this library
+* __fix__ Fix serialization of Scoring
+* __fix__ Fix json serialization of Dataset and RemoteLocation
+* __test__ Add test for serialisation of dataset
 
 ## 2.6.0 - 2018-03-16
 
 * Akka serializers for all API messages
 * Add table parameter to DatasetsQuery
 * Improve VariableForDatasets messaging to include possible errors
-* [test] Test churn variables
-* [test] Add tests for IN filters
+* __test__ Test churn variables
+* __test__ Add tests for IN filters
 
 ## 2.5.0 - 2018-03-08
 
@@ -53,12 +53,12 @@
 * Use more precise types for validation and scoring
 * Add statistics for variables
 * Improve publishing process
-* [dev] Update Scala to 2.11.12
-* [dev] Moved convertion of filter rules to SQL from Woken
-* [dev] Change DatasetsQuery message to a case object
-* [test] Add tests for scores, scoring result
-* [fix] Fix serializer
-* [fix] Fix serialisation of KFoldCrossValidationScore
+* __dev__ Update Scala to 2.11.12
+* __dev__ Moved convertion of filter rules to SQL from Woken
+* __dev__ Change DatasetsQuery message to a case object
+* __test__ Add tests for scores, scoring result
+* __fix__ Fix serializer
+* __fix__ Fix serialisation of KFoldCrossValidationScore
 
 ## 2.4.0 - 2018-02-16
 

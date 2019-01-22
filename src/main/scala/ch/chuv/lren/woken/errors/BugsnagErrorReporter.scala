@@ -80,7 +80,6 @@ case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyL
 
     // General metadata
     report.addToTab("App", "Name", appName)
-    report.addToTab("App", "Version", version)
     report.addToTab("App", "BuildDate", buildDate)
 
     // Datacenter metadata
