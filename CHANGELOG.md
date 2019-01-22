@@ -3,7 +3,8 @@
 
 ## Unreleased
 
-* Add Bugsnag error reporter
+* Add Akka management to the library dependencies
+* Add Bugsnag error reporter and a Log4j configuration that forwards errors to Bugsnag
 
 ## 2.9.0  2019-01-14
 
