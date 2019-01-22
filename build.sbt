@@ -16,6 +16,8 @@ lazy val `woken-messages` =
           library.akkaClusterTools,
           library.akkaSlf4j,
           library.akkaHttp,
+          library.akkaManagementBase,
+          library.akkaManagementClusterHttp,
           library.swaggerAnnotations,
           library.sprayJson,
           library.catsCore,
@@ -43,6 +45,7 @@ lazy val library =
       val scalaTest          = "3.0.5"
       val akka               = "2.5.19"
       val akkaHttp           = "10.1.7"
+      val akkaManagement     = "0.20.0"
       val swaggerAnnotations = "1.5.21"
       val sprayJson          = "1.3.5"
       val cats               = "1.5.0"
@@ -54,7 +57,8 @@ lazy val library =
       val bugsnag            = "3.4.4"
     }
     object ExclusionRules {
-      val excludeJackson = ExclusionRule(organization = "com.fasterxml.jackson.core")
+    val excludeAkkaClusterSharding =
+      ExclusionRule(organization = "com.typesafe.akka", name = "akka-cluster-sharding_2.11")
     }
     val scalaCheck: ModuleID   = "org.scalacheck"    %% "scalacheck"   % Version.scalaCheck
     val scalaTest: ModuleID    = "org.scalatest"     %% "scalatest"    % Version.scalaTest
@@ -64,6 +68,8 @@ lazy val library =
     val akkaClusterTools: ModuleID = "com.typesafe.akka" %% "akka-cluster-tools" % Version.akka
     val akkaSlf4j: ModuleID    = "com.typesafe.akka" %% "akka-slf4j"   % Version.akka
     val akkaHttp: ModuleID     = "com.typesafe.akka" %% "akka-http"    % Version.akkaHttp
+    val akkaManagementBase: ModuleID = "com.lightbend.akka.management" %% "akka-management" % Version.akkaManagement
+    val akkaManagementClusterHttp: ModuleID =  "com.lightbend.akka.management" %% "akka-management-cluster-http" % Version.akkaManagement excludeAll ExclusionRules.excludeAkkaClusterSharding
     val swaggerAnnotations: ModuleID = "io.swagger"  % "swagger-annotations"       % Version.swaggerAnnotations
     val sprayJson: ModuleID    = "io.spray"          %% "spray-json"   % Version.sprayJson
     val catsCore: ModuleID     = "org.typelevel"     %% "cats-core"    % Version.cats
@@ -72,7 +78,7 @@ lazy val library =
     val disruptor: ModuleID    = "com.lmax"           % "disruptor"    % Version.disruptor
     val scalaLogging: ModuleID = "com.typesafe.scala-logging" %% "scala-logging" % Version.scalaLogging
     val postgresQl: ModuleID   = "org.postgresql"     % "postgresql"   % Version.postgresQl
-    val bugsnag: ModuleID      = "com.bugsnag"       % "bugsnag"       % Version.bugsnag excludeAll ExclusionRules.excludeJackson
+    val bugsnag: ModuleID      = "com.bugsnag"       % "bugsnag"       % Version.bugsnag
 
   }
 
