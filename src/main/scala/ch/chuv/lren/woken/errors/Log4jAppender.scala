@@ -30,15 +30,15 @@ class Log4jAppender(reporter: ErrorReporter) extends AbstractAppender("ErrorRepo
   override def append(event: LogEvent): Unit =
     Option(event.getThrown).fold {
       reporter.report(
-        new Exception("No exception"),
-        GenericMetadata("Error", event.getLoggerFqcn, event.getMessage.getFormattedMessage)
+        new Exception(event.getMessage.getFormattedMessage.take(100)),
+        GenericMetadata("Error", event.getLoggerName, event.getMessage.getFormattedMessage)
       )
     } { e =>
       reporter.report(
         e,
         GenericMetadata(
           "Error",
-          event.getLoggerFqcn,
+          event.getLoggerName,
           event.getMessage.getFormattedMessage
         )
       )

@@ -24,7 +24,7 @@ import ch.chuv.lren.woken.messages.query.QueryResult
 import ch.chuv.lren.woken.messages.query.queryProtocol._
 import ch.chuv.lren.woken.messages.validation.validationProtocol._
 import com.bugsnag.{ Bugsnag, Report }
-import com.typesafe.config.{ Config, ConfigFactory }
+import com.typesafe.config.{ Config, ConfigException, ConfigFactory }
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.collection.immutable.Seq
@@ -37,14 +37,13 @@ object BugsnagErrorReporter {
 @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
 case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyLogging {
 
-  private val apiKey =
-    if (!config.hasPathOrNull("bugsnag.apiKey")) "" else config.getString("bugsnag.apiKey")
-  private val releaseStage = config.getString("bugsnag.releaseStage")
+  private val apiKey       = fromConfig("bugsnag.apiKey")
+  private val releaseStage = fromConfig("bugsnag.releaseStage")
 
-  private val appName   = config.getString("app.name")
-  private val appType   = config.getString("app.type")
-  private val version   = config.getString("app.version")
-  private val buildDate = config.getString("app.buildDate")
+  private val appName   = fromConfig("app.name")
+  private val appType   = fromConfig("app.type")
+  private val version   = fromConfig("app.version")
+  private val buildDate = fromConfig("app.buildDate")
   private val client = {
     val sendUncaughtExceptions = false // we are doing this ourselves
     val bugSnag                = new Bugsnag(apiKey, sendUncaughtExceptions)
@@ -61,24 +60,24 @@ case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyL
   }
   Thread.setDefaultUncaughtExceptionHandler(selfAsUncaughtExceptionHandler)
 
-  private val dcCluster  = config.getString("clustering.cluster.name")
-  private val dcSeedIP   = config.getString("clustering.seed-ip")
-  private val dcSeedPort = config.getString("clustering.seed-port")
-  private val dcLocation = config.getString("datacenter.location")
-  private val dcHost     = config.getString("datacenter.host")
+  private val dcCluster  = fromConfig("clustering.cluster.name")
+  private val dcSeedIP   = fromConfig("clustering.seed-ip")
+  private val dcSeedPort = fromConfig("clustering.seed-port")
+  private val dcLocation = fromConfig("datacenter.location")
+  private val dcHost     = fromConfig("datacenter.host")
   private val dcOrchestration = {
-    val co = config.getString("datacenter.containerOrchestration")
-    if (co == "mesos" && config.getString("datacenter.mesos.containerName").isEmpty)
+    val co = fromConfig("datacenter.containerOrchestration")
+    if (co == "mesos" && fromConfig("datacenter.mesos.containerName").isEmpty)
       "docker-compose"
     else
       co
   }
 
-  private val mesosContainerName = config.getString("datacenter.mesos.containerName")
-  private val mesosDockerImage   = config.getString("datacenter.mesos.dockerImage")
-  private val mesosResourceCpu   = config.getString("datacenter.mesos.resourceCpu")
-  private val mesosResourceMem   = config.getString("datacenter.mesos.resourceMem")
-  private val mesosLabels        = config.getString("datacenter.mesos.labels")
+  private val mesosContainerName = fromConfig("datacenter.mesos.containerName")
+  private val mesosDockerImage   = fromConfig("datacenter.mesos.dockerImage")
+  private val mesosResourceCpu   = fromConfig("datacenter.mesos.resourceCpu")
+  private val mesosResourceMem   = fromConfig("datacenter.mesos.resourceMem")
+  private val mesosLabels        = fromConfig("datacenter.mesos.labels")
 
   override def report(t: Throwable, meta: ErrorMetadata*): Unit = {
     val report: Report = client.buildReport(t)
@@ -200,4 +199,11 @@ case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyL
         case (key, value) => s"$key: $value"
       }
       .mkString("\n")
+
+  private def fromConfig(key: String): String =
+    try {
+      config.getString(key)
+    } catch {
+      case _: ConfigException.Missing => logger.warn(s"Could not find key: $key"); ""
+    }
 }
