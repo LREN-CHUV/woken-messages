@@ -22,8 +22,9 @@ import org.apache.logging.log4j.{ Level, LogManager }
 import org.apache.logging.log4j.core.appender.AbstractAppender
 import org.apache.logging.log4j.core.config.Configuration
 import org.apache.logging.log4j.core.filter.MarkerFilter
-import org.apache.logging.log4j.core.{ LogEvent, LoggerContext }
+import org.apache.logging.log4j.core.LogEvent
 
+@SuppressWarnings(Array("org.wartremover.warts.Null"))
 class Log4jAppender(reporter: ErrorReporter) extends AbstractAppender("ErrorReport", null, null) {
 
   override def append(event: LogEvent): Unit =
@@ -53,11 +54,6 @@ class Log4jAppender(reporter: ErrorReporter) extends AbstractAppender("ErrorRepo
     configuration.getLoggerConfig(category).addAppender(this, Level.ERROR, filter)
   }
 
-  def uninstall(): Unit = {
-    val loggerContext = LogManager.getContext(false).asInstanceOf[LoggerContext]
-    loggerContext.getConfiguration.removeLogger(category)
-    loggerContext.updateLoggers()
-  }
 }
 
 object Log4jAppender {
