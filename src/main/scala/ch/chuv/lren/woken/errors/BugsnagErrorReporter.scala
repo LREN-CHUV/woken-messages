@@ -140,7 +140,7 @@ case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyL
       if (query.grouping.nonEmpty)
         r.addToTab("Query", "Grouping", query.grouping.mkString(", "))
       query.filters.map(filters => r.addToTab("Query", "Filters", filters.toSqlWhere))
-      r.addToTab("Query", "QueryAsJson", query.toJson)
+      r.addToTab("Query", "QueryAsJson", query.toJson.compactPrint)
     })
     r.addToTab("Response", "Node", result.node)
     r.addToTab("Response", "Timestamp", result.timestamp.toString)
