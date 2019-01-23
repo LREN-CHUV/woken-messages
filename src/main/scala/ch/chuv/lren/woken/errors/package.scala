@@ -23,6 +23,8 @@ import scala.collection.JavaConverters._
 
 package object errors {
 
+  val SKIP_REPORTING_MARKER: String = Log4jAppender.SKIP_REPORTING_MARKER
+
   def reportErrorsToBugsnag(): Unit =
     PluginManager.addPackages(List("ch.chuv.lren.woken.errors").asJavaCollection)
 }
