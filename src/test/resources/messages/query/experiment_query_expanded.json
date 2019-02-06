@@ -11,13 +11,36 @@
     }
   ],
   "covariablesMustExist": true,
-  "executionPlan": "scatter-gather",
-  "filters": "",
+  "executionPlan": {
+    "steps": [
+      {
+        "execution": "map",
+        "input": {
+          "selectionType": "training",
+          "type": "SelectDataset"
+        },
+        "name": "scatter",
+        "operation": {
+          "compute": "compute"
+        }
+      },
+      {
+        "execution": "gather",
+        "input": {
+          "fromStep": "scatter",
+          "type": "PreviousResults"
+        },
+        "name": "gather",
+        "operation": "fold"
+      }
+    ]
+  },
   "grouping": [
     {
       "code": "COLPROT"
     }
   ],
+  "testingDatasets": [],
   "trainingDatasets": [
     {
       "code": "clinical1"
@@ -32,6 +55,7 @@
   "user": {
     "code": "user1"
   },
+  "validationDatasets": [],
   "validations": [
     {
       "code": "kfold",

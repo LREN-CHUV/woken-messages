@@ -26,6 +26,8 @@ import org.scalatest.{ Matchers, WordSpec }
 import spray.json._
 import queryProtocol._
 
+import scala.collection.immutable.TreeSet
+
 class QueryTest extends WordSpec with Matchers with JsonUtils {
 
   "Woken query models" should {
@@ -63,7 +65,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         grouping = List(VariableId("COLPROT")),
         filters = None,
         targetTable = None,
-        datasets = Set(),
+        datasets = TreeSet(),
         algorithm = AlgorithmSpec("knn", List(CodeValue("k", "5")), None),
         executionPlan = None
       )
@@ -83,9 +85,9 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         grouping = List(VariableId("COLPROT")),
         filters = None,
         targetTable = None,
-        trainingDatasets = Set("research", "clinical1", "clinical2").map(DatasetId),
-        testingDatasets = Set(),
-        validationDatasets = Set(),
+        trainingDatasets = TreeSet("research", "clinical1", "clinical2").map(DatasetId),
+        testingDatasets = TreeSet(),
+        validationDatasets = TreeSet(),
         algorithms = List(AlgorithmSpec("linearRegression", List(), None)),
         validations = List(ValidationSpec("kfold", List(CodeValue("k", "2")))),
         executionPlan = Some(ExecutionPlan.scatterGather)
@@ -93,6 +95,8 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
 
       experimentQuery shouldBe expected
 
+      val expandedJson = loadJson("/messages/query/experiment_query_expanded.json").asJsObject
+      experimentQuery.toJson shouldBe expandedJson
     }
 
     "serialize a mining query with the specs for algorithm" in {
@@ -105,7 +109,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         grouping = List(),
         filters = None,
         targetTable = Some("cde_features_mixed"),
-        datasets = Set(DatasetId("desd-synthdata"), DatasetId("qqni-synthdata")),
+        datasets = TreeSet(DatasetId("desd-synthdata"), DatasetId("qqni-synthdata")),
         algorithm = AlgorithmSpec("knn",
                                   List(),
                                   Some(

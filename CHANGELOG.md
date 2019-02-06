@@ -3,8 +3,10 @@
 
 ## Unreleased
 
+* Always sort datasets to be able to search for matching queries from their Json format
 * Add Akka management to the library dependencies
 * Add Bugsnag error reporter and a Log4j configuration that forwards errors to Bugsnag
+* __dev__ Update Update Akka to 2.5.20, cats-core to 1.6.0
 
 ## 2.9.0  2019-01-14
 

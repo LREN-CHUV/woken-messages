@@ -25,6 +25,8 @@ import ch.chuv.lren.woken.messages.query.filters.FilterRule
 import ch.chuv.lren.woken.messages.variables.FeatureIdentifier
 import spray.json.{ JsObject, JsValue }
 
+import scala.collection.immutable.SortedSet
+
 // This file contains the API defined by messages exchanged via Akka
 
 /** Request the list of methods available */
@@ -77,6 +79,7 @@ sealed trait Query extends RemoteMessage {
   * @param datasets Selection of the datasets to query
   * @param algorithm Algorithm to execute, with parameters defined
   */
+// Use SortedSet to simplify serialization
 case class MiningQuery(
     user: UserId,
     variables: List[FeatureIdentifier],
@@ -85,7 +88,7 @@ case class MiningQuery(
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
     targetTable: Option[String],
-    datasets: Set[DatasetId],
+    datasets: SortedSet[DatasetId],
     algorithm: AlgorithmSpec,
     executionPlan: Option[ExecutionPlan]
 ) extends Query
@@ -114,10 +117,10 @@ case class ExperimentQuery(
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
     targetTable: Option[String],
-    trainingDatasets: Set[DatasetId],
-    testingDatasets: Set[DatasetId],
+    trainingDatasets: SortedSet[DatasetId],
+    testingDatasets: SortedSet[DatasetId],
     algorithms: List[AlgorithmSpec],
-    validationDatasets: Set[DatasetId],
+    validationDatasets: SortedSet[DatasetId],
     validations: List[ValidationSpec],
     executionPlan: Option[ExecutionPlan]
 ) extends Query

@@ -30,7 +30,9 @@ import io.swagger.annotations.ApiModel
 )
 case class DatasetId(
     code: String
-)
+) extends Comparable[DatasetId] {
+  override def compareTo(t: DatasetId): Int = this.code.compareTo(t.code)
+}
 
 object AnonymisationLevel extends Enumeration {
   type AnonymisationLevel = Value

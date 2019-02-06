@@ -21,7 +21,9 @@ import ch.chuv.lren.woken.messages.datasets.DatasetsProtocol
 import ch.chuv.lren.woken.messages.remoting.RemotingProtocol
 
 package object variables {
-  type PathSegment = String
+
+  type PathSegment        = String
+  type FeatureIdentifiers = List[FeatureIdentifier]
 
   object variablesProtocol extends VariablesProtocol with DatasetsProtocol with RemotingProtocol
 }

@@ -26,6 +26,8 @@ import ch.chuv.lren.woken.messages.variables.VariablesProtocol
 import ch.chuv.lren.woken.utils.JsonEnums
 import spray.json._
 
+import scala.collection.immutable.{ SortedSet, TreeSet }
+
 trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
   this: DatasetsProtocol with VariablesProtocol with QueryFiltersProtocol =>
 
@@ -107,6 +109,18 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
   }
 
   implicit val MethodsResponseFormat: JsonFormat[MethodsResponse] = jsonFormat1(MethodsResponse)
+
+  // Sort datasets fields
+  implicit object DatasetIdOrdering extends Ordering[DatasetId] {
+    override def compare(x: DatasetId, y: DatasetId): Int = x.code.compareTo(y.code)
+  }
+
+  implicit object SortedSetDatasetFormat extends RootJsonFormat[SortedSet[DatasetId]] {
+    override def read(json: JsValue): SortedSet[DatasetId] =
+      json.convertTo[List[DatasetId]].to[TreeSet]
+    override def write(obj: SortedSet[DatasetId]): JsValue =
+      obj.toList.toJson
+  }
 
   implicit object MiningQueryJsonFormat extends RootJsonFormat[MiningQuery] {
     private val caseClassFormat                   = jsonFormat10(MiningQuery)
