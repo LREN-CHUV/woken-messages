@@ -1,5 +1,5 @@
 # Pull base image
-FROM hbpmip/scala-base-build:1.2.6-5 as scala-build-env
+FROM hbpmip/scala-base-build:1.2.6-6 as scala-build-env
 
 ARG BINTRAY_USER
 ARG BINTRAY_PASS
