@@ -1,6 +1,9 @@
 .credentials
+.sbtserver
 target/
 .idea/
+.bloop/
 .ensime
 .ensime_cache/
+.vscode/
 *.log

@@ -13,7 +13,7 @@ RUN  mkdir -p /build/project/
 COPY project/build.properties project/plugins.sbt project/.gitignore /build/project/
 
 # Run sbt on an empty project and force it to download most of its dependencies to fill the cache
-RUN sbt compile
+RUN sbt -mem 1500 compile
 
 # Second caching layer: project sources
 COPY src/ /build/src/
@@ -23,7 +23,7 @@ COPY .*.cfg .*ignore .*.yaml .*.conf *.md *.sh *.yml *.json Dockerfile LICENSE /
 
 RUN /check-sources.sh
 
-RUN sbt test +package
+RUN sbt -mem 1500 test +package
 
 # Check again the sources to detect code that needs reformatting
 RUN /check-sources.sh

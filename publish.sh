@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
-set -e
+
+#
+# Build the release image for the project and publish it on Dockerhub, then
+# announce the new version on Slack
+#
+# Required environment variables:
+# * BINTRAY_USER
+# * BINTRAY_PASS or BINTRAY_API_KEY
+#
+
+set -o pipefail  # trace ERR through pipes
+set -o errtrace  # trace ERR through 'time command' and other functions
+set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
+
 
 if [ -z "${BINTRAY_USER}" ]; then
   echo "Environment variable BINTRAY_USER is required"
@@ -30,17 +43,16 @@ if pgrep -lf sshuttle > /dev/null ; then
 fi
 
 if [ $NO_SUDO ]; then
-  CAPTAIN="captain"
-elif groups $USER | grep &>/dev/null '\bdocker\b'; then
-  CAPTAIN="captain"
+  DOCKER="docker"
+elif groups "$USER" | grep &>/dev/null '\bdocker\b'; then
+  DOCKER="docker"
 else
-  CAPTAIN="sudo captain"
+  DOCKER="sudo docker"
 fi
 
 # Build
 echo "Build the project..."
 ./build.sh
-#./tests/test.sh
 echo "[ok] Done"
 
 count=$(git status --porcelain | wc -l)
@@ -97,7 +109,6 @@ updated_version=$(bumpversion --dry-run --list patch | grep current_version | se
 # Build again to update the version
 echo "Build the project for distribution..."
 ./build.sh
-#./tests/test.sh
 echo "[ok] Done"
 
 # Publish on BinTray

@@ -4,6 +4,7 @@ resolvers += Classpaths.sbtPluginReleases
 
 resolvers += "Typesafe repository" at "https://repo.typesafe.com/typesafe/releases/"
 
+// Kamon
 resolvers += Resolver.bintrayRepo("kamon-io", "sbt-plugins")
 
 libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.25" // Needed by sbt-git
@@ -35,3 +36,5 @@ addSbtPlugin("com.typesafe.sbt"  % "sbt-git"         % "1.0.0")
 
 // Monitoring
 addSbtPlugin("io.kamon" % "sbt-aspectj-runner"       % "1.1.1")
+
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.1")

@@ -7,6 +7,7 @@
 * Add Akka management to the library dependencies
 * Add Bugsnag error reporter and a Log4j configuration that forwards errors to Bugsnag
 * __dev__ Update Update Akka to 2.5.20, cats-core to 1.6.0
+* __dev__ Remove need to install captain, use only Docker for the build
 
 ## 2.9.0  2019-01-14
 
