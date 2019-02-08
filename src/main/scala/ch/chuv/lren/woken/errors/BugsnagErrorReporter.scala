@@ -26,7 +26,6 @@ import ch.chuv.lren.woken.messages.validation.validationProtocol._
 import com.bugsnag.{ Bugsnag, Report }
 import com.typesafe.config.{ Config, ConfigException, ConfigFactory }
 import com.typesafe.scalalogging.LazyLogging
-import org.slf4j.MarkerFactory
 
 import scala.collection.immutable.Seq
 import spray.json._
@@ -58,8 +57,7 @@ case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyL
   private val self = this
   private val selfAsUncaughtExceptionHandler = new UncaughtExceptionHandler {
     override def uncaughtException(t: Thread, e: Throwable): Unit = {
-      val skipReportingMarker = MarkerFactory.getMarker(Log4jAppender.SKIP_REPORTING_MARKER)
-      logger.error(skipReportingMarker, "Uncaught exception", e)
+      logger.error(SKIP_REPORTING_MARKER, "Uncaught exception", e)
       self.report(e)
     }
   }

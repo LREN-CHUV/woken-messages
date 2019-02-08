@@ -23,6 +23,7 @@ import org.apache.logging.log4j.core.appender.AbstractAppender
 import org.apache.logging.log4j.core.config.Configuration
 import org.apache.logging.log4j.core.filter.MarkerFilter
 import org.apache.logging.log4j.core.LogEvent
+import org.slf4j.{ Marker, MarkerFactory }
 
 @SuppressWarnings(Array("org.wartremover.warts.Null"))
 class Log4jAppender(reporter: ErrorReporter) extends AbstractAppender("ErrorReport", null, null) {
@@ -58,7 +59,7 @@ class Log4jAppender(reporter: ErrorReporter) extends AbstractAppender("ErrorRepo
 
 object Log4jAppender {
 
-  val SKIP_REPORTING_MARKER: String = "SKIP_REPORTING"
+  val SKIP_REPORTING_MARKER: Marker = MarkerFactory.getMarker("SKIP_REPORTING")
 
   def apply(): Log4jAppender = new Log4jAppender(BugsnagErrorReporter())
 
