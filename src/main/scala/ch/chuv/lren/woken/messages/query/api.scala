@@ -65,6 +65,9 @@ sealed trait Query extends RemoteMessage {
 
   /** Name of the target table. Defaults to the settings defined in Woken configuration */
   def targetTable: Option[String]
+
+  /** The name of the target db schema. Defaults to the settings defined in Woken configuration */
+  def targetDbSchema: Option[String]
 }
 
 /**
@@ -88,6 +91,7 @@ case class MiningQuery(
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
     targetTable: Option[String],
+    targetDbSchema: Option[String],
     datasets: SortedSet[DatasetId],
     algorithm: AlgorithmSpec,
     executionPlan: Option[ExecutionPlan]
@@ -117,6 +121,7 @@ case class ExperimentQuery(
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
     targetTable: Option[String],
+    targetDbSchema: Option[String],
     trainingDatasets: SortedSet[DatasetId],
     testingDatasets: SortedSet[DatasetId],
     algorithms: List[AlgorithmSpec],
