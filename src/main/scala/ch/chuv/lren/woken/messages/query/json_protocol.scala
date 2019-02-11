@@ -122,7 +122,7 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
       obj.toList.toJson
   }
 
-  implicit val TargetFormat: JsonFormat[Target] = jsonFormat2(Target)
+  implicit val TargetFormat: JsonFormat[TargetTable] = jsonFormat2(TargetTable)
 
   implicit object MiningQueryJsonFormat extends RootJsonFormat[MiningQuery] {
     private val caseClassFormat                   = jsonFormat10(MiningQuery)
