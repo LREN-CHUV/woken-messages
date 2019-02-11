@@ -20,7 +20,7 @@ package ch.chuv.lren.woken.messages.query
 import java.time.OffsetDateTime
 
 import ch.chuv.lren.woken.messages.RemoteMessage
-import ch.chuv.lren.woken.messages.datasets.DatasetId
+import ch.chuv.lren.woken.messages.datasets.{ DatasetId, TableId }
 import ch.chuv.lren.woken.messages.query.filters.FilterRule
 import ch.chuv.lren.woken.messages.variables.FeatureIdentifier
 import spray.json.{ JsObject, JsValue }
@@ -38,11 +38,6 @@ case object MethodsQuery extends RemoteMessage
   */
 case class MethodsResponse(
     methods: JsObject
-)
-
-case class Target(
-    table: Option[String],
-    schema: Option[String]
 )
 
 /** A query for data mining or more complex operations on data */
@@ -69,7 +64,7 @@ sealed trait Query extends RemoteMessage {
   def filters: Option[FilterRule]
 
   /** Name of the target table. Defaults to the settings defined in Woken configuration */
-  def target: Option[Target]
+  def target: Option[TableId]
 }
 
 /**
@@ -92,7 +87,7 @@ case class MiningQuery(
     covariablesMustExist: Boolean,
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
-    target: Option[Target],
+    target: Option[TableId],
     datasets: SortedSet[DatasetId],
     algorithm: AlgorithmSpec,
     executionPlan: Option[ExecutionPlan]
@@ -121,7 +116,7 @@ case class ExperimentQuery(
     covariablesMustExist: Boolean,
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
-    target: Option[Target],
+    target: Option[TableId],
     trainingDatasets: SortedSet[DatasetId],
     testingDatasets: SortedSet[DatasetId],
     algorithms: List[AlgorithmSpec],

@@ -20,7 +20,7 @@ package ch.chuv.lren.woken.messages.query
 import java.time.{ OffsetDateTime, ZoneOffset }
 
 import ch.chuv.lren.woken.JsonUtils
-import ch.chuv.lren.woken.messages.datasets.DatasetId
+import ch.chuv.lren.woken.messages.datasets.{ DatasetId, TableId }
 import ch.chuv.lren.woken.messages.variables.VariableId
 import org.scalatest.{ Matchers, WordSpec }
 import spray.json._
@@ -108,7 +108,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         covariablesMustExist = true,
         grouping = List(),
         filters = None,
-        target = Some(Target(Some("cde_features_mixed"), None)),
+        target = Some(TableId(None, "cde_features_mixed")),
         datasets = TreeSet(DatasetId("desd-synthdata"), DatasetId("qqni-synthdata")),
         algorithm = AlgorithmSpec("knn",
                                   List(),

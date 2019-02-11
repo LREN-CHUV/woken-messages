@@ -20,13 +20,14 @@ package ch.chuv.lren.woken.errors
 import org.apache.logging.log4j.core.Filter.Result
 import org.apache.logging.log4j.{ Level, LogManager }
 import org.apache.logging.log4j.core.appender.AbstractAppender
-import org.apache.logging.log4j.core.config.Configuration
+import org.apache.logging.log4j.core.config.{ Configuration, Property }
 import org.apache.logging.log4j.core.filter.MarkerFilter
 import org.apache.logging.log4j.core.LogEvent
 import org.slf4j.{ Marker, MarkerFactory }
 
 @SuppressWarnings(Array("org.wartremover.warts.Null"))
-class Log4jAppender(reporter: ErrorReporter) extends AbstractAppender("ErrorReport", null, null) {
+class Log4jAppender(reporter: ErrorReporter)
+    extends AbstractAppender("ErrorReport", null, null, true, Property.EMPTY_ARRAY) {
 
   override def append(event: LogEvent): Unit =
     Option(event.getThrown).fold {

@@ -53,4 +53,6 @@ case class Dataset(dataset: DatasetId,
 
 }
 
-case class Table(name: String, defaultGroupings: Set[String])
+case class TableId(schema: Option[String], name: String)
+
+case class Table(tableId: TableId, defaultGroupings: Set[String])
