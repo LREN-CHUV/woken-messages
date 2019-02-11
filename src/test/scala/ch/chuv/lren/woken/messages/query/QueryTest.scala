@@ -108,7 +108,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         covariablesMustExist = true,
         grouping = List(),
         filters = None,
-        target = Some(TableId(None, "cde_features_mixed")),
+        target = Some(TableId("features", None, "cde_features_mixed")),
         datasets = TreeSet(DatasetId("desd-synthdata"), DatasetId("qqni-synthdata")),
         algorithm = AlgorithmSpec("knn",
                                   List(),

@@ -53,6 +53,37 @@ case class Dataset(dataset: DatasetId,
 
 }
 
-case class TableId(schema: Option[String], name: String)
+/** Identifier for a table
+  *
+  * @param database The database owning the table
+  * @param dbSchema The schema containing the table, or None for default 'public' schema
+  * @param name The name of the table, without any quotation
+  */
+case class TableId(database: String, dbSchema: Option[String], name: String) {
 
+  assert(!name.contains("."), "Table name should not contain schema information")
+  // Disallow access to all system tables for security
+  assert(database != "woken" && database != "metadata" && database != "postgres")
+
+  def schemaOrPublic: String = dbSchema.getOrElse("public")
+
+  def same(other: TableId): Boolean =
+    (other.dbSchema == dbSchema || dbSchema.isEmpty && other.dbSchema
+      .contains("public")) && (other.name == name)
+
+}
+
+object TableId {
+
+  @SuppressWarnings(Array("org.wartremover.warts.Throw"))
+  def apply(database: String, qualifiedTableName: String): TableId =
+    qualifiedTableName.split("\\.").toList match {
+      case tableName :: Nil                   => TableId(database, None, tableName)
+      case dbSchema :: tableName :: Nil       => TableId(database, Some(dbSchema), tableName)
+      case db :: dbSchema :: tableName :: Nil => TableId(db, Some(dbSchema), tableName)
+      case _                                  => throw new IllegalArgumentException(s"Invalid table name: $qualifiedTableName")
+    }
+}
+
+// TODO: doesn't seem to be used
 case class Table(tableId: TableId, defaultGroupings: Set[String])
