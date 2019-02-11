@@ -129,17 +129,16 @@ case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyL
     r.addToTab(meta.group, meta.key, meta.value)
 
   private def addQuery(r: Report, result: QueryResult) = {
+    val query = result.query
     result.jobId.foreach(jobId => r.addToTab("Query", "JobId", jobId))
-    result.query.foreach(query => {
-      r.addToTab("Query", "User", query.user.code)
-      r.addToTab("Query", "Variables", query.variables.map(_.id).mkString(", "))
-      r.addToTab("Query", "Covariables", query.covariables.map(_.id).mkString(", "))
-      r.addToTab("Query", "CovariablesMustExist", query.covariablesMustExist)
-      if (query.grouping.nonEmpty)
-        r.addToTab("Query", "Grouping", query.grouping.map(_.id).mkString(", "))
-      query.filters.map(filters => r.addToTab("Query", "Filters", filters.toSqlWhere))
-      r.addToTab("Query", "QueryAsJson", query.toJson.compactPrint)
-    })
+    r.addToTab("Query", "User", query.user.code)
+    r.addToTab("Query", "Variables", query.variables.map(_.id).mkString(", "))
+    r.addToTab("Query", "Covariables", query.covariables.map(_.id).mkString(", "))
+    r.addToTab("Query", "CovariablesMustExist", query.covariablesMustExist)
+    if (query.grouping.nonEmpty)
+      r.addToTab("Query", "Grouping", query.grouping.map(_.id).mkString(", "))
+    query.filters.map(filters => r.addToTab("Query", "Filters", filters.toSqlWhere))
+    r.addToTab("Query", "QueryAsJson", query.toJson.compactPrint)
     r.addToTab("Response", "Node", result.node)
     r.addToTab("Response", "Timestamp", result.timestamp.toString)
     if (result.feedback.nonEmpty)

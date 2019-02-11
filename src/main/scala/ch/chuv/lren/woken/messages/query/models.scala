@@ -17,7 +17,6 @@
 
 package ch.chuv.lren.woken.messages.query
 
-
 case class CodeValue(code: String, value: String) {
   def toTuple: (String, String) = (code, value)
 }

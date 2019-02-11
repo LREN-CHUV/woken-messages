@@ -104,7 +104,7 @@ class AkkaSerializersTest extends WordSpec with Matchers with JsonUtils {
       val jsonAst = loadJson("/messages/query/mining_query.json").asJsObject
       val q       = jsonAst.convertTo[MiningQuery]
       val r = QueryResult(
-        Some("1"),
+        "1",
         "local",
         Set(DatasetId("setA"), DatasetId("setB")),
         List(UserWarning("Not much data"), UserInfo("250 records queried")),
@@ -113,7 +113,7 @@ class AkkaSerializersTest extends WordSpec with Matchers with JsonUtils {
         Some("fuzzy"),
         Some(JsString("Hi!")),
         None,
-        Some(q)
+        q
       )
       ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r
     }
@@ -122,7 +122,7 @@ class AkkaSerializersTest extends WordSpec with Matchers with JsonUtils {
       val jsonAst = loadJson("/messages/query/experiment_query.json").asJsObject
       val q       = jsonAst.convertTo[ExperimentQuery]
       val r = QueryResult(
-        Some("1"),
+        "1",
         "local",
         Set(DatasetId("setA"), DatasetId("setB")),
         List(UserWarning("Not much data"), UserInfo("250 records queried")),
@@ -131,7 +131,7 @@ class AkkaSerializersTest extends WordSpec with Matchers with JsonUtils {
         Some("fuzzy"),
         Some(JsString("Hi!")),
         None,
-        Some(q)
+        q
       )
       ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r
     }

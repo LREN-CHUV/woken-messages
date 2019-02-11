@@ -18,7 +18,6 @@
 package ch.chuv.lren.woken.messages.datasets
 
 import ch.chuv.lren.woken.messages.remoting.RemoteLocation
-import io.swagger.v3.oas.annotations.
 
 /**
   * Id of a dataset

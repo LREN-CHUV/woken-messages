@@ -204,10 +204,16 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
     override def read(json: JsValue): QueryResult = {
       val jsObject = json.asJsObject
 
-      jsObject.getFields("node", "dataProvenance", "feedback", "timestamp", "type") match {
-        case Seq(node, datasets, feedback, timestamp, t) =>
+      jsObject.getFields("jobId",
+                         "node",
+                         "dataProvenance",
+                         "feedback",
+                         "timestamp",
+                         "type",
+                         "query") match {
+        case Seq(jobId, node, datasets, feedback, timestamp, t, query) =>
           QueryResult(
-            jobId = jsObject.fields.get("jobId").map(_.convertTo[String]),
+            jobId = jobId.convertTo[String],
             node = node.convertTo[String],
             dataProvenance = datasets.convertTo[Set[DatasetId]],
             feedback = feedback.convertTo[List[UserFeedback]],
@@ -216,7 +222,7 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
             algorithm = jsObject.fields.get("algorithm").map(_.convertTo[String]),
             data = jsObject.fields.get("data"),
             error = jsObject.fields.get("error").map(_.convertTo[String]),
-            query = jsObject.fields.get("query").map(_.convertTo[Query])
+            query = query.convertTo[Query]
           )
       }
     }
@@ -224,7 +230,7 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
     override def write(obj: QueryResult): JsValue =
       JsObject(
         List[Option[(String, JsValue)]](
-          obj.jobId.map("jobId"         -> _.toJson),
+          Some("jobId"                  -> obj.jobId.toJson),
           Some("node"                   -> obj.node.toJson),
           Some("dataProvenance"         -> obj.dataProvenance.toJson),
           Some("feedback"               -> obj.feedback.toJson),
@@ -233,7 +239,7 @@ trait QueryProtocol extends DefaultJsonProtocol with JsonEnums {
           obj.algorithm.map("algorithm" -> _.toJson),
           obj.data.map("data"           -> _),
           obj.error.map("error"         -> _.toJson),
-          obj.query.map("query"         -> _.toJson)
+          Some("query"                  -> obj.query.toJson)
         ).flatten: _*
       )
 

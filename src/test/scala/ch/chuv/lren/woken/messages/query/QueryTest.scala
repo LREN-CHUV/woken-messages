@@ -130,7 +130,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
       val jsonAst = loadJson("/messages/query/mining_query.json").asJsObject
       val q       = jsonAst.convertTo[MiningQuery]
       val queryResult = QueryResult(
-        Some("1"),
+        "1",
         "local",
         Set(DatasetId("setA"), DatasetId("setB")),
         List(UserWarning("Not much data"), UserInfo("250 records queried")),
@@ -139,7 +139,7 @@ class QueryTest extends WordSpec with Matchers with JsonUtils {
         Some("fuzzy"),
         Some(JsString("Hi!")),
         None,
-        Some(q)
+        q
       )
 
       val json = queryResult.toJson

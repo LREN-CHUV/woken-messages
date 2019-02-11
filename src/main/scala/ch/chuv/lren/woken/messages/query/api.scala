@@ -141,9 +141,8 @@ case class ExperimentQuery(
   * @param query The query that produced this result
   *
   */
-// TODO: Query and jobId in the QueryResult should be mandatory
 case class QueryResult(
-    jobId: Option[String],
+    jobId: String,
     node: String,
     dataProvenance: DataProvenance,
     feedback: UserFeedbacks,
@@ -152,5 +151,5 @@ case class QueryResult(
     algorithm: Option[String],
     data: Option[JsValue],
     error: Option[String],
-    query: Option[Query]
+    query: Query
 )
