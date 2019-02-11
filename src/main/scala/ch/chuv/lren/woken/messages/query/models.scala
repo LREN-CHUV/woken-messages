@@ -17,7 +17,6 @@
 
 package ch.chuv.lren.woken.messages.query
 
-import io.swagger.annotations.ApiModel
 
 case class CodeValue(code: String, value: String) {
   def toTuple: (String, String) = (code, value)
@@ -27,14 +26,11 @@ object CodeValue {
 }
 
 /**
-  * An algorithm
+  * Specification for the execution of an algorithm
   *
   * @param code Code identifying the algorithm
   * @param parameters List of parameters to pass to the algorithm
   */
-@ApiModel(
-  description = "Specification for the execution of an algorithm"
-)
 case class AlgorithmSpec(
     code: String,
     parameters: List[CodeValue],
@@ -48,9 +44,6 @@ case class AlgorithmSpec(
   *
   * @param code Unique user ID
   */
-@ApiModel(
-  description = "Id of a user"
-)
 case class UserId(
     code: String
 )

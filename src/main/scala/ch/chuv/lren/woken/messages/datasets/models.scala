@@ -18,16 +18,13 @@
 package ch.chuv.lren.woken.messages.datasets
 
 import ch.chuv.lren.woken.messages.remoting.RemoteLocation
-import io.swagger.annotations.ApiModel
+import io.swagger.v3.oas.annotations.
 
 /**
   * Id of a dataset
   *
   * @param code Unique dataset code
   */
-@ApiModel(
-  description = "Id of a dataset"
-)
 case class DatasetId(
     code: String
 ) extends Comparable[DatasetId] {
@@ -71,6 +68,7 @@ case class TableId(database: String, dbSchema: Option[String], name: String) {
     (other.dbSchema == dbSchema || dbSchema.isEmpty && other.dbSchema
       .contains("public")) && (other.name == name)
 
+  override def toString: String = s"$database.$schemaOrPublic.$name"
 }
 
 object TableId {

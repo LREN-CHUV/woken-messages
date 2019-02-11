@@ -63,8 +63,8 @@ sealed trait Query extends RemoteMessage {
   /** Filters to apply on the data. Currently, a SQL where clause */
   def filters: Option[FilterRule]
 
-  /** Name of the target table. Defaults to the settings defined in Woken configuration */
-  def target: Option[TableId]
+  /** Name of the target table. Defaults to the settings defined in Woken configuration (jobs.defaultFeaturesTable) */
+  def targetTable: Option[TableId]
 }
 
 /**
@@ -75,7 +75,7 @@ sealed trait Query extends RemoteMessage {
   * @param covariables List of covariables (aka independent features )
   * @param grouping List of groupings
   * @param filters Filters to apply on the data. Currently, a SQL where clause
-  * @param target Name of the target db. Defaults to the settings defined in Woken configuration
+  * @param targetTable Name of the target table. Defaults to the settings defined in Woken configuration (jobs.defaultFeaturesTable)
   * @param datasets Selection of the datasets to query
   * @param algorithm Algorithm to execute, with parameters defined
   */
@@ -87,7 +87,7 @@ case class MiningQuery(
     covariablesMustExist: Boolean,
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
-    target: Option[TableId],
+    targetTable: Option[TableId],
     datasets: SortedSet[DatasetId],
     algorithm: AlgorithmSpec,
     executionPlan: Option[ExecutionPlan]
@@ -101,7 +101,7 @@ case class MiningQuery(
   * @param covariables List of covariables (aka independent features )
   * @param grouping List of groupings
   * @param filters Filters to apply on the data. Currently, a SQL where clause
-  * @param target Name of the target db. Defaults to the settings defined in Woken configuration
+  * @param targetTable Name of the target table. Defaults to the settings defined in Woken configuration (jobs.defaultFeaturesTable)
   * @param trainingDatasets Set of datasets used for training
   * @param testingDatasets Set of datasets used for testing. Ignored for cross-validation methods
   * @param algorithms List of algorithms to execute, with parameters defined
@@ -116,7 +116,7 @@ case class ExperimentQuery(
     covariablesMustExist: Boolean,
     grouping: List[FeatureIdentifier],
     filters: Option[FilterRule],
-    target: Option[TableId],
+    targetTable: Option[TableId],
     trainingDatasets: SortedSet[DatasetId],
     testingDatasets: SortedSet[DatasetId],
     algorithms: List[AlgorithmSpec],

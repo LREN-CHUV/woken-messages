@@ -18,7 +18,7 @@
 package ch.chuv.lren.woken.messages.variables
 
 import ch.chuv.lren.woken.messages.datasets.DatasetId
-import io.swagger.annotations.ApiModel
+import io.swagger.v3.oas.annotations.media.Schema
 
 sealed trait FeatureIdentifier {
   def id: String
@@ -29,9 +29,6 @@ sealed trait FeatureIdentifier {
   *
   * @param code Unique variable code, used to request
   */
-@ApiModel(
-  description = "Id of a variable"
-)
 case class VariableId(
     code: String
 ) extends FeatureIdentifier {
@@ -43,9 +40,6 @@ case class VariableId(
   *
   * @param path part of the path identifying this group relative to its parent
   */
-@ApiModel(
-  description = "Id of a group"
-)
 case class GroupId(path: List[PathSegment]) extends FeatureIdentifier {
   override def id: String = path.mkString("/")
 
@@ -167,13 +161,13 @@ case class VariableMetaData(
     label: String,
     `type`: VariableType,
     sqlType: Option[SqlType],
-    methodology: Option[String],
-    description: Option[String],
-    units: Option[String],
+    @Schema(required = false, implementation = classOf[String]) methodology: Option[String],
+    @Schema(required = false, implementation = classOf[String]) description: Option[String],
+    @Schema(required = false, implementation = classOf[String]) units: Option[String],
     enumerations: Option[List[EnumeratedValue]],
-    length: Option[Int],
-    minValue: Option[Double],
-    maxValue: Option[Double],
+    @Schema(required = false, implementation = classOf[Int]) length: Option[Int],
+    @Schema(required = false, implementation = classOf[Double]) minValue: Option[Double],
+    @Schema(required = false, implementation = classOf[Double]) maxValue: Option[Double],
     summaryStatistics: Option[SummaryStatistics],
     datasets: Set[DatasetId]
 ) {
