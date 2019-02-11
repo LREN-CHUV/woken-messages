@@ -20,7 +20,9 @@ package ch.chuv.lren.woken.messages.variables
 import ch.chuv.lren.woken.messages.datasets.DatasetId
 import io.swagger.annotations.ApiModel
 
-sealed trait FeatureIdentifier
+sealed trait FeatureIdentifier {
+  def id: String
+}
 
 /**
   * Id of a variable
@@ -32,7 +34,9 @@ sealed trait FeatureIdentifier
 )
 case class VariableId(
     code: String
-) extends FeatureIdentifier
+) extends FeatureIdentifier {
+  override def id: String = code
+}
 
 /**
   * Id of a group
@@ -43,6 +47,8 @@ case class VariableId(
   description = "Id of a group"
 )
 case class GroupId(path: List[PathSegment]) extends FeatureIdentifier {
+  override def id: String = path.mkString("/")
+
   def parent: Option[GroupId] =
     if (path.lengthCompare(1) > 0)
       Some(GroupId(path.take(path.size - 1)))
