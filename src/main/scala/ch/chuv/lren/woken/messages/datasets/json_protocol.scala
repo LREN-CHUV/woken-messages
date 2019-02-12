@@ -30,6 +30,8 @@ trait DatasetsProtocol extends DefaultJsonProtocol with JsonEnums {
     AnonymisationLevel
   )
 
+  implicit val TableIdJsonFormat: JsonFormat[TableId] = jsonFormat3(TableId.apply)
+
   implicit val DatasetJsonFormat: JsonFormat[Dataset] = jsonFormat6(Dataset)
 
   implicit val DatasetsQueryFormat: RootJsonFormat[DatasetsQuery] = jsonFormat1(DatasetsQuery)
@@ -37,8 +39,6 @@ trait DatasetsProtocol extends DefaultJsonProtocol with JsonEnums {
   implicit val DatasetsResponseFormat: RootJsonFormat[DatasetsResponse] = jsonFormat1(
     DatasetsResponse
   )
-
-  implicit val TableIdJsonFormat: JsonFormat[TableId] = jsonFormat3(TableId.apply)
 
   implicit val TableJsonFormat: JsonFormat[Table] = jsonFormat2(Table)
 

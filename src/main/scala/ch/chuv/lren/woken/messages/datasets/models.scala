@@ -37,10 +37,10 @@ object AnonymisationLevel extends Enumeration {
 
 import AnonymisationLevel.AnonymisationLevel
 
-case class Dataset(dataset: DatasetId,
+case class Dataset(id: DatasetId,
                    label: String,
                    description: String,
-                   tables: List[String],
+                   tables: List[TableId],
                    anonymisationLevel: AnonymisationLevel,
                    location: Option[RemoteLocation]) {
 
@@ -83,4 +83,4 @@ object TableId {
 }
 
 // TODO: doesn't seem to be used
-case class Table(tableId: TableId, defaultGroupings: Set[String])
+case class Table(id: TableId, defaultGroupings: Set[String])

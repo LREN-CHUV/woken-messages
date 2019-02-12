@@ -38,11 +38,12 @@ class DatasetsTest extends WordSpec with Matchers with JsonUtils {
     }
   }
 
+  val tableA = TableId("features", None, "table_a")
   val dataset = Dataset(
     DatasetId("test"),
     "Test",
     "Test dataset",
-    tables = List("table_a"),
+    tables = List(tableA),
     anonymisationLevel = AnonymisationLevel.Identifying,
     location = Some(RemoteLocation(Uri("http://remote"), None))
   )

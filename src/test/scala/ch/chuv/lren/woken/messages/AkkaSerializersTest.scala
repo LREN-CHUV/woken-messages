@@ -61,12 +61,13 @@ class AkkaSerializersTest extends WordSpec with Matchers with JsonUtils {
     }
 
     "serialize Datasets response" in {
+      val table = TableId("features", None, "table")
       val r = DatasetsResponse(
         Set(
           Dataset(DatasetId("test"),
                   "Test",
                   "Description",
-                  List("table"),
+                  List(table),
                   AnonymisationLevel.Identifying,
                   None)
         )
