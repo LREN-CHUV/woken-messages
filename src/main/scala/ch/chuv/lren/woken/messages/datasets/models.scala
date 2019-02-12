@@ -52,22 +52,20 @@ case class Dataset(id: DatasetId,
 /** Identifier for a table
   *
   * @param database The database owning the table
-  * @param dbSchema The schema containing the table, or None for default 'public' schema
+  * @param dbSchema The schema containing the table. Use 'public' for default schema
   * @param name The name of the table, without any quotation
   */
-case class TableId(database: String, dbSchema: Option[String], name: String) {
+case class TableId(database: String, dbSchema: String, name: String) {
 
   assert(!name.contains("."), "Table name should not contain schema information")
   // Disallow access to all system tables for security
   assert(database != "woken" && database != "metadata" && database != "postgres")
 
-  def schemaOrPublic: String = dbSchema.getOrElse("public")
-
   def same(other: TableId): Boolean =
     (other.dbSchema == dbSchema || dbSchema.isEmpty && other.dbSchema
       .contains("public")) && (other.name == name)
 
-  override def toString: String = s"$database.$schemaOrPublic.$name"
+  override def toString: String = s"$database.$dbSchema.$name"
 }
 
 object TableId {
@@ -75,9 +73,9 @@ object TableId {
   @SuppressWarnings(Array("org.wartremover.warts.Throw"))
   def apply(database: String, qualifiedTableName: String): TableId =
     qualifiedTableName.split("\\.").toList match {
-      case tableName :: Nil                   => TableId(database, None, tableName)
-      case dbSchema :: tableName :: Nil       => TableId(database, Some(dbSchema), tableName)
-      case db :: dbSchema :: tableName :: Nil => TableId(db, Some(dbSchema), tableName)
+      case tableName :: Nil                   => TableId(database, "public", tableName)
+      case dbSchema :: tableName :: Nil       => TableId(database, dbSchema, tableName)
+      case db :: dbSchema :: tableName :: Nil => TableId(db, dbSchema, tableName)
       case _                                  => throw new IllegalArgumentException(s"Invalid table name: $qualifiedTableName")
     }
 }

@@ -38,7 +38,7 @@ class DatasetsTest extends WordSpec with Matchers with JsonUtils {
     }
   }
 
-  val tableA = TableId("features", None, "table_a")
+  val tableA = TableId("features", "table_a")
   val dataset = Dataset(
     DatasetId("test"),
     "Test",
