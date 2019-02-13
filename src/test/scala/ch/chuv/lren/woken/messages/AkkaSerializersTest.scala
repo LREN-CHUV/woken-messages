@@ -51,6 +51,29 @@ class AkkaSerializersTest extends WordSpec with Matchers with JsonUtils {
       ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r
     }
 
+    "serialize Component request" in {
+      val q = ComponentQuery(true)
+      ser.fromBinary(ser.toBinary(q), Some(q.getClass)) shouldBe q
+    }
+
+    "serialize Component response" in {
+      val r = ComponentResponse(
+        Set("woken"),
+        Set("woken", "woken-subsystem")
+      )
+      ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r
+    }
+
+    "serialize Version request" in {
+      val q = VersionQuery("woken")
+      ser.fromBinary(ser.toBinary(q), Some(q.getClass)) shouldBe q
+    }
+
+    "serialize Version response" in {
+      val r = VersionResponse("woken", "1.2.3")
+      ser.fromBinary(ser.toBinary(r), Some(r.getClass)) shouldBe r
+    }
+
   }
 
   "Datasets API" should {

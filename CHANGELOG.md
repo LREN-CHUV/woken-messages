@@ -3,9 +3,12 @@
 
 ## Unreleased
 
+* Add messages to request the list of components and their version
 * Always sort datasets to be able to search for matching queries from their Json format
 * Add Akka management to the library dependencies
 * Add Bugsnag error reporter and a Log4j configuration that forwards errors to Bugsnag
+* __dev__ Add TableId and use it for targetTable field in queries
+* __dev__ Query and jobId in the QueryResult now mandatory
 * __dev__ Update Update Akka to 2.5.20, cats-core to 1.6.0
 * __dev__ Remove need to install captain, use only Docker for the build
 

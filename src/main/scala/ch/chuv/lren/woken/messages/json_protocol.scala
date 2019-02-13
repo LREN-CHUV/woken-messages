@@ -25,4 +25,14 @@ trait MessagesProtocol extends DefaultJsonProtocol {
   implicit val PingProtocol: JsonFormat[Ping] = jsonFormat1(Ping)
   implicit val PongProtocol: JsonFormat[Pong] = jsonFormat1(Pong)
 
+  implicit val ComponentRequestProtocol: JsonFormat[ComponentQuery] = jsonFormat1(
+    ComponentQuery
+  )
+  implicit val ComponentResponseProtocol: JsonFormat[ComponentResponse] = jsonFormat2(
+    ComponentResponse
+  )
+
+  implicit val VersionRequestProtocol: JsonFormat[VersionQuery]     = jsonFormat1(VersionQuery)
+  implicit val VersionResponseProtocol: JsonFormat[VersionResponse] = jsonFormat2(VersionResponse)
+
 }

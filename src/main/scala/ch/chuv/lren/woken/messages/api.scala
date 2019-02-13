@@ -27,3 +27,21 @@ package ch.chuv.lren.woken.messages
 case class Ping(role: Option[String]) extends RemoteMessage
 
 case class Pong(role: Set[String])
+
+/**
+  * Request the list of components available
+  *
+  * @param detailed If true, the list may include sub-components
+  */
+case class ComponentQuery(detailed: Boolean) extends RemoteMessage
+
+case class ComponentResponse(role: Set[String], components: Set[String])
+
+/**
+  * Request the version of a component of the software
+  *
+  * @param component The component requested
+  */
+case class VersionQuery(component: String) extends RemoteMessage
+
+case class VersionResponse(component: String, version: String)
