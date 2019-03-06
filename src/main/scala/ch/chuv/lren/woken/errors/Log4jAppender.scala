@@ -32,7 +32,7 @@ class Log4jAppender(reporter: ErrorReporter)
   override def append(event: LogEvent): Unit =
     Option(event.getThrown).fold {
       reporter.report(
-        new Exception(event.getMessage.getFormattedMessage.take(100)),
+        exceptionFrom(event),
         GenericMetadata("Error", event.getLoggerName, event.getMessage.getFormattedMessage)
       )
     } { e =>
@@ -46,6 +46,10 @@ class Log4jAppender(reporter: ErrorReporter)
       )
     }
 
+  private def exceptionFrom(event: LogEvent): Throwable =
+    if (event.getThrown != null) event.getThrown
+    else new ReportErrorException(event.getMessage.getFormattedMessage.take(100))
+
   private val category = LogManager.ROOT_LOGGER_NAME
 
   def install(configuration: Configuration): Unit = {
@@ -57,6 +61,8 @@ class Log4jAppender(reporter: ErrorReporter)
   }
 
 }
+
+private[this] class ReportErrorException(msg: String) extends Exception(msg, null, true, false)
 
 object Log4jAppender {
 
