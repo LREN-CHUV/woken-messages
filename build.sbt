@@ -43,8 +43,8 @@ lazy val library =
     object Version {
       val scalaCheck         = "1.14.0"
       val scalaTest          = "3.0.7"
-      val akka               = "2.5.21"
-      val akkaHttp           = "10.1.7"
+      val akka               = "2.5.22"
+      val akkaHttp           = "10.1.8"
       val akkaManagement     = "1.0.0"
       val swaggerAnnotations = "2.0.7"
       val sprayJson          = "1.3.5"
@@ -54,7 +54,7 @@ lazy val library =
       val disruptor          = "3.4.2"
       val scalaLogging       = "3.9.0"
       val postgresQl         = "42.2.5"
-      val bugsnag            = "3.4.4"
+      val bugsnag            = "3.4.5"
     }
     object ExclusionRules {
     val excludeAkkaClusterSharding =
