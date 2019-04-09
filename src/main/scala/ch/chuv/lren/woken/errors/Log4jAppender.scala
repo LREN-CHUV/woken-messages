@@ -33,7 +33,8 @@ class Log4jAppender(reporter: ErrorReporter)
     Option(event.getThrown).fold {
       reporter.report(
         exceptionFrom(event),
-        GenericMetadata("Error", event.getLoggerName, event.getMessage.getFormattedMessage)
+        GenericMetadata("Error", event.getLoggerName, event.getMessage.getFormattedMessage),
+        GenericMetadata("Error", "Thread", event.getThreadName)
       )
     } { e =>
       reporter.report(
