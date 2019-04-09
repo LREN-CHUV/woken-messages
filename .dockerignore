@@ -1,6 +1,7 @@
 .bloop/
 .idea/
 .settings/
+.ensime_cache/
 project/project/
 project/target/
 target/
