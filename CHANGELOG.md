@@ -3,6 +3,11 @@
 
 ## Unreleased
 
+* Improve error reports: keep original exception when available from log statement
+* __dev__ Update Update Akka to 2.5.22, akka-management to 1.0.0
+
+## 3.0.0 - 2019-02-13
+
 * Add messages to request the list of components and their version
 * Always sort datasets to be able to search for matching queries from their Json format
 * Add Akka management to the library dependencies
@@ -12,7 +17,7 @@
 * __dev__ Update Update Akka to 2.5.20, cats-core to 1.6.0
 * __dev__ Remove need to install captain, use only Docker for the build
 
-## 2.9.0  2019-01-14
+## 2.9.0 - 2019-01-14
 
 * Provenance: Keep track of original query in QueryResult
 * Provenance: Keep track of datasets used in QueryResult
