@@ -58,6 +58,11 @@ class ConfigurationLoaderTest extends WordSpec with Matchers {
           |app {
           |  prop = "value"
           |}
+          |akka {
+          |  cluster {
+          |    roles = ["woken"]
+          |  }
+          |}
         """.stripMargin)
       val config    = ConfigurationLoader.appendClusterConfiguration(appConfig).resolve()
 
@@ -65,6 +70,7 @@ class ConfigurationLoaderTest extends WordSpec with Matchers {
       config.getList("akka.cluster.seed-nodes").unwrapped() should contain(
         "akka://woken@127.0.0.1:8088"
       )
+      config.getList("akka.cluster.roles").unwrapped() should contain("woken")
     }
   }
 }

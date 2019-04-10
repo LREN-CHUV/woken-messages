@@ -35,7 +35,7 @@ object ConfigurationLoader {
     ConfigFactory
       .parseResourcesAnySyntax(s"akka-$remotingImpl-remoting.conf")
       .withFallback(ConfigFactory.parseResourcesAnySyntax("akka-cluster.conf"))
-      .withFallback(remotingConfig)
       .withFallback(appConfig)
+      .withFallback(remotingConfig)
   }
 }
