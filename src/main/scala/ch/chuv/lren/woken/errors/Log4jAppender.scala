@@ -63,6 +63,7 @@ class Log4jAppender(reporter: ErrorReporter)
 
 }
 
+@SuppressWarnings(Array("org.wartremover.warts.Null"))
 private[this] class ReportErrorException(msg: String) extends Exception(msg, null, true, false)
 
 object Log4jAppender {
