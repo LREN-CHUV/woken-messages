@@ -50,6 +50,36 @@ It will build the scala project into a docker container.
   ./publish.sh
 ```
 
+# Configuration
+
+The common configuration stored in Woken-messages for Akka clustering can be adjusted with the following environment variables:
+
+* APP_NAME
+* APP_TYPE
+* VERSION
+* BUILD_DATE
+* DATA_CENTER_LOCATION
+* HOST or DATA_CENTER_SERVER
+* CONTAINER_ORCHESTRATION
+* MESOS_CONTAINER_NAME
+* MARATHON_APP_DOCKER_IMAGE
+* MARATHON_APP_RESOURCE_CPUS
+* MARATHON_APP_RESOURCE_MEM
+* MARATHON_APP_LABELS
+* BUGSNAG_KEY
+* RELEASE_STAGE
+* AKKA_LOG_LEVEL
+* AKKA_LOG_CONFIG
+* AKKA_REMOTING
+* CLUSTER_IP
+* CLUSTER_PORT
+* CLUSTER_IP
+* CLUSTER_NAME
+* WOKEN_PORT_8088_TCP_ADDR
+* WOKEN_PORT_8088_TCP_PORT
+* VALIDATION_MIN_SERVERS
+* SCORING_MIN_SERVERS
+
 # Acknowledgements
 
 This work has been funded by the European Union Seventh Framework Program (FP7/2007­2013) under grant agreement no. 604102 (HBP)
