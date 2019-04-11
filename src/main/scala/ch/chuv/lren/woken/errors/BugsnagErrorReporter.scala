@@ -81,6 +81,8 @@ case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyL
   private val mesosResourceCpu   = fromConfig("datacenter.mesos.resourceCpu")
   private val mesosResourceMem   = fromConfig("datacenter.mesos.resourceMem")
   private val mesosLabels        = fromConfig("datacenter.mesos.labels")
+  private val mesosId            = fromConfig("datacenter.mesos.id")
+  private val mesosVersion       = fromConfig("datacenter.mesos.version")
 
   override def report(t: Throwable, meta: ErrorMetadata*): Unit = {
     val report: Report = client.buildReport(t)
@@ -102,6 +104,8 @@ case class BugsnagErrorReporter(config: Config) extends ErrorReporter with LazyL
       report.addToTab("Mesos", "ContainerName", mesosContainerName)
       report.addToTab("Mesos", "DockerImage", mesosDockerImage)
       report.addToTab("Mesos", "Labels", mesosLabels)
+      report.addToTab("Mesos", "Id", mesosId)
+      report.addToTab("Mesos", "Version", mesosVersion)
       report.addToTab("Mesos", "ResourceCPU", mesosResourceCpu)
       report.addToTab("Mesos", "ResourceMemory", mesosResourceMem)
     }
