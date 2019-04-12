@@ -68,7 +68,7 @@ class ConfigurationLoaderTest extends WordSpec with Matchers {
 
       config.getString("app.prop") shouldBe "value"
       config.getList("akka.cluster.seed-nodes").unwrapped() should contain(
-        "akka://woken@127.0.0.1:8088"
+        "akka.tcp://woken@127.0.0.1:8088"
       )
       config.getList("akka.cluster.roles").unwrapped() should contain("woken")
     }
