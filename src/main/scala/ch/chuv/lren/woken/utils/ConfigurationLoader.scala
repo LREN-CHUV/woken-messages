@@ -29,13 +29,13 @@ object ConfigurationLoader {
     */
   def appendClusterConfiguration(appConfig: Config): Config = {
 
-    val remotingConfig = ConfigFactory.load()
-    val remotingImpl   = remotingConfig.getString("remoting.implementation")
+    val commonConfig = ConfigFactory.load("woken-common.conf")
+    val remotingImpl = commonConfig.getString("remoting.implementation")
 
     ConfigFactory
       .parseResourcesAnySyntax(s"akka-$remotingImpl-remoting.conf")
       .withFallback(ConfigFactory.parseResourcesAnySyntax("akka-cluster.conf"))
       .withFallback(appConfig)
-      .withFallback(remotingConfig)
+      .withFallback(commonConfig)
   }
 }

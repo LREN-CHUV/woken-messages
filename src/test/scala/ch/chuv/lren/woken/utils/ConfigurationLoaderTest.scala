@@ -22,10 +22,10 @@ import org.scalatest.{ Matchers, WordSpec }
 
 class ConfigurationLoaderTest extends WordSpec with Matchers {
 
-  "Reference configuration" should {
+  "Common configuration" should {
     "be self-contained" in {
       val reference = ConfigFactory
-        .parseResourcesAnySyntax("reference.conf")
+        .parseResourcesAnySyntax("woken-common.conf")
         .resolve()
       reference.getConfig("akka") shouldNot be(null)
       reference.getConfig("clustering") shouldNot be(null)
@@ -35,7 +35,9 @@ class ConfigurationLoaderTest extends WordSpec with Matchers {
   "Akka remoting configuration" should {
 
     "define remoting implementation" in {
-      val remoting = ConfigFactory.load("akka-remoting.conf")
+      val remoting = ConfigFactory
+        .parseResourcesAnySyntax("akka-remoting.conf")
+        .withFallback(ConfigFactory.load("woken-common.conf"))
       remoting.getString("remoting.implementation") should (equal("artery") or equal("netty"))
     }
   }
@@ -46,7 +48,7 @@ class ConfigurationLoaderTest extends WordSpec with Matchers {
       val cluster: Config = ConfigFactory
         .parseResourcesAnySyntax("akka-artery-remoting.conf")
         .withFallback(ConfigFactory.parseResourcesAnySyntax("akka-cluster.conf"))
-        .withFallback(ConfigFactory.load())
+        .withFallback(ConfigFactory.load("woken-common.conf"))
         .resolve()
       cluster.getConfig("akka.cluster") shouldNot be(null)
     }

@@ -37,46 +37,66 @@ import ch.chuv.lren.woken.messages.variables.{
   VariablesForDatasetsQuery,
   VariablesForDatasetsResponse
 }
+import com.typesafe.scalalogging.LazyLogging
+
+import scala.util.{ Failure, Try }
+import scala.util.control.NonFatal
 
 /**
   * Serializer for all messages of this API exchanged with Akka
   */
-@SuppressWarnings(Array("org.wartremover.warts.Throw"))
-class AkkaSerializer extends Serializer {
+@SuppressWarnings(Array("org.wartremover.warts.Throw", "org.wartremover.warts.TryPartial"))
+class AkkaSerializer extends Serializer with LazyLogging {
 
   override def identifier: Int = 34543534
 
-  override def toBinary(o: AnyRef): Array[Byte] = {
-    val json = o match {
-      case p: Ping              => p.toJson
-      case p: Pong              => p.toJson
-      case p: ComponentQuery    => p.toJson
-      case p: ComponentResponse => p.toJson
-      case p: VersionQuery      => p.toJson
-      case p: VersionResponse   => p.toJson
-      case q: DatasetsQuery     => q.toJson
-      case r: DatasetsResponse  => r.toJson
-      case q: TablesQuery       => q.toJson
-      case r: TablesResponse    => r.toJson
-      case MethodsQuery         => JsString("")
-      case r: MethodsResponse   => r.toJson
-      case q: MiningQuery       => q.toJson
-      case q: ExperimentQuery   => q.toJson
-      case r: QueryResult       => r.toJson
-      case q: ValidationQuery   => q.toJson
-      case r: ValidationResult  => r.toJson
-      case q: ScoringQuery      => q.toJson
-      case r: ScoringResult     => r.toJson
+  override def toBinary(o: AnyRef): Array[Byte] =
+    Try {
+      val json = o match {
+        case p: Ping              => p.toJson
+        case p: Pong              => p.toJson
+        case p: ComponentQuery    => p.toJson
+        case p: ComponentResponse => p.toJson
+        case p: VersionQuery      => p.toJson
+        case p: VersionResponse   => p.toJson
+        case q: DatasetsQuery     => q.toJson
+        case r: DatasetsResponse  => r.toJson
+        case q: TablesQuery       => q.toJson
+        case r: TablesResponse    => r.toJson
+        case MethodsQuery         => JsString("")
+        case r: MethodsResponse   => r.toJson
+        case q: MiningQuery       => q.toJson
+        case q: ExperimentQuery   => q.toJson
+        case r: QueryResult       => r.toJson
+        case q: ValidationQuery   => q.toJson
+        case r: ValidationResult  => r.toJson
+        case q: ScoringQuery      => q.toJson
+        case r: ScoringResult     => r.toJson
 
-      case q: VariablesForDatasetsQuery    => q.toJson
-      case r: VariablesForDatasetsResponse => r.toJson
-      case _ =>
-        throw new IllegalArgumentException(
-          s"Serializer does not support object of class ${o.getClass}"
+        case q: VariablesForDatasetsQuery    => q.toJson
+        case r: VariablesForDatasetsResponse => r.toJson
+        case _ =>
+          throw new IllegalArgumentException(
+            s"Serializer does not support object of class ${o.getClass}"
+          )
+      }
+      val jsonBytes = json.compactPrint.getBytes()
+      logger.whenDebugEnabled(
+        if (jsonBytes.length < 1024)
+          logger.debug(s"Serialize ${o.getClass} message: ${jsonBytes.length} bytes")
+        else if (jsonBytes.length < 1024 * 1024)
+          logger.debug(s"Serialize ${o.getClass} message: ${jsonBytes.length / 1024} kb")
+        else
+          logger.debug(s"Serialize ${o.getClass} message: ${jsonBytes.length / 1024 / 1024} mb")
+      )
+      jsonBytes
+    }.recoverWith {
+      case NonFatal(e) =>
+        logger.error(
+          s"Cannot serialize message of type ${if (o == null) "null" else o.getClass.toString}"
         )
-    }
-    json.compactPrint.getBytes
-  }
+        Failure(e)
+    }.get
 
   override def includeManifest: Boolean = true
 
@@ -106,7 +126,11 @@ class AkkaSerializer extends Serializer {
     val variablesForDatasetsQueryClass  = classOf[VariablesForDatasetsQuery]
     val variablesForDatasetsResultClass = classOf[VariablesForDatasetsResponse]
 
-    val result: AnyRef = manifest.getOrElse(classOf[Unit]) match {
+    val clazz = manifest.getOrElse(classOf[Unit])
+    logger.whenDebugEnabled(
+      logger.debug(s"Deserialize message of class $clazz")
+    )
+    val result: AnyRef = clazz match {
       case `pingClass`              => json.convertTo[Ping]
       case `pongClass`              => json.convertTo[Pong]
       case `componentQueryClass`    => json.convertTo[ComponentQuery]
