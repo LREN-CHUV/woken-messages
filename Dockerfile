@@ -22,6 +22,7 @@ COPY .circleci/ /build/.circleci/
 COPY .*.cfg .*ignore .*.yaml .*.conf *.md *.sh *.yml *.json Dockerfile LICENSE /build/
 
 RUN /check-sources.sh
+LABEL build=true
 
 RUN sbt -mem 1500 test +package
 
