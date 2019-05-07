@@ -54,7 +54,7 @@ lazy val library =
       val disruptor          = "3.4.2"
       val scalaLogging       = "3.9.0"
       val postgresQl         = "42.2.5"
-      val bugsnag            = "3.4.6"
+      val bugsnag            = "3.5.0"
     }
     object ExclusionRules {
     val excludeAkkaClusterSharding =
