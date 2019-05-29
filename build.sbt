@@ -52,7 +52,7 @@ lazy val library =
       val slf4j              = "1.7.26"
       val log4j              = "2.11.2"
       val disruptor          = "3.4.2"
-      val scalaLogging       = "3.9.0"
+      val scalaLogging       = "3.9.2"
       val postgresQl         = "42.2.5"
       val bugsnag            = "3.5.0"
     }
