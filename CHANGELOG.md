@@ -23,7 +23,7 @@
 * Provenance: Keep track of datasets used in QueryResult
 * Provide user feedback in QueryResult
 * Add flag for 'covariables must exist' on the queries
-* __dev__ Update Update Akka to 2.5.19, akka-http to 10.1.5, cats-core to 1.5.0, postgresql to 42.2.5
+* __dev__ Update Update Akka to 2.5.19, akka-http to 10.1.5, cats-core to 1.5.0, postgresql to 42.2.12
 
 ## 2.8.0 - 2018-05-18
 
